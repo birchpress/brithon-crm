@@ -14,15 +14,20 @@ if ( defined( 'ABSPATH' ) && !defined( 'BRITHON_CRM' ) ) {
 
 	define( 'BRITHON_CRM', true );
 
-	require_once 'framework/includes/birchpress.inc.php';
+	if ( is_file( dirname(__DIR__) . '/birchpress/birchpress.php' ) ) {
+		require_once dirname(__DIR__) . '/birchpress/birchpress.php';
+		birchpress_load_common_framework();
+	} else {
+		require_once 'framework/includes/birchpress.inc.php';
+		global $birchpress;
+		$birchpress->set_framework_url( plugins_url() . '/' . basename( __FILE__, '.php' ) . '/framework' );
+	}
 
 	require_once 'package.php';
 
-	global $brithoncrm, $birchpress;
+	global $brithoncrm;
 
 	$brithoncrm->set_plugin_file_path( __FILE__ );
-	$birchpress->set_plugin_url( $brithoncrm->plugin_url() );
-
 	$brithoncrm->set_product_version( '<%= productVersion %>' );
 	$brithoncrm->set_product_name( '<%= productName %>' );
 	$brithoncrm->set_product_code( '<%= productCode %>' );

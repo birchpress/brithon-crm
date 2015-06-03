@@ -6,8 +6,6 @@ birch_ns( 'brithoncrm', function( $ns ) {
 
 		$plugin_file_path = '';
 
-		$less_dirs = array();
-
 		$module_names = array();
 
 		$product_version = '';
@@ -59,40 +57,6 @@ birch_ns( 'brithoncrm', function( $ns ) {
 				return plugin_dir_path( $plugin_file_path );
 			} );
 
-		birch_defn( $ns, 'add_less_dir', function( $less_dir ) use( $ns, &$less_dirs ) {
-				$less_dirs[] = $less_dir;
-			} );
-
-		birch_defn( $ns, 'compile_less', function() use ( $ns, &$less_dirs ) {
-				foreach ( $less_dirs as $less_dir ) {
-					$ns->compile_less_dir( $less_dir );
-				}
-			} );
-
-		birch_defn( $ns, 'compile_less_dir', function( $dir ) use ( $ns ) {
-				global $birchpress;
-
-				$less = new lessc();
-				if ( is_dir( $dir ) ) {
-					$files = scandir( $dir );
-					if ( $files ) {
-						foreach ( $files as $file ) {
-							if ( $file != '.' && $file != '..' ) {
-								if ( is_dir( $dir . '/' . $file ) ) {
-									$ns->compile_less_dir( $dir . '/' . $file );
-								} else {
-									if ( $birchpress->util->ends_with( $file, '.less' ) ) {
-										$input_less = $dir . "/$file";
-										$output_less = substr( $input_less, 0, strlen( $input_less ) - 4 ) . 'css';
-										$less->checkedCompile( $input_less, $output_less );
-									}
-								}
-							}
-						}
-					}
-				}
-			} );
-
 		birch_defn( $ns, 'get_dev_modules', function() use ( $ns ) {
 				@include_once $ns->plugin_dir_path() . 'dev.local.php';
 				if ( empty( $dev_local ) ) {
@@ -112,19 +76,8 @@ birch_ns( 'brithoncrm', function( $ns ) {
 				global $birchpress;
 
 				$modules_dir = $ns->plugin_dir_path() . 'modules';
-				$_module_names = scandir( $modules_dir );
 				$dev_modules = $ns->get_dev_modules();
-				if ( $dev_modules !== false ) {
-					$_module_names = array_intersect( $_module_names, $dev_modules );
-				}
-				foreach ( $_module_names as $module_name ) {
-					if ( $module_name != '.' && $module_name != '..' ) {
-
-						$module_names[] = $module_name;
-						$module_dir = $modules_dir . '/' . $module_name;
-						$birchpress->load_package( $module_dir );
-					}
-				}
+				$module_names = $birchpress->load_modules( $modules_dir, $dev_modules );
 			} );
 
 		birch_defn( $ns, 'get_module_lookup_config', function() {
