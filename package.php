@@ -46,27 +46,11 @@ birch_ns( 'brithoncrm', function( $ns ) {
 				return plugin_dir_path( $_ns_data->plugin_file_path );
 			} );
 
-		birch_defn( $ns, 'get_dev_modules', function() use ( $ns ) {
-				@include_once $ns->plugin_dir_path() . 'dev.local.php';
-				if ( empty( $dev_local ) ) {
-					return false;
-				}
-				$build_dev_file_path = $ns->plugin_dir_path() . 'buildfiles/dev.json';
-				$build_config = json_decode( file_get_contents( $build_dev_file_path ), true );
-				$edition_config = $build_config['editions'][$dev_local['edition']];
-				if ( empty( $edition_config ) ) {
-					return false;
-				}
-				$module_names = $edition_config['addons'];
-				return $module_names;
-			} );
-
 		birch_defn( $ns, 'load_modules', function() use ( $ns, $_ns_data ) {
 				global $birchpress;
 
 				$modules_dir = $ns->plugin_dir_path() . 'modules';
-				$dev_modules = $ns->get_dev_modules();
-				$_ns_data->module_names = $birchpress->load_modules( $modules_dir, $dev_modules );
+				$_ns_data->module_names = $birchpress->load_modules( $modules_dir );
 			} );
 
 		birch_defn( $ns, 'get_module_lookup_config', function() {
@@ -98,10 +82,6 @@ birch_ns( 'brithoncrm', function( $ns ) {
 				$ns->load_modules();
 				$ns->init_packages();
 				$ns->upgrade();
-			} );
-
-		birch_defn( $ns, 'spawn_cron', function() {
-				spawn_cron();
 			} );
 
 	} );
