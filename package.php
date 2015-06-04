@@ -2,59 +2,48 @@
 
 birch_ns( 'brithoncrm', function( $ns ) {
 
-		$plugin_url = '';
+		$_ns_data = new stdClass();
 
-		$plugin_file_path = '';
-
-		$module_names = array();
-
-		$product_version = '';
-
-		$product_name = '';
-
-		$product_code = '';
-
-		birch_defn( $ns, 'set_product_version', function( $_product_version ) use ( $ns, &$product_version ) {
-				$product_version = $_product_version;
+		birch_defn( $ns, 'set_product_version', function( $product_version ) use ( $ns, $_ns_data ) {
+				$_ns_data->product_version = $product_version;
 			} );
 
-		birch_defn( $ns, 'get_product_version', function() use ( $ns, &$product_version ) {
-				return $product_version;
+		birch_defn( $ns, 'get_product_version', function() use ( $ns, $_ns_data ) {
+				return $_ns_data->product_version;
 			} );
 
-		birch_defn( $ns, 'set_product_name', function( $_product_name ) use ( $ns, &$product_name ) {
-				$product_name = $_product_name;
+		birch_defn( $ns, 'set_product_name', function( $product_name ) use ( $ns, $_ns_data ) {
+				$_ns_data->product_name = $product_name;
 			} );
 
-		birch_defn( $ns, 'get_product_name', function() use ( $ns, &$product_name ) {
-				return $product_name;
+		birch_defn( $ns, 'get_product_name', function() use ( $ns, $_ns_data ) {
+				return $_ns_data->product_name;
 			} );
 
-		birch_defn( $ns, 'set_product_code', function( $_product_code ) use ( $ns, &$product_code ) {
-				$product_code = $_product_code;
+		birch_defn( $ns, 'set_product_code', function( $product_code ) use ( $ns, $_ns_data ) {
+				$_ns_data->product_code = $product_code;
 			} );
 
-		birch_defn( $ns, 'get_product_code', function() use ( $ns, &$product_code ) {
-				return $product_code;
+		birch_defn( $ns, 'get_product_code', function() use ( $ns, $_ns_data ) {
+				return $_ns_data->product_code;
 			} );
 
-		birch_defn( $ns, 'set_plugin_file_path', function ( $_plugin_file_path )
-			use( $ns, &$plugin_url, &$plugin_file_path ) {
+		birch_defn( $ns, 'set_plugin_file_path', function ( $plugin_file_path )
+			use( $ns, $_ns_data ) {
 
-				$plugin_file_path = $_plugin_file_path;
-				$plugin_url = plugins_url() . '/' . basename( $plugin_file_path, '.php' );
+				$_ns_data->plugin_file_path = $plugin_file_path;
 			} );
 
-		birch_defn( $ns, 'plugin_url', function() use ( $ns, &$plugin_url ) {
-				return $plugin_url;
+		birch_defn( $ns, 'plugin_url', function() use ( $ns, $_ns_data ) {
+				return plugins_url() . '/' . basename( $_ns_data->plugin_file_path, '.php' );
 			} );
 
-		birch_defn( $ns, 'plugin_file_path', function() use ( $ns, &$plugin_file_path ) {
-				return $plugin_file_path;
+		birch_defn( $ns, 'plugin_file_path', function() use ( $ns, $_ns_data ) {
+				return $_ns_data->plugin_file_path;
 			} );
 
-		birch_defn( $ns, 'plugin_dir_path', function () use ( $ns, &$plugin_file_path ) {
-				return plugin_dir_path( $plugin_file_path );
+		birch_defn( $ns, 'plugin_dir_path', function () use ( $ns, $_ns_data ) {
+				return plugin_dir_path( $_ns_data->plugin_file_path );
 			} );
 
 		birch_defn( $ns, 'get_dev_modules', function() use ( $ns ) {
@@ -72,12 +61,12 @@ birch_ns( 'brithoncrm', function( $ns ) {
 				return $module_names;
 			} );
 
-		birch_defn( $ns, 'load_modules', function() use ( $ns, &$module_names ) {
+		birch_defn( $ns, 'load_modules', function() use ( $ns, $_ns_data ) {
 				global $birchpress;
 
 				$modules_dir = $ns->plugin_dir_path() . 'modules';
 				$dev_modules = $ns->get_dev_modules();
-				$module_names = $birchpress->load_modules( $modules_dir, $dev_modules );
+				$_ns_data->module_names = $birchpress->load_modules( $modules_dir, $dev_modules );
 			} );
 
 		birch_defn( $ns, 'get_module_lookup_config', function() {
@@ -89,8 +78,8 @@ birch_ns( 'brithoncrm', function( $ns ) {
 
 		birch_defmulti( $ns, 'upgrade_module', $ns->get_module_lookup_config, function( $module_a ) {} );
 
-		birch_defn( $ns, 'upgrade', function() use ( $ns, &$module_names ) {
-				foreach ( $module_names as $module_name ) {
+		birch_defn( $ns, 'upgrade', function() use ( $ns, $_ns_data ) {
+				foreach ( $_ns_data->module_names as $module_name ) {
 					$ns->upgrade_module( array(
 							'module' => $module_name
 						) );
