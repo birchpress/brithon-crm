@@ -11,14 +11,13 @@
             "readme.txt"
         ],
         "wpVersionRequires": "3.7",
-        "wpVersionTested": "4.0",
+        "wpVersionTested": "4.2",
         "updaterApiUrl": "http://www.brithon.com/"
     },
 
     "editions": {
 
         "multisite": {
-            "productName": "Brithon CRM",
             "addons": [
                 "subscriptions"
             ]

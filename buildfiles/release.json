@@ -3,7 +3,7 @@
         "productCode": "brithon-crm",
         "packageName": "brithon-crm",
         "productName": "Brithon CRM",
-        "frameworkVersion":  "0.9",
+        "frameworkVersion":  "1.0",
         "templates": [
             "birchpress.inc.php",
 
@@ -12,14 +12,13 @@
             "readme.txt"
         ],
         "wpVersionRequires": "3.7",
-        "wpVersionTested": "4.0",
+        "wpVersionTested": "4.2",
         "updaterApiUrl": "http://www.brithon.com/"
     },
 
     "editions": {
 
         "multisite": {
-            "productName": "Brithon CRM",
             "addons": [
                 "subscriptions"
             ]
