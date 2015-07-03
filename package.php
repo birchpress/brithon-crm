@@ -53,15 +53,15 @@ birch_ns( 'brithoncrm', function( $ns ) {
 			$_ns_data->module_names = $birchpress->load_modules( $modules_dir );
 		};
 
-		$ns->get_module_lookup_config = function() {
+		$ns->get_module_lookup = function() {
 			return array(
 				'key' => 'module',
 				'lookup_table' => array()
 			);
 		};
 
-		$upgrade_module = function( $module_a ) {};
-		$ns->define_multimethod( 'upgrade_module', $ns->get_module_lookup_config, $upgrade_module );
+		$ns->upgrade_module = function( $module_a ) {};
+		$ns->upgrade_module->set_lookup( $ns->get_module_lookup );
 
 		$ns->upgrade = function() use ( $ns, $_ns_data ) {
 			foreach ( $_ns_data->module_names as $module_name ) {
