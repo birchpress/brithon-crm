@@ -1,0 +1,41 @@
+{
+  "name": "brithon-crm",
+  "description": "",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/birchpress/brithon-crm.git"
+  },
+  "dependencies": {
+    "browserify": "^9.0.4",
+    "immutable": "^3.7.1",
+    "react-immutable-render-mixin": "^0.8.0"
+  },
+  "devDependencies": {
+    "browserify-shim": "^3.8.3",
+    "jsonfile": "^2.0.0",
+    "react": "^0.13.1",
+    "react-tools": "^0.13.1",
+    "reactify": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:$",
+    "immutable": "global:Immutable",
+    "react": "global:React"
+  },
+  "scripts": {
+  },
+  "private": true,
+  "author": "Brithon Inc.",
+  "license": "Commercial",
+  "bugs": {
+    "url": "https://github.com/birchpress/brithon-crm/issues"
+  },
+  "homepage": "https://github.com/birchpress/brithon-crm"
+}
