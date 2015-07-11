@@ -1,357 +1,346 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-birchpress.namespace('brithoncrm.todomvc.actions', function(ns) {
-	ns.exports = {
+var ns = birchpress.namespace('brithoncrm.todomvc.actions', {
 
-		init: function() {},
+	init: function() {},
 
-		create: function(text) {},
+	create: function(text) {},
 
-		updateText: function(id, text) {},
+	updateText: function(id, text) {},
 
-		toggleComplete: function(todo) {},
+	toggleComplete: function(todo) {},
 
-		toggleCompleteAll: function() {},
+	toggleCompleteAll: function() {},
 
-		destroy: function(id) {},
+	destroy: function(id) {},
 
-		destroyCompleted: function() {}
-	};
-	module.exports = ns;
+	destroyCompleted: function() {}
+
 });
+
+module.exports = ns;
 
 },{}],2:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.components.footer', function (ns) {
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-    var ReactPropTypes = React.PropTypes;
-    var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var ReactPropTypes = React.PropTypes;
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-    var actions = require('../actions');
+var actions = require('../actions');
 
-    ns.exports = {
-        getComponentClass: function () {
-            var Footer = React.createClass({displayName: "Footer",
+var ns = birchpress.namespace('brithoncrm.todomvc.components.footer', {
 
-                mixins: [ImmutableRenderMixin],
+    getComponentClass: function () {
+        var Footer = React.createClass({displayName: "Footer",
 
-                propTypes: {
-                    allTodos: ReactPropTypes.object.isRequired
-                },
+            mixins: [ImmutableRenderMixin],
 
-                render: function() { return ns.render(this); }
-            });
+            propTypes: {
+                allTodos: ReactPropTypes.object.isRequired
+            },
 
-            return Footer;
-        },
+            render: function() { return ns.render(this); }
+        });
 
-        render: function (component) {
-            var allTodos = component.props.allTodos.toJS();
-            var total = Object.keys(allTodos).length;
+        return Footer;
+    },
 
-            if (total === 0) {
-                return null;
-            }
+    render: function (component) {
+        var allTodos = component.props.allTodos.toJS();
+        var total = Object.keys(allTodos).length;
 
-            var completed = 0;
-            for (var key in allTodos) {
-                if (allTodos[key].complete) {
-                    completed++;
-                }
-            }
-
-            var itemsLeft = total - completed;
-            var itemsLeftPhrase = itemsLeft === 1 ? ' item ' : ' items ';
-            itemsLeftPhrase += 'left';
-
-            var clearCompletedButton;
-            if (completed) {
-                clearCompletedButton = (
-                    React.createElement("button", {
-                        id: "clear-completed", 
-                        onClick:  _.partial(ns.onClearCompletedClick, component) }, 
-                        "Clear completed(",  completed, ")"
-                    )
-                );
-            }
-
-            return (
-                React.createElement("footer", {id: "footer"}, 
-                    React.createElement("span", {id: "todo-count"}, 
-                        React.createElement("strong", null, " ",  itemsLeft, " "), 
-                         itemsLeftPhrase 
-                    ), 
-                     clearCompletedButton 
-                )
-            );
-        },
-        
-        onClearCompletedClick: function (component) {
-            actions.destroyCompleted();
+        if (total === 0) {
+            return null;
         }
 
-    };
-    module.exports = ns;
+        var completed = 0;
+        for (var key in allTodos) {
+            if (allTodos[key].complete) {
+                completed++;
+            }
+        }
+
+        var itemsLeft = total - completed;
+        var itemsLeftPhrase = itemsLeft === 1 ? ' item ' : ' items ';
+        itemsLeftPhrase += 'left';
+
+        var clearCompletedButton;
+        if (completed) {
+            clearCompletedButton = (
+                React.createElement("button", {
+                    id: "clear-completed", 
+                    onClick:  _.partial(ns.onClearCompletedClick, component) }, 
+                    "Clear completed(",  completed, ")"
+                )
+            );
+        }
+
+        return (
+            React.createElement("footer", {id: "footer"}, 
+                React.createElement("span", {id: "todo-count"}, 
+                    React.createElement("strong", null, " ",  itemsLeft, " "), 
+                     itemsLeftPhrase 
+                ), 
+                 clearCompletedButton 
+            )
+        );
+    },
+    
+    onClearCompletedClick: function (component) {
+        actions.destroyCompleted();
+    }
+
 });
+module.exports = ns;
+
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../actions":1,"react-immutable-render-mixin":12}],3:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.components.header', function(ns) {
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-    var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-    var actions = require('../actions');
+var actions = require('../actions');
 
-    ns.exports = {
+var ns = birchpress.namespace('brithoncrm.todomvc.components.header', {
 
-        getComponentClass: function () {
-            var Header = React.createClass({displayName: "Header",
+    getComponentClass: function () {
+        var Header = React.createClass({displayName: "Header",
 
-                mixins: [ImmutableRenderMixin],
+            mixins: [ImmutableRenderMixin],
 
-                render: function() { return ns.render(this); }
-            });
+            render: function() { return ns.render(this); }
+        });
 
-            return Header;
-        },
+        return Header;
+    },
 
-        render: function(component) {
-            var TodoTextInput = require('./todotextinput').getComponentClass();
-            return (
-                React.createElement("header", {id: "header"}, 
-                    React.createElement("h1", null, "todos"), 
-                    React.createElement(TodoTextInput, {
-                        id: "new-todo", 
-                        placeholder: "What needs to be done?", 
-                        onSave:  _.partial(ns.onSave, component) }
-                    )
+    render: function(component) {
+        var TodoTextInput = require('./todotextinput').getComponentClass();
+        return (
+            React.createElement("header", {id: "header"}, 
+                React.createElement("h1", null, "todos"), 
+                React.createElement(TodoTextInput, {
+                    id: "new-todo", 
+                    placeholder: "What needs to be done?", 
+                    onSave:  _.partial(ns.onSave, component) }
                 )
-            );
-        },
+            )
+        );
+    },
 
-        onSave: function(component, text) {
-            if (text.trim()) {
-                actions.create(text);
-            }
+    onSave: function(component, text) {
+        if (text.trim()) {
+            actions.create(text);
         }
-    };
-    module.exports = ns;
+    }
 });
+module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../actions":1,"./todotextinput":7,"react-immutable-render-mixin":12}],4:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.components.mainsection', function(ns) {
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var ReactPropTypes = React.PropTypes;
+var ImmutableRenderMixin = require('react-immutable-render-mixin')
 
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-    var ReactPropTypes = React.PropTypes;
-    var ImmutableRenderMixin = require('react-immutable-render-mixin')
+var actions = require('../actions');
 
-    var actions = require('../actions');
+var ns = birchpress.namespace('brithoncrm.todomvc.components.mainsection', {
 
-    ns.exports = {
+    getComponentClass: function() {
+        var MainSection = React.createClass({displayName: "MainSection",
 
-        getComponentClass: function() {
-            var MainSection = React.createClass({displayName: "MainSection",
+            mixins: [ImmutableRenderMixin],
 
-                mixins: [ImmutableRenderMixin],
+            propTypes: {
+                allTodos: ReactPropTypes.object.isRequired,
+                areAllComplete: ReactPropTypes.bool.isRequired
+            },
 
-                propTypes: {
-                    allTodos: ReactPropTypes.object.isRequired,
-                    areAllComplete: ReactPropTypes.bool.isRequired
-                },
+            render: function() { return ns.render(this); },
 
-                render: function() { return ns.render(this); },
+            onToggleCompleteAll: _.partial(ns.onToggleCompleteAll, this)
 
-                onToggleCompleteAll: _.partial(ns.onToggleCompleteAll, this)
+        });
 
-            });
+        return MainSection;
+    },
 
-            return MainSection;
-        },
+    render: function (component) {
+        var TodoItem = require('./todoitem').getComponentClass();
+        var allTodos = component.props.allTodos.toJS();
 
-        render: function (component) {
-            var TodoItem = require('./todoitem').getComponentClass();
-            var allTodos = component.props.allTodos.toJS();
-
-            if (Object.keys(allTodos).length < 1) {
-                return null;
-            }
-
-            var todos = [];
-
-            for (var key in allTodos) {
-                var todo = component.props.allTodos.get(key);
-                todos.push(React.createElement(TodoItem, {key: key, todo: todo}));
-            }
-
-            return (
-                React.createElement("section", {id: "main"}, 
-                    React.createElement("input", {
-                        id: "toggle-all", 
-                        type: "checkbox", 
-                        onChange: component.onToggleCompleteAll, 
-                        checked: component.props.areAllComplete ? 'checked' : ''}
-                    ), 
-                    React.createElement("label", {htmlFor: "toggle-all"}, "Mark all as complete"), 
-                    React.createElement("ul", {id: "todo-list"}, todos)
-                )
-            );
-        },
-
-        onToggleCompleteAll: function (component) {
-            actions.toggleCompleteAll();
+        if (Object.keys(allTodos).length < 1) {
+            return null;
         }
-    };
-    module.exports = ns;
+
+        var todos = [];
+
+        for (var key in allTodos) {
+            var todo = component.props.allTodos.get(key);
+            todos.push(React.createElement(TodoItem, {key: key, todo: todo}));
+        }
+
+        return (
+            React.createElement("section", {id: "main"}, 
+                React.createElement("input", {
+                    id: "toggle-all", 
+                    type: "checkbox", 
+                    onChange: component.onToggleCompleteAll, 
+                    checked: component.props.areAllComplete ? 'checked' : ''}
+                ), 
+                React.createElement("label", {htmlFor: "toggle-all"}, "Mark all as complete"), 
+                React.createElement("ul", {id: "todo-list"}, todos)
+            )
+        );
+    },
+
+    onToggleCompleteAll: function (component) {
+        actions.toggleCompleteAll();
+    }
 });
+module.exports = ns;
 
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../actions":1,"./todoitem":6,"react-immutable-render-mixin":12}],5:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.components.todoapp', function(ns){
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var ImmutableRenderMixin = require('react-immutable-render-mixin')
 
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-    var ImmutableRenderMixin = require('react-immutable-render-mixin')
+var ns = birchpress.namespace('brithoncrm.todomvc.components.todoapp', {
 
-    ns.exports = {
+    getComponentClass: function() {
+        var TodoApp = React.createClass({displayName: "TodoApp",
 
-        getComponentClass: function() {
-            var TodoApp = React.createClass({displayName: "TodoApp",
+            mixins: [ImmutableRenderMixin],
 
-                mixins: [ImmutableRenderMixin],
+            render: function() { return ns.render(this); }
+        });
 
-                render: function() { return ns.render(this); }
-            });
+        return TodoApp;
+    },
 
-            return TodoApp;
-        },
+    render: function(component) {
+        var Footer = require('./footer').getComponentClass();
+        var Header = require('./header').getComponentClass();
+        var MainSection = require('./mainsection').getComponentClass();
 
-        render: function(component) {
-            var Footer = require('./footer').getComponentClass();
-            var Header = require('./header').getComponentClass();
-            var MainSection = require('./mainsection').getComponentClass();
-
-            return (
-                React.createElement("div", null, 
-                    React.createElement(Header, null), 
-                    React.createElement(MainSection, {
-                        allTodos: component.props.todoStore.allTodos, 
-                        areAllComplete: component.props.todoStore.areAllComplete}
-                    ), 
-                    React.createElement(Footer, {allTodos: component.props.todoStore.allTodos})
-                )
-            );
-        }
-    };
-    module.exports = ns;
+        return (
+            React.createElement("div", null, 
+                React.createElement(Header, null), 
+                React.createElement(MainSection, {
+                    allTodos: component.props.todoStore.allTodos, 
+                    areAllComplete: component.props.todoStore.areAllComplete}
+                ), 
+                React.createElement(Footer, {allTodos: component.props.todoStore.allTodos})
+            )
+        );
+    }
 });
+module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./footer":2,"./header":3,"./mainsection":4,"react-immutable-render-mixin":12}],6:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.components.todoitem', function(ns) {
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var ReactPropTypes = React.PropTypes;
+var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
+var Cursor = require('immutable/contrib/cursor');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var cx = require('react/lib/cx');
 
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-    var ReactPropTypes = React.PropTypes;
-    var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
-    var Cursor = require('immutable/contrib/cursor');
-    var ImmutableRenderMixin = require('react-immutable-render-mixin');
-    var cx = require('react/lib/cx');
+var actions = require('../actions');
 
-    var actions = require('../actions');
+var ns = birchpress.namespace('brithoncrm.todomvc.components.todoitem', {
 
-    ns.exports = {
-        getComponentClass: function() {
-            var TodoItem = React.createClass({displayName: "TodoItem",
+    getComponentClass: function() {
+        var TodoItem = React.createClass({displayName: "TodoItem",
 
-                mixins: [ImmutableRenderMixin],
+            mixins: [ImmutableRenderMixin],
 
-                propTypes: {
-                    todo: ReactPropTypes.object.isRequired
-                },
+            propTypes: {
+                todo: ReactPropTypes.object.isRequired
+            },
 
-                getInitialState: function() { return ns.getInitialState(this); },
+            getInitialState: function() { return ns.getInitialState(this); },
 
-                render: function() { return ns.render(this); }
-            });
+            render: function() { return ns.render(this); }
+        });
 
-            return TodoItem;
-        },
+        return TodoItem;
+    },
 
-        getInitialState: function (component) {
-            return {
-                'isEditing': false
-            };
-        },
+    getInitialState: function (component) {
+        return {
+            'isEditing': false
+        };
+    },
 
-        render: function (component) {
-            var TodoTextInput = require('./todotextinput').getComponentClass();
-            var todo = component.props.todo.toJS();
+    render: function (component) {
+        var TodoTextInput = require('./todotextinput').getComponentClass();
+        var todo = component.props.todo.toJS();
 
-            var input;
-            if (component.state.isEditing) {
-                input =
-                    React.createElement(TodoTextInput, {
-                        className: "edit", 
-                        onSave: _.partial(ns.onSave, component), 
-                        value: todo.text}
-                    );
-            }
-
-            return (
-                React.createElement("li", {
-                    className: cx({
-                        'completed': todo.complete,
-                        'editing': component.state.isEditing
-                    }), 
-                    key: todo.id}, 
-                    React.createElement("div", {className: "view"}, 
-                        React.createElement("input", {
-                            className: "toggle", 
-                            type: "checkbox", 
-                            checked: todo.complete, 
-                            onChange: _.partial(ns.onToggleComplete, component)}
-                        ), 
-                        React.createElement("label", {onDoubleClick: _.partial(ns.onDoubleClick, component)}, 
-                            todo.text
-                        ), 
-                        React.createElement("button", {className: "destroy", onClick: _.partial(ns.onDestroyClick, component)})
-                    ), 
-                    input
-                )
-            );
-        },
-
-        onToggleComplete: function (component) {
-            actions.toggleComplete(component.props.todo.toJS());
-        },
-
-        onDoubleClick: function (component) {
-            component.setState({
-                isEditing: true
-            });
-        },
-
-        onSave: function (component, text) {
-            actions.updateText(component.props.todo.toJS().id, text);
-            component.setState({
-                isEditing: false
-            });
-        },
-
-        onDestroyClick: function (component) {
-            actions.destroy(component.props.todo.toJS().id);
+        var input;
+        if (component.state.isEditing) {
+            input =
+                React.createElement(TodoTextInput, {
+                    className: "edit", 
+                    onSave: _.partial(ns.onSave, component), 
+                    value: todo.text}
+                );
         }
 
-    };
+        return (
+            React.createElement("li", {
+                className: cx({
+                    'completed': todo.complete,
+                    'editing': component.state.isEditing
+                }), 
+                key: todo.id}, 
+                React.createElement("div", {className: "view"}, 
+                    React.createElement("input", {
+                        className: "toggle", 
+                        type: "checkbox", 
+                        checked: todo.complete, 
+                        onChange: _.partial(ns.onToggleComplete, component)}
+                    ), 
+                    React.createElement("label", {onDoubleClick: _.partial(ns.onDoubleClick, component)}, 
+                        todo.text
+                    ), 
+                    React.createElement("button", {className: "destroy", onClick: _.partial(ns.onDestroyClick, component)})
+                ), 
+                input
+            )
+        );
+    },
 
-    module.exports = ns;
+    onToggleComplete: function (component) {
+        actions.toggleComplete(component.props.todo.toJS());
+    },
+
+    onDoubleClick: function (component) {
+        component.setState({
+            isEditing: true
+        });
+    },
+
+    onSave: function (component, text) {
+        actions.updateText(component.props.todo.toJS().id, text);
+        component.setState({
+            isEditing: false
+        });
+    },
+
+    onDestroyClick: function (component) {
+        actions.destroy(component.props.todo.toJS().id);
+    }
+
 });
+module.exports = ns;
 
 
 
@@ -359,291 +348,291 @@ birchpress.namespace('brithoncrm.todomvc.components.todoitem', function(ns) {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../actions":1,"./todotextinput":7,"immutable/contrib/cursor":10,"react-immutable-render-mixin":12,"react/lib/cx":14}],7:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.components.todotextinput', function(ns) {
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-    var ReactPropTypes = React.PropTypes;
-    var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
-    var Cursor = require('immutable/contrib/cursor');
-    var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var ReactPropTypes = React.PropTypes;
+var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
+var Cursor = require('immutable/contrib/cursor');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-    var actions = require('../actions');
+var actions = require('../actions');
 
-    var ENTER_KEY_CODE = 13;
+var ENTER_KEY_CODE = 13;
 
-    ns.exports = {
+var ns = birchpress.namespace('brithoncrm.todomvc.components.todotextinput', {
 
-        getComponentClass: function() {
-            var TodoTextInput = React.createClass({displayName: "TodoTextInput",
+    getComponentClass: function() {
+        var TodoTextInput = React.createClass({displayName: "TodoTextInput",
 
-                propTypes: {
-                    className: ReactPropTypes.string,
-                    id: ReactPropTypes.string,
-                    placeholder: ReactPropTypes.string,
-                    onSave: ReactPropTypes.func.isRequired,
-                    value: ReactPropTypes.string
-                },
+            propTypes: {
+                className: ReactPropTypes.string,
+                id: ReactPropTypes.string,
+                placeholder: ReactPropTypes.string,
+                onSave: ReactPropTypes.func.isRequired,
+                value: ReactPropTypes.string
+            },
 
-                getInitialState: function() { return ns.getInitialState(this); },
+            getInitialState: function() { return ns.getInitialState(this); },
 
-                render: function() { return ns.render(this); }
-            });
+            render: function() { return ns.render(this); }
+        });
 
-            return TodoTextInput;
-        },
+        return TodoTextInput;
+    },
 
-        getInitialState: function (component) {
-            return {
-                value: component.props.value || ''
-            };
-        },
+    getInitialState: function (component) {
+        return {
+            value: component.props.value || ''
+        };
+    },
 
-        render: function (component) {
-            return (
-                React.createElement("input", {
-                    className:  component.props.className, 
-                    id:  component.props.id, 
-                    placeholder:  component.props.placeholder, 
-                    onBlur:  _.partial(ns.onBlur, component), 
-                    onChange:  _.partial(ns.onChange, component), 
-                    onKeyDown:  _.partial(ns.onKeyDown, component), 
-                    value:  component.state.value, 
-                    autoFocus:  true }
-                )
-            );
-        },
+    render: function (component) {
+        return (
+            React.createElement("input", {
+                className:  component.props.className, 
+                id:  component.props.id, 
+                placeholder:  component.props.placeholder, 
+                onBlur:  _.partial(ns.onBlur, component), 
+                onChange:  _.partial(ns.onChange, component), 
+                onKeyDown:  _.partial(ns.onKeyDown, component), 
+                value:  component.state.value, 
+                autoFocus:  true }
+            )
+        );
+    },
 
-        onBlur: function(component) {
+    onBlur: function(component) {
+        ns.save(component);
+    },
+
+    onChange: function (component, event) {
+        component.setState({
+            value: event.target.value
+        });
+    },
+
+    save: function (component) {
+        component.props.onSave(component.state.value);
+        component.setState({
+            value: ''
+        });
+    },
+
+    onKeyDown: function (component, event) {
+        if (event.keyCode === ENTER_KEY_CODE) {
             ns.save(component);
-        },
-
-        onChange: function (component, event) {
-            component.setState({
-                value: event.target.value
-            });
-        },
-
-        save: function (component) {
-            component.props.onSave(component.state.value);
-            component.setState({
-                value: ''
-            });
-        },
-
-        onKeyDown: function (component, event) {
-            if (event.keyCode === ENTER_KEY_CODE) {
-                ns.save(component);
-            }
         }
-    };
+    }
 
-    module.exports = ns;
 });
+module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../actions":1,"immutable/contrib/cursor":10,"react-immutable-render-mixin":12}],8:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc', function(ns) {
+var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+
+var stores = require('./stores');
+var actions = require('./actions');
+
+var todoAppComponent;
+
+var ns = birchpress.namespace('brithoncrm.todomvc', {
+
+    init: function() {
+        birchpress.addAction('brithoncrm.todomvc.initModuleAfter', ns.run);
+    },
     
-    var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+    initModule: function() {
+        birchpress.initNamespace(brithoncrm.todomvc);
+    },
 
-    var stores = require('./stores');
-    var actions = require('./actions');
-
-    var todoAppComponent;
-
-    ns.exports = {
-
-        init: function() {
-            birchpress.addAction('birchpress.initFrameworkAfter', ns.run);
-        },
-
-        run: function() {
-            var TodoApp = require('./components/todoapp').getComponentClass();
-            if (!todoAppComponent) {
-                todoAppComponent = React.render(
-                    React.createElement(TodoApp, {
-                        todoStore: ns.getTodoStore()
-                    }),
-                    document.getElementById('todoapp')
-                );
-                birchpress.addAction('brithoncrm.todomvc.stores.onChangeAfter', function() {
-                    todoAppComponent.setProps({
-                        todoStore: ns.getTodoStore()
-                    });
+    run: function() {
+        var TodoApp = require('./components/todoapp').getComponentClass();
+        if (!todoAppComponent) {
+            todoAppComponent = React.render(
+                React.createElement(TodoApp, {
+                    todoStore: ns.getTodoStore()
+                }),
+                document.getElementById('todoapp')
+            );
+            birchpress.addAction('brithoncrm.todomvc.stores.onChangeAfter', function() {
+                todoAppComponent.setProps({
+                    todoStore: ns.getTodoStore()
                 });
-            }
-        },
-
-        /**
-         * Retrieve the current TODO data from the TodoStore
-         */
-        getTodoStore: function() {
-            return {
-                allTodos: stores.getAll(),
-                areAllComplete: stores.areAllComplete()
-            };
+            });
         }
-    };
-    module.exports = ns;
+    },
+
+    /**
+     * Retrieve the current TODO data from the TodoStore
+     */
+    getTodoStore: function() {
+        return {
+            allTodos: stores.getAll(),
+            areAllComplete: stores.areAllComplete()
+        };
+    }
 });
+birchpress.addAction('birchpress.initFrameworkAfter', ns.initModule);
+module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./actions":1,"./components/todoapp":5,"./stores":9}],9:[function(require,module,exports){
 (function (global){
-birchpress.namespace('brithoncrm.todomvc.stores', function(ns) {
-    var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
-    var Cursor = require('immutable/contrib/cursor');
+var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
+var Cursor = require('immutable/contrib/cursor');
 
-    var _todos = Immutable.fromJS({});
-    var createCursor = function() {
-        return Cursor.from(_todos, function(newData) {
-            _todos = newData;
-            todosCursor = createCursor();
-            ns.onChange(newData);
-        });
-    };
-    var todosCursor = createCursor();
+var _todos = Immutable.fromJS({});
+var createCursor = function() {
+    return Cursor.from(_todos, function(newData) {
+        _todos = newData;
+        todosCursor = createCursor();
+        ns.onChange(newData);
+    });
+};
+var todosCursor = createCursor();
 
-    ns.exports = {
-        init: function() {
-            birchpress.addAction('brithoncrm.todomvc.actions.createAfter', function(text) {
-                text = text.trim();
-                if (text !== '') {
-                    ns.create(text);
-                }
-            });
-            birchpress.addAction('brithoncrm.todomvc.actions.updateTextAfter', function(id, text) {
-                text = text.trim();
-                if (text !== '') {
-                    ns.update(id, {
-                        text: text
-                    });
-                }
-            });
-            birchpress.addAction('brithoncrm.todomvc.actions.toggleCompleteAfter', function(todo) {
-                var id = todo.id;
-                if (todo.complete) {
-                    ns.update(id, {
-                        complete: false
-                    });
-                } else {
-                    ns.update(id, {
-                        complete: true
-                    });
-                }
-            });
-            birchpress.addAction('brithoncrm.todomvc.actions.toggleCompleteAllAfter', function() {
-                if (ns.areAllComplete()) {
-                    ns.updateAll({
-                        complete: false
-                    });
-                } else {
-                    ns.updateAll({
-                        complete: true
-                    });
-                }
-            });
-            birchpress.addAction('brithoncrm.todomvc.actions.destroyAfter', function(id) {
-                ns.destroy(id);
-            });
-            birchpress.addAction('brithoncrm.todomvc.actions.destroyCompletedAfter', function() {
-                ns.destroyCompleted();
-            });
-        },
+var ns = birchpress.namespace('brithoncrm.todomvc.stores', {
 
-        onChange: function(newData) {},
-
-        /**
-         * Create a TODO item.
-         * @param  {string} text The content of the TODO
-         */
-        create: function(text) {
-            // Hand waving here -- not showing how this interacts with XHR or persistent
-            // server-side storage.
-            // Using the current timestamp + random number in place of a real id.
-            var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
-            var todo = Immutable.Map({
-                id: id,
-                complete: false,
-                text: text
-            });
-            todosCursor.set(id, todo);
-        },
-
-        /**
-         * Update a TODO item.
-         * @param  {string} id
-         * @param {object} updates An object literal containing only the data to be
-         *     updated.
-         */
-        update: function(id, updates) {
-            var todo = todosCursor.get(id);
-            if (!Immutable.Map.isMap(updates)) {
-                updates = Immutable.fromJS(updates);
+    init: function() {
+        birchpress.addAction('brithoncrm.todomvc.actions.createAfter', function(text) {
+            text = text.trim();
+            if (text !== '') {
+                ns.create(text);
             }
-            todo.merge(updates);
-        },
+        });
+        birchpress.addAction('brithoncrm.todomvc.actions.updateTextAfter', function(id, text) {
+            text = text.trim();
+            if (text !== '') {
+                ns.update(id, {
+                    text: text
+                });
+            }
+        });
+        birchpress.addAction('brithoncrm.todomvc.actions.toggleCompleteAfter', function(todo) {
+            var id = todo.id;
+            if (todo.complete) {
+                ns.update(id, {
+                    complete: false
+                });
+            } else {
+                ns.update(id, {
+                    complete: true
+                });
+            }
+        });
+        birchpress.addAction('brithoncrm.todomvc.actions.toggleCompleteAllAfter', function() {
+            if (ns.areAllComplete()) {
+                ns.updateAll({
+                    complete: false
+                });
+            } else {
+                ns.updateAll({
+                    complete: true
+                });
+            }
+        });
+        birchpress.addAction('brithoncrm.todomvc.actions.destroyAfter', function(id) {
+            ns.destroy(id);
+        });
+        birchpress.addAction('brithoncrm.todomvc.actions.destroyCompletedAfter', function() {
+            ns.destroyCompleted();
+        });
+    },
 
-        /**
-         * Update all of the TODO items with the same object.
-         *     the data to be updated.  Used to mark all TODOs as completed.
-         * @param  {object} updates An object literal containing only the data to be
-         *     updated.
-         
-         */
-        updateAll: function(updates) {
-            todosCursor.valueOf().forEach(function(value, key) {
-                ns.update(key, updates);
-            });
-        },
+    onChange: function(newData) {},
 
-        /**
-         * Delete a TODO item.
-         * @param  {string} id
-         */
-        destroy: function(id) {
-            todosCursor.delete(id);
-        },
+    /**
+     * Create a TODO item.
+     * @param  {string} text The content of the TODO
+     */
+    create: function(text) {
+        // Hand waving here -- not showing how this interacts with XHR or persistent
+        // server-side storage.
+        // Using the current timestamp + random number in place of a real id.
+        var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+        var todo = Immutable.Map({
+            id: id,
+            complete: false,
+            text: text
+        });
+        todosCursor.set(id, todo);
+    },
 
-        /**
-         * Delete all the completed TODO items.
-         */
-        destroyCompleted: function() {
-            todosCursor.valueOf().forEach(function(value, key) {
-                if (value.get('complete', false)) {
-                    ns.destroy(key);
-                }
-            });
-        },
-
-        /**
-         * Tests whether all the remaining TODO items are marked as completed.
-         * @return {boolean}
-         */
-        areAllComplete: function() {
-            var allComplete = true;
-            todosCursor.valueOf().forEach(function(value, key) {
-                if (!value.get('complete', false)) {
-                    allComplete = false;
-                    return false;
-                }
-            });
-            return allComplete;
-        },
-
-        /**
-         * Get the entire collection of TODOs.
-         * @return {object}
-         */
-        getAll: function() {
-            return _todos;
+    /**
+     * Update a TODO item.
+     * @param  {string} id
+     * @param {object} updates An object literal containing only the data to be
+     *     updated.
+     */
+    update: function(id, updates) {
+        var todo = todosCursor.get(id);
+        if (!Immutable.Map.isMap(updates)) {
+            updates = Immutable.fromJS(updates);
         }
+        todo.merge(updates);
+    },
 
-    };
-    module.exports = ns;
+    /**
+     * Update all of the TODO items with the same object.
+     *     the data to be updated.  Used to mark all TODOs as completed.
+     * @param  {object} updates An object literal containing only the data to be
+     *     updated.
+     
+     */
+    updateAll: function(updates) {
+        todosCursor.valueOf().forEach(function(value, key) {
+            ns.update(key, updates);
+        });
+    },
+
+    /**
+     * Delete a TODO item.
+     * @param  {string} id
+     */
+    destroy: function(id) {
+        todosCursor.delete(id);
+    },
+
+    /**
+     * Delete all the completed TODO items.
+     */
+    destroyCompleted: function() {
+        todosCursor.valueOf().forEach(function(value, key) {
+            if (value.get('complete', false)) {
+                ns.destroy(key);
+            }
+        });
+    },
+
+    /**
+     * Tests whether all the remaining TODO items are marked as completed.
+     * @return {boolean}
+     */
+    areAllComplete: function() {
+        var allComplete = true;
+        todosCursor.valueOf().forEach(function(value, key) {
+            if (!value.get('complete', false)) {
+                allComplete = false;
+                return false;
+            }
+        });
+        return allComplete;
+    },
+
+    /**
+     * Get the entire collection of TODOs.
+     * @return {object}
+     */
+    getAll: function() {
+        return _todos;
+    }
+
 });
+module.exports = ns;
+
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"immutable/contrib/cursor":10}],10:[function(require,module,exports){

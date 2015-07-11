@@ -1,71 +1,70 @@
-birchpress.namespace('brithoncrm.todomvc.components.footer', function (ns) {
-    var React = require('react');
-    var ReactPropTypes = React.PropTypes;
-    var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var React = require('react');
+var ReactPropTypes = React.PropTypes;
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-    var actions = require('../actions');
+var actions = require('../actions');
 
-    ns.exports = {
-        getComponentClass: function () {
-            var Footer = React.createClass({
+var ns = birchpress.namespace('brithoncrm.todomvc.components.footer', {
 
-                mixins: [ImmutableRenderMixin],
+    getComponentClass: function () {
+        var Footer = React.createClass({
 
-                propTypes: {
-                    allTodos: ReactPropTypes.object.isRequired
-                },
+            mixins: [ImmutableRenderMixin],
 
-                render: function() { return ns.render(this); }
-            });
+            propTypes: {
+                allTodos: ReactPropTypes.object.isRequired
+            },
 
-            return Footer;
-        },
+            render: function() { return ns.render(this); }
+        });
 
-        render: function (component) {
-            var allTodos = component.props.allTodos.toJS();
-            var total = Object.keys(allTodos).length;
+        return Footer;
+    },
 
-            if (total === 0) {
-                return null;
-            }
+    render: function (component) {
+        var allTodos = component.props.allTodos.toJS();
+        var total = Object.keys(allTodos).length;
 
-            var completed = 0;
-            for (var key in allTodos) {
-                if (allTodos[key].complete) {
-                    completed++;
-                }
-            }
-
-            var itemsLeft = total - completed;
-            var itemsLeftPhrase = itemsLeft === 1 ? ' item ' : ' items ';
-            itemsLeftPhrase += 'left';
-
-            var clearCompletedButton;
-            if (completed) {
-                clearCompletedButton = (
-                    <button
-                        id = "clear-completed"
-                        onClick = { _.partial(ns.onClearCompletedClick, component) } >
-                        Clear completed({ completed })
-                    </button>
-                );
-            }
-
-            return (
-                <footer id = "footer" >
-                    <span id = "todo-count" >
-                        <strong > { itemsLeft } </strong>
-                        { itemsLeftPhrase }
-                    </span> 
-                    { clearCompletedButton }
-                </footer>
-            );
-        },
-        
-        onClearCompletedClick: function (component) {
-            actions.destroyCompleted();
+        if (total === 0) {
+            return null;
         }
 
-    };
-    module.exports = ns;
+        var completed = 0;
+        for (var key in allTodos) {
+            if (allTodos[key].complete) {
+                completed++;
+            }
+        }
+
+        var itemsLeft = total - completed;
+        var itemsLeftPhrase = itemsLeft === 1 ? ' item ' : ' items ';
+        itemsLeftPhrase += 'left';
+
+        var clearCompletedButton;
+        if (completed) {
+            clearCompletedButton = (
+                <button
+                    id = "clear-completed"
+                    onClick = { _.partial(ns.onClearCompletedClick, component) } >
+                    Clear completed({ completed })
+                </button>
+            );
+        }
+
+        return (
+            <footer id = "footer" >
+                <span id = "todo-count" >
+                    <strong > { itemsLeft } </strong>
+                    { itemsLeftPhrase }
+                </span> 
+                { clearCompletedButton }
+            </footer>
+        );
+    },
+    
+    onClearCompletedClick: function (component) {
+        actions.destroyCompleted();
+    }
+
 });
+module.exports = ns;
