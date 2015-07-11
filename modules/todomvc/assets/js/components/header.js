@@ -1,41 +1,39 @@
-birchpress.namespace('brithoncrm.todomvc.components.header', function(ns) {
-    var React = require('react');
-    var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-    var actions = require('../actions');
+var actions = require('../actions');
 
-    ns.exports = {
+var ns = birchpress.namespace('brithoncrm.todomvc.components.header', {
 
-        getComponentClass: function () {
-            var Header = React.createClass({
+    getComponentClass: function () {
+        var Header = React.createClass({
 
-                mixins: [ImmutableRenderMixin],
+            mixins: [ImmutableRenderMixin],
 
-                render: function() { return ns.render(this); }
-            });
+            render: function() { return ns.render(this); }
+        });
 
-            return Header;
-        },
+        return Header;
+    },
 
-        render: function(component) {
-            var TodoTextInput = require('./todotextinput').getComponentClass();
-            return (
-                <header id="header">
-                    <h1>todos</h1>
-                    <TodoTextInput
-                        id="new-todo"
-                        placeholder="What needs to be done?"
-                        onSave={ _.partial(ns.onSave, component) }
-                    />
-                </header>
-            );
-        },
+    render: function(component) {
+        var TodoTextInput = require('./todotextinput').getComponentClass();
+        return (
+            <header id="header">
+                <h1>todos</h1>
+                <TodoTextInput
+                    id="new-todo"
+                    placeholder="What needs to be done?"
+                    onSave={ _.partial(ns.onSave, component) }
+                />
+            </header>
+        );
+    },
 
-        onSave: function(component, text) {
-            if (text.trim()) {
-                actions.create(text);
-            }
+    onSave: function(component, text) {
+        if (text.trim()) {
+            actions.create(text);
         }
-    };
-    module.exports = ns;
+    }
 });
+module.exports = ns;

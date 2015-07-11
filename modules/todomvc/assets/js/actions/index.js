@@ -1,19 +1,19 @@
-birchpress.namespace('brithoncrm.todomvc.actions', function(ns) {
-	ns.exports = {
+var ns = birchpress.namespace('brithoncrm.todomvc.actions', {
 
-		init: function() {},
+	init: function() {},
 
-		create: function(text) {},
+	create: function(text) {},
 
-		updateText: function(id, text) {},
+	updateText: function(id, text) {},
 
-		toggleComplete: function(todo) {},
+	toggleComplete: function(todo) {},
 
-		toggleCompleteAll: function() {},
+	toggleCompleteAll: function() {},
 
-		destroy: function(id) {},
+	destroy: function(id) {},
 
-		destroyCompleted: function() {}
-	};
-	module.exports = ns;
+	destroyCompleted: function() {}
+
 });
+
+module.exports = ns;
