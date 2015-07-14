@@ -10,12 +10,12 @@
   License: GPLv2
  */
 
-if ( defined( 'ABSPATH' ) && !defined( 'BRITHON_CRM' ) ) {
+if ( defined( 'ABSPATH' ) && ! defined( 'BRITHON_CRM' ) ) {
 
 	define( 'BRITHON_CRM', true );
 
-	if ( is_file( dirname(__DIR__) . '/birchpress/birchpress.php' ) ) {
-		require_once dirname(__DIR__) . '/birchpress/birchpress.php';
+	if ( is_file( dirname( __DIR__ ) . '/birchpress/birchpress.php' ) ) {
+		require_once dirname( __DIR__ ) . '/birchpress/birchpress.php';
 		birchpress_load_common_framework();
 	} else {
 		require_once 'framework/includes/birchpress.inc.php';
