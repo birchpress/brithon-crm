@@ -16,7 +16,6 @@
     },
 
     "editions": {
-
         "developer": {
             "addons": [
                 "subscriptions", "todomvc"
