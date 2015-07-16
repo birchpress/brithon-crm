@@ -21,7 +21,7 @@ module.exports = ns;
 
 },{}],2:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactPropTypes = React.PropTypes;
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
@@ -94,9 +94,9 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../actions":1,"react-immutable-render-mixin":12}],3:[function(require,module,exports){
+},{"../actions":1,"react-immutable-render-mixin":13}],3:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var actions = require('../actions');
@@ -138,9 +138,9 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../actions":1,"./todotextinput":7,"react-immutable-render-mixin":12}],4:[function(require,module,exports){
+},{"../actions":1,"./todotextinput":7,"react-immutable-render-mixin":13}],4:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactPropTypes = React.PropTypes;
 var ImmutableRenderMixin = require('react-immutable-render-mixin')
 
@@ -205,9 +205,9 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../actions":1,"./todoitem":6,"react-immutable-render-mixin":12}],5:[function(require,module,exports){
+},{"../actions":1,"./todoitem":6,"react-immutable-render-mixin":13}],5:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ImmutableRenderMixin = require('react-immutable-render-mixin')
 
 var ns = birchpress.namespace('brithoncrm.todomvc.components.todoapp', {
@@ -244,11 +244,11 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./footer":2,"./header":3,"./mainsection":4,"react-immutable-render-mixin":12}],6:[function(require,module,exports){
+},{"./footer":2,"./header":3,"./mainsection":4,"react-immutable-render-mixin":13}],6:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactPropTypes = React.PropTypes;
-var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
+var Immutable = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var cx = require('react/lib/cx');
@@ -346,11 +346,11 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../actions":1,"./todotextinput":7,"immutable/contrib/cursor":10,"react-immutable-render-mixin":12,"react/lib/cx":14}],7:[function(require,module,exports){
+},{"../actions":1,"./todotextinput":7,"immutable/contrib/cursor":11,"react-immutable-render-mixin":13,"react/lib/cx":15}],7:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactPropTypes = React.PropTypes;
-var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
+var Immutable = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
@@ -428,9 +428,9 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../actions":1,"immutable/contrib/cursor":10,"react-immutable-render-mixin":12}],8:[function(require,module,exports){
+},{"../actions":1,"immutable/contrib/cursor":11,"react-immutable-render-mixin":13}],8:[function(require,module,exports){
 (function (global){
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
 var stores = require('./stores');
 var actions = require('./actions');
@@ -481,7 +481,7 @@ module.exports = ns;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./actions":1,"./components/todoapp":5,"./stores":9}],9:[function(require,module,exports){
 (function (global){
-var Immutable = (typeof window !== "undefined" ? window.Immutable : typeof global !== "undefined" ? global.Immutable : null);
+var Immutable = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Cursor = require('immutable/contrib/cursor');
 
 var _todos = Immutable.fromJS({});
@@ -635,7 +635,67 @@ module.exports = ns;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"immutable/contrib/cursor":10}],10:[function(require,module,exports){
+},{"immutable/contrib/cursor":11}],10:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    draining = true;
+    var currentQueue;
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        var i = -1;
+        while (++i < len) {
+            currentQueue[i]();
+        }
+        len = queue.length;
+    }
+    draining = false;
+}
+process.nextTick = function (fun) {
+    queue.push(fun);
+    if (!draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],11:[function(require,module,exports){
 /**
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
@@ -976,7 +1036,7 @@ function valToKeyPath(val) {
 
 exports.from = cursorFrom;
 
-},{"immutable":11}],11:[function(require,module,exports){
+},{"immutable":12}],12:[function(require,module,exports){
 /**
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
@@ -5904,7 +5964,7 @@ exports.from = cursorFrom;
   return Immutable;
 
 }));
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 
 "use strict";
 
@@ -5919,7 +5979,7 @@ var ImmutableRenderMixin = {
 
 module.exports = ImmutableRenderMixin;
 
-},{"./shallowEqualImmutable":13}],13:[function(require,module,exports){
+},{"./shallowEqualImmutable":14}],14:[function(require,module,exports){
 var Immutable = require('immutable');
 
 var is = Immutable.is.bind(Immutable);
@@ -5954,7 +6014,7 @@ function shallowEqualImmutable(objA, objB) {
 
 module.exports = shallowEqualImmutable;
 
-},{"immutable":11}],14:[function(require,module,exports){
+},{"immutable":12}],15:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -6010,7 +6070,7 @@ function cx(classNames) {
 module.exports = cx;
 
 }).call(this,require('_process'))
-},{"./warning":16,"_process":17}],15:[function(require,module,exports){
+},{"./warning":17,"_process":10}],16:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -6044,7 +6104,7 @@ emptyFunction.thatReturnsArgument = function(arg) { return arg; };
 
 module.exports = emptyFunction;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -6107,63 +6167,4 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":15,"_process":17}],17:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    draining = true;
-    var currentQueue;
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        var i = -1;
-        while (++i < len) {
-            currentQueue[i]();
-        }
-        len = queue.length;
-    }
-    draining = false;
-}
-process.nextTick = function (fun) {
-    queue.push(fun);
-    if (!draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}]},{},[8]);
+},{"./emptyFunction":16,"_process":10}]},{},[8]);
