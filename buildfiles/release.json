@@ -18,6 +18,12 @@
 
     "editions": {
 
+        "developer": {
+            "addons": [
+                "subscriptions", "todomvc"
+            ]
+        },
+
         "multisite": {
             "addons": [
                 "subscriptions"
