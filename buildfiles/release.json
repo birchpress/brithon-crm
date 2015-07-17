@@ -3,7 +3,7 @@
         "productCode": "brithon-crm",
         "packageName": "brithon-crm",
         "productName": "Brithon CRM",
-        "frameworkVersion":  "1.0",
+        "frameworkVersion":  "2.0",
         "templates": [
             "birchpress.inc.php",
 
@@ -17,6 +17,11 @@
     },
 
     "editions": {
+        "developer": {
+            "addons": [
+                "subscriptions", "todomvc"
+            ]
+        },
 
         "multisite": {
             "addons": [
