@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * base.css overrides
+ */
+
+/**
+ * We are not changing from display:none, but rather re-rendering instead.
+ * Therefore this needs to be displayed normally by default.
+ */
+#todo-list li .edit {
+    display: inline;
+}
+
+.ModalBackdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+}
+
+.ModalContent {
+    background: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    width: 400px;
+}
