@@ -1,5 +1,8 @@
 var React = require('react');
 
+var stores = require('./stores');
+var actions = require('./actions');
+
 var todoAppComponent;
 
 var ns = birchpress.namespace('brithoncrm.subscriptions', {

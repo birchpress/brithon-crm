@@ -3,6 +3,11 @@
 $parse_uri = explode( 'wp-content', $_SERVER['SCRIPT_FILENAME'] );
 require_once( $parse_uri[0] . 'wp-load.php' );
 
+birch_ns( 'brithoncrm.subscriptions.register', function( $ns ) {
+
+        global $brithoncrm;
+
+        $ns->init = function() use ( $ns ) {
             $action = $_POST['action'];
             if( isset($_POST['action']) && $action=='reg' ) {
                 $username = $_POST['username'];
@@ -13,22 +18,22 @@ require_once( $parse_uri[0] . 'wp-load.php' );
                 $org = $_POST['org'];
 
                 if( !$username ) {
-                    return_err_msg('Empty username!');
+                    $ns->return_err_msg('Empty username!');
                 } 
                 if ( !$password ) {
-                    return_err_msg('Empty password!');
+                    $ns->return_err_msg('Empty password!');
                 } 
                 if ( !$email ) {
-                    return_err_msg('Empty email address!');
+                    $ns->return_err_msg('Empty email address!');
                 }
                 if ( !$first_name ) {
-                    return_err_msg('First name required!');
+                    $ns->return_err_msg('First name required!');
                 }
                 if ( !$last_name ) {
-                    return_err_msg('Last name required!');
+                    $ns->return_err_msg('Last name required!');
                 }
                 if ( !$org ) {
-                    return_err_msg('Organization required!');
+                    $ns->return_err_msg('Organization required!');
                 }
 
                 $userdata = array(
@@ -55,22 +60,23 @@ require_once( $parse_uri[0] . 'wp-load.php' );
                                 'site_id' => $site_id
                         ));
                     } else {
-                        return_err_msg( $site_id.get_error_message( $site_id.get_error_code() ) );
+                        $ns->return_err_msg( $site_id.get_error_message( $site_id.get_error_code() ) );
                     }
                 } else {
-                    return_err_msg( $user_id.get_error_message( $user_id.get_error_code() ) );
+                    $ns->return_err_msg( $user_id.get_error_message( $user_id.get_error_code() ) );
                 }
             }
+        };
 
-        function return_err_msg ($msg) {
+        $ns->return_err_msg = function($msg) use ( $ns ) {
             die("{'message':'$msg'}");
         };
 
-        function get_clean_basedomain() {
+        $ns->get_clean_basedomain = function() use ( $ns ) {
             $domain = preg_replace( '|https?://|', '', site_url() );
             if ( $slash = strpos( $domain, '/' ) ) {
                 $domain = substr( $domain, 0, $slash );
             }
             return $domain;
-        }    
-
+        }
+} );

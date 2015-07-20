@@ -122,7 +122,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
                         <Input type="password" name="password" id="" className="width-1-1" placeholder="Password" onChange={ component.handleChange } />
                     </div>
                     <div className="row align-center">
-                        <Button type="submit" id="" className="" text="Submit" />
+                        <Button type="submit" id="" className="" text="Submit" onClick={ component.buttonClick } />
                         <Button type="reset" id="" className="" text="Reset" />
                     </div>  
                 </form>
@@ -137,6 +137,14 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
 
     buttonClick: function(component, event){
         event.preventDefault();
+
+        actions.submit(
+            component.props.first_name,
+            component.props.last_name,
+            component.props.email,
+            component.props.org,
+            component.props.password
+        );
     },
 
     handleChange: function(component, childComponent, event) {

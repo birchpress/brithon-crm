@@ -20,7 +20,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/css/base.css' );
 				wp_enqueue_style( 'brithoncrm_subscriptions_app',
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/css/app.css' );
-				wp_register_script( 'brithoncrm_test_index',
+				wp_enqueue_script( 'brithoncrm_test_index',
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_enqueue_script( 'brithoncrm_subscriptions_index');

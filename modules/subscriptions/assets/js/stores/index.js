@@ -10,7 +10,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.stores', {
                 password = password.trim();
                 if(first_name != '' && last_name != '' && email != '' && org != '' && password != '') {
                     var usrname = ns.generateUserName(first_name, last_name);
-                    ns.submit(usrname, password, email, first_name, last_name, organization);
+                    ns.submit(usrname, password, email, first_name, last_name, org);
                 }
             }
         );
@@ -18,8 +18,9 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.stores', {
 
     submit: function(username, password, email, first_name, last_name, organization) {
         ns.postApi(
-            '../../../inc/register.php', 
+            'wp-content/plugins/brithon-crm/modules/subscriptions/inc/register.php', 
             {
+                'action': 'reg',
                 'username': username,
                 'password': password,
                 'email': email,
@@ -42,7 +43,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.stores', {
     },
 
     _ajax: function(method, url, data, callback) {
-        $.ajax({
+        jQuery.ajax({
             type: method,
             url: url,
             data: data,
@@ -62,7 +63,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.stores', {
             callback = data;
             data = {};
         }
-        _ajax('GET', url, data, callback);
+        ns._ajax('GET', url, data, callback);
     },
 
     postApi: function(url, data, callback) {
@@ -70,7 +71,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.stores', {
             callback = data;
             data = {};
         }
-        _ajax('POST', url, data, callback);
+        ns._ajax('POST', url, data, callback);
     }   
 });
 
