@@ -1,4 +1,5 @@
 node_modules
+index.bundle.js
 framework
 dist
 npm-debug.log

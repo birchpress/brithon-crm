@@ -9,11 +9,16 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.button', {
                 type: React.PropTypes.string,
                 id: React.PropTypes.string,
                 className: React.PropTypes.string,
-                text: React.PropTypes.string
+                text: React.PropTypes.string,
+                onClick: React.PropTypes.func
             },
 
             render: function() {
                 return ns.render(this);
+            },
+
+            handleClick: function(e) {
+                return ns.handleClick(this, e);
             }
         });
         return _button;
@@ -25,8 +30,14 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.button', {
                 type={ component.props.type }
                 id={ component.props.id }
                 className={ component.props.className }
+                onClick={ component.props.onClick }
             >{ component.props.text }</button>
         );
+    },
+
+    handleClick: function(component, event) {
+        event.preventDefault();
+        component.props.onClick();
     }
 });
 

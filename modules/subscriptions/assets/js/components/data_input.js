@@ -24,11 +24,17 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
         });
         return _input;
     },
-    
+
     getInitialState: function(component) {
         return {
             value: component.props.value || ''
         };
+    },
+
+    onChange: function(component, event) {
+        component.setState({
+            value: event.target.value
+        });
     },
 
     render: function(component) { 
@@ -39,7 +45,8 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
                 id={ component.props.id }
                 className={ component.props.className }
                 placeholder={ component.props.placeholder }
-                value={ component.props.value }
+                onChange={ _.partial(ns.onChange, component) }
+                value={ component.state.value }
             />
         );
     }

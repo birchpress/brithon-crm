@@ -1,6 +1,8 @@
 var React = require('react/addons');
 
 var Modal = require('./modal').getComponentClass();
+var stores = require('../stores');
+var actions = require('../actions');
 
 var ReactLayeredComponentMixin = {
 
@@ -58,6 +60,10 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
 
             render: function() {
                 return ns.render(this);
+            },
+
+            buttonClick: function(e) {
+                return ns.buttonClick(this, e);
             }
         });
         return testMod;
@@ -104,7 +110,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
                         <Input type="password" name="password" id="" className="width-1-1" placeholder="Password" />
                     </div>
                     <div className="row align-center">
-                        <Button type="submit" id="" className="" text="Submit" />
+                        <Button type="submit" id="" className="" text="Submit" onClick={ _.partial(ns.buttonClick, component) } />
                         <Button type="reset" id="" className="" text="Reset" />
                     </div> 
                 </form>
@@ -114,6 +120,11 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
 
     render: function(component){
         return <a href="javascript:;" role="button" onClick={component.handleClick}>Click here to register</a>;
+    },
+
+    buttonClick: function(component, event){
+        event.preventDefault();
+        alert(component.props.child);
     }
 });
 
