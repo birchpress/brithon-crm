@@ -42,6 +42,14 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
 
             mixins: [ReactLayeredComponentMixin],
 
+            propTypes: {
+                first_name: React.PropTypes.string,
+                last_name: React.PropTypes.string,
+                email: React.PropTypes.string,
+                password: React.PropTypes.string,
+                org: React.PropTypes.string
+            },
+
             handleClick: function() {
                 return ns.handleClick(this);
             },
@@ -64,6 +72,10 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
 
             buttonClick: function(e) {
                 return ns.buttonClick(this, e);
+            },
+
+            handleChange: function(childComponent, e) {
+                return ns.handleChange(this, childComponent, e);
             }
         });
         return testMod;
@@ -83,7 +95,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
     },
 
     componentDidMount: function(component) {
-    
+
     },
 
     renderLayer: function(component) {
@@ -97,23 +109,24 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
                 <h1>Welcome to register!</h1>
                 <form>
                     <div className="row">
-                        <Input type="text" name="first_name" id="" className="width-1-2" placeholder="First Name" />
-                        <Input type="text" name="last_name" id="" className="width-1-2" placeholder="Last Name" />
+                        <Input type="text" name="first_name" id="" className="width-1-2" placeholder="First Name" onChange={ component.handleChange } />
+                        <Input type="text" name="last_name" id="" className="width-1-2" placeholder="Last Name" onChange={ component.handleChange } />
                     </div>
                     <div className="row">
-                        <Input type="text" name="email" id="" className="" placeholder="Email address" />
+                        <Input type="text" name="email" id="" className="" placeholder="Email address" onChange={ component.handleChange } />
                     </div>
                     <div className="row">
-                        <Input type="text" name="organization" id="" className="width-1-1" placeholder="Organization" />
+                        <Input type="text" name="organization" id="" className="width-1-1" placeholder="Organization" onChange={ component.handleChange } />
                     </div>
                     <div className="row">
-                        <Input type="password" name="password" id="" className="width-1-1" placeholder="Password" />
+                        <Input type="password" name="password" id="" className="width-1-1" placeholder="Password" onChange={ component.handleChange } />
                     </div>
                     <div className="row align-center">
-                        <Button type="submit" id="" className="" text="Submit" onClick={ _.partial(ns.buttonClick, component) } />
+                        <Button type="submit" id="" className="" text="Submit" />
                         <Button type="reset" id="" className="" text="Reset" />
-                    </div> 
+                    </div>  
                 </form>
+
             </Modal>
         );
     },
@@ -124,7 +137,34 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
 
     buttonClick: function(component, event){
         event.preventDefault();
-        alert(component.props.child);
+    },
+
+    handleChange: function(component, childComponent, event) {
+        switch(childComponent.props.name){
+            case 'first_name':
+            component.props.first_name = childComponent.state.value;
+            break;
+
+            case 'last_name':
+            component.props.last_name = childComponent.state.value;
+            break;
+
+            case 'email':
+            component.props.email = childComponent.state.value;
+            break;
+
+            case 'organization':
+            component.props.org = childComponent.state.value;
+            break;
+
+            case 'password':
+            component.props.password = childComponent.state.value;
+            break;
+
+            default:
+            break;
+        }     
+        console.log(childComponent.state.value);
     }
 });
 

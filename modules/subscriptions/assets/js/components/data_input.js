@@ -11,7 +11,8 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
                 id: React.PropTypes.string,
                 className: React.PropTypes.string,
                 placeholder: React.PropTypes.string,
-                value: React.PropTypes.string
+                value: React.PropTypes.string,
+                onChange: React.PropTypes.func
             },
 
             getInitialState: function() {
@@ -20,6 +21,10 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
 
             render: function() {
                 return ns.render(this);
+            },
+
+            handleChange: function(e) {
+                return ns.handleChange(this, e);
             }
         });
         return _input;
@@ -31,10 +36,11 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
         };
     },
 
-    onChange: function(component, event) {
+    handleChange: function(component, event) {
         component.setState({
             value: event.target.value
         });
+        component.props.onChange(component, event);
     },
 
     render: function(component) { 
@@ -45,7 +51,7 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
                 id={ component.props.id }
                 className={ component.props.className }
                 placeholder={ component.props.placeholder }
-                onChange={ _.partial(ns.onChange, component) }
+                onChange={ component.handleChange }
                 value={ component.state.value }
             />
         );
