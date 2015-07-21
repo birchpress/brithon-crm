@@ -5,25 +5,19 @@ var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var cx = require('react/lib/cx');
 
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 var actions = require('../actions');
 
-var ns = birchpress.namespace('brithoncrm.todomvc.components.todoitem', {
+var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
 
-    getComponentClass: function() {
-        var TodoItem = React.createClass({
+    __mixins__: [ReactMixinCompositor],
 
-            mixins: [ImmutableRenderMixin],
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
-            propTypes: {
-                todo: ReactPropTypes.object.isRequired
-            },
-
-            getInitialState: function() { return ns.getInitialState(this); },
-
-            render: function() { return ns.render(this); }
-        });
-
-        return TodoItem;
+    propTypes: {
+        todo: ReactPropTypes.object.isRequired
     },
 
     getInitialState: function (component) {
@@ -33,7 +27,7 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todoitem', {
     },
 
     render: function (component) {
-        var TodoTextInput = require('./todotextinput').getComponentClass();
+        var TodoTextInput = require('./todotextinput');
         var todo = component.props.todo.toJS();
 
         var input;
@@ -41,7 +35,7 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todoitem', {
             input =
                 <TodoTextInput
                     className="edit"
-                    onSave={_.partial(ns.onSave, component)}
+                    onSave={ component.onSave }
                     value={todo.text}
                 />;
         }
@@ -58,12 +52,12 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todoitem', {
                         className="toggle"
                         type="checkbox"
                         checked={todo.complete}
-                        onChange={_.partial(ns.onToggleComplete, component)}
+                        onChange={ component.onToggleComplete }
                     />
-                    <label onDoubleClick={_.partial(ns.onDoubleClick, component)}>
+                    <label onDoubleClick={ component.onDoubleClick }>
                         {todo.text}
                     </label>
-                    <button className="destroy" onClick={_.partial(ns.onDestroyClick, component)} />
+                    <button className="destroy" onClick={ component.onDestroyClick } />
                 </div>
                 {input}
             </li>
@@ -92,6 +86,6 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todoitem', {
     }
 
 });
-module.exports = ns;
+module.exports = clazz;
 
 

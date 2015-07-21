@@ -2,31 +2,25 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var ImmutableRenderMixin = require('react-immutable-render-mixin')
 
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
+
 var actions = require('../actions');
 
-var ns = birchpress.namespace('brithoncrm.todomvc.components.mainsection', {
+var clazz = birchpress.provide('brithoncrm.todomvc.components.MainSection', {
 
-    getComponentClass: function() {
-        var MainSection = React.createClass({
+    __mixins__: [ReactMixinCompositor],
 
-            mixins: [ImmutableRenderMixin],
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
-            propTypes: {
-                allTodos: ReactPropTypes.object.isRequired,
-                areAllComplete: ReactPropTypes.bool.isRequired
-            },
-
-            render: function() { return ns.render(this); },
-
-            onToggleCompleteAll: _.partial(ns.onToggleCompleteAll, this)
-
-        });
-
-        return MainSection;
+    propTypes: {
+        allTodos: ReactPropTypes.object.isRequired,
+        areAllComplete: ReactPropTypes.bool.isRequired
     },
 
     render: function (component) {
-        var TodoItem = require('./todoitem').getComponentClass();
+        var TodoItem = require('./todoitem');
         var allTodos = component.props.allTodos.toJS();
 
         if (Object.keys(allTodos).length < 1) {
@@ -58,5 +52,5 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.mainsection', {
         actions.toggleCompleteAll();
     }
 });
-module.exports = ns;
+module.exports = clazz;
 
