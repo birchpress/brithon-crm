@@ -3,7 +3,7 @@ var React = require('react');
 var stores = require('./stores');
 var actions = require('./actions');
 
-var todoAppComponent;
+var regAppComponent;
 
 var ns = birchpress.namespace('brithoncrm.subscriptions', {
 
@@ -16,10 +16,10 @@ var ns = birchpress.namespace('brithoncrm.subscriptions', {
     },
 
     run: function() {
-        var TodoApp = require('./components/testapp').getComponentClass();
-        if (!todoAppComponent) {
-            todoAppComponent = React.render(
-                React.createElement(TodoApp, {
+        var regApp = require('./components/regapp').getComponentClass();
+        if (!regAppComponent) {
+            regAppComponent = React.render(
+                React.createElement(regApp, {
                 }),
                 document.getElementById('registerapp')
             );

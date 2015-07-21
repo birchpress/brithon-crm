@@ -35,7 +35,7 @@ var ReactLayeredComponentMixin = {
     }
 };
 
-var ns = birchpress.namespace('brithoncrm.subscriptions.components.testapp', {
+var ns = birchpress.namespace('brithoncrm.subscriptions.components.regapp', {
 
     getComponentClass: function() {
         var testMod = React.createClass({
