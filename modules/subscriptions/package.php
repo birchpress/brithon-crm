@@ -28,7 +28,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 				wp_enqueue_script( 'brithoncrm_subscriptions_index');
 			}
 			
-			wp_register_sidebar_widget( 'birchpress-register-form', 'Register', array( $ns, 'render_registration_widget' ),
+			wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
 				array(
 					'description' => 'Register a new account'
 				));
@@ -45,7 +45,10 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 		$ns->render_registration_widget = function($args) {
     		echo $args['before_widget'];
     		echo $args['before_title'] . 'Register' .  $args['after_title'];
-    		echo '<section id="registerapp"></section>';
+    		if( !is_user_logged_in() ){
+    			echo '<section><a href="wp-login.php">Log in</a></section>';
+    			echo '<section id="registerapp"></section>';
+    		}
     		echo $args['after_widget'];
    		};
 
