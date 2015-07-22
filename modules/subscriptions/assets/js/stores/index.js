@@ -18,7 +18,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions.stores', {
 
     submit: function(username, password, email, first_name, last_name, organization) {
         ns.postApi(
-            'wp-admin/admin-post.php', 
+            bp_urls.ajax_url, 
             {
                 'action': 'register_birchpress_account',
                 'username': username,
@@ -32,7 +32,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions.stores', {
                 if(err){
                     alert(err);
                 } else {
-                    location.assign('/wp-admin');
+                    location.assign(bp_urls.admincp_url);
                 }
             }
         );

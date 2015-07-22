@@ -10,6 +10,11 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             add_action( 'wp_head', array( $ns, 'wp_header' ) );
         };
 
+        $bp_urls = array(
+            'ajax_url' => admin_url( 'admin_ajax.php' ),
+            'admincp_url' => admin_url()
+        );
+
         $ns->wp_init = function() use ( $ns, $brithoncrm ) {
             global $birchpress;
 
@@ -23,8 +28,8 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 wp_register_script( 'brithoncrm_subscriptions_index',
                     $brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/index.bundle.js',
                     array( 'birchpress', 'react-with-addons', 'immutable' ) );
-                //wp_localize_script( 'brithoncrm_subscriptions_registration_var', 'reg_date', $reg_data );
-                add_action( 'admin_post_register_birchpress_account', array( $ns, 'register_account' ) );
+                wp_localize_script( 'brithoncrm_subscriptions_urls', 'bp_urls', $bp_urls );
+                add_action( 'wp_ajax_nopriv_register_birchpress_account', array( $ns, 'register_account' ) );
                 wp_enqueue_script( 'brithoncrm_subscriptions_index' );
             }
 
