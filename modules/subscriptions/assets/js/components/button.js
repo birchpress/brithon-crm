@@ -1,27 +1,17 @@
 var React = require('react');
 
-var ns = birchpress.namespace('brithoncrm.subscriptions.components.button', {
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-    getComponentClass: function() {
-        var _button = React.createClass({
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.button', {
 
-            propTypes: {
-                type: React.PropTypes.string,
-                id: React.PropTypes.string,
-                className: React.PropTypes.string,
-                text: React.PropTypes.string,
-                onClick: React.PropTypes.func
-            },
+    __mixins__: [ReactMixinCompositor],
 
-            render: function() {
-                return ns.render(this);
-            },
-
-            handleClick: function(e) {
-                return ns.handleClick(this, e);
-            }
-        });
-        return _button;
+    propTypes: {
+        type: React.PropTypes.string,
+        id: React.PropTypes.string,
+        className: React.PropTypes.string,
+        text: React.PropTypes.string,
+        onClick: React.PropTypes.func
     },
 
     render: function(component) { 
@@ -41,4 +31,4 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.button', {
     }
 });
 
-module.exports = ns;
+module.exports = clazz;

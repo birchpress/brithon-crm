@@ -1,21 +1,10 @@
 var React = require('react');
 
-var ns = birchpress.namespace('brithoncrm.subscriptions.components.modal', {
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-    getComponentClass: function() {
-        var Modal = React.createClass({
-            killClick: function(e) {
-                return ns.killClick(this, e);
-            },
-            handleBackdropClick: function() {
-                return ns.handleBackdropClick(this);
-            },
-            render: function() {
-                return ns.render(this);
-            }
-        });
-        return Modal;
-    },
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.modal', {
+
+    __mixins__: [ReactMixinCompositor];
 
     killClick: function(component, event){
         // clicks on the content shouldn't close the modal
@@ -41,4 +30,4 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.modal', {
 
 });
 
-module.exports = ns;
+module.exports = clazz;

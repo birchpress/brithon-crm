@@ -1,4 +1,4 @@
-var ns = birchpress.namespace('brithoncrm.subscriptions.stores', {
+var ns = birchpress.provide('brithoncrm.subscriptions.stores', {
 
     init: function() {
         birchpress.addAction('brithoncrm.subscriptions.actions.submitAfter', 

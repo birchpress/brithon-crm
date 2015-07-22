@@ -1,33 +1,19 @@
 var React = require('react');
 
-var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', {
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-    getComponentClass: function() {
-        var _input = React.createClass({
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input', {
 
-            propTypes: {
-                type: React.PropTypes.string,
-                name: React.PropTypes.string,
-                id: React.PropTypes.string,
-                className: React.PropTypes.string,
-                placeholder: React.PropTypes.string,
-                value: React.PropTypes.string,
-                onChange: React.PropTypes.func
-            },
+    __mixins__: [ReactMixinCompositor],
 
-            getInitialState: function() {
-                return ns.getInitialState(this);
-            },
-
-            render: function() {
-                return ns.render(this);
-            },
-
-            handleChange: function(e) {
-                return ns.handleChange(this, e);
-            }
-        });
-        return _input;
+    propTypes: {
+        type: React.PropTypes.string,
+        name: React.PropTypes.string,
+        id: React.PropTypes.string,
+        className: React.PropTypes.string,
+        placeholder: React.PropTypes.string,
+        value: React.PropTypes.string,
+        onChange: React.PropTypes.func
     },
 
     getInitialState: function(component) {
@@ -58,4 +44,4 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.data_input', 
     }
 });
 
-module.exports = ns;
+module.exports = clazz;

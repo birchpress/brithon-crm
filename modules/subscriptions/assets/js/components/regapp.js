@@ -35,50 +35,22 @@ var ReactLayeredComponentMixin = {
     }
 };
 
-var ns = birchpress.namespace('brithoncrm.subscriptions.components.regapp', {
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-    getComponentClass: function() {
-        var testMod = React.createClass({
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
 
-            mixins: [ReactLayeredComponentMixin],
+    __mixins__: [ReactMixinCompositor],
 
-            propTypes: {
-                first_name: React.PropTypes.string,
-                last_name: React.PropTypes.string,
-                email: React.PropTypes.string,
-                password: React.PropTypes.string,
-                org: React.PropTypes.string
-            },
+    getReactMixins: function(component) {
+        return [ReactLayeredComponentMixin];
+    },
 
-            handleClick: function() {
-                return ns.handleClick(this);
-            },
-
-            getInitialState: function() {
-                return ns.getInitialState(this);
-            },
-
-            componentDidMount: function() {
-                return ns.componentDidMount(this);
-            },
-
-            renderLayer: function() {
-                return ns.renderLayer(this);
-            },
-
-            render: function() {
-                return ns.render(this);
-            },
-
-            buttonClick: function(e) {
-                return ns.buttonClick(this, e);
-            },
-
-            handleChange: function(childComponent, e) {
-                return ns.handleChange(this, childComponent, e);
-            }
-        });
-        return testMod;
+    propTypes: {
+        first_name: React.PropTypes.string,
+        last_name: React.PropTypes.string,
+        email: React.PropTypes.string,
+        password: React.PropTypes.string,
+        org: React.PropTypes.string
     },
 
     handleClick: function(component) {
@@ -102,8 +74,8 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.regapp', {
         if (!component.state.shown) {
             return <span />;
         }
-        var Button = require('./button').getComponentClass();
-        var Input = require('./data_input').getComponentClass();
+        var Button = require('./button');
+        var Input = require('./data_input');
         return (
             <Modal onRequestClose={component.handleClick} >
                 <h1>Welcome to register!</h1>
@@ -176,4 +148,4 @@ var ns = birchpress.namespace('brithoncrm.subscriptions.components.regapp', {
     }
 });
 
-module.exports = ns;
+module.exports = clazz;

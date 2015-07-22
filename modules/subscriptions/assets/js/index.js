@@ -5,9 +5,9 @@ var actions = require('./actions');
 
 var regAppComponent;
 
-var ns = birchpress.namespace('brithoncrm.subscriptions', {
+var ns = birchpress.provide('brithoncrm.subscriptions', {
 
-    init: function() {
+    __init__: function() {
         birchpress.addAction('brithoncrm.subscriptions.initModuleAfter', ns.run);
     },
     
