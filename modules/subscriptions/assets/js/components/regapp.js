@@ -1,17 +1,17 @@
 var React = require('react/addons');
 
-var Modal = require('./modal').getComponentClass();
+var Modal = require('./modal');
 var stores = require('../stores');
 var actions = require('../actions');
 
 var ReactLayeredComponentMixin = {
 
     componentWillUnmount: function() {
-        this._unrenderLayer();
+        React.unmountComponentAtNode(this._target);
         document.body.removeChild(this._target);
     },
     componentDidUpdate: function() {
-        this._renderLayer();
+        React.render(this.renderLayer(), this._target);
     },
     
     componentDidMount: function() {
@@ -20,18 +20,7 @@ var ReactLayeredComponentMixin = {
         // in mount order).
         this._target = document.createElement('div');
         document.body.appendChild(this._target);
-        this._renderLayer();
-    },
-    
-    _renderLayer: function() {
-        // By calling this method in componentDidMount() and componentDidUpdate(), you're effectively
-        // creating a "wormhole" that funnels React's hierarchical updates through to a DOM node on an
-        // entirely different part of the page.
         React.render(this.renderLayer(), this._target);
-    },
-    
-    _unrenderLayer: function() {
-        React.unmountComponentAtNode(this._target);
     }
 };
 
@@ -64,10 +53,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
             shown: false, 
             modalShown: false
         };
-    },
-
-    componentDidMount: function(component) {
-
     },
 
     renderLayer: function(component) {
@@ -122,29 +107,29 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
     handleChange: function(component, childComponent, event) {
         switch(childComponent.props.name){
             case 'first_name':
-            component.props.first_name = childComponent.state.value;
+            component.props.first_name = childComponent.props.value;
             break;
 
             case 'last_name':
-            component.props.last_name = childComponent.state.value;
+            component.props.last_name = childComponent.props.value;
             break;
 
             case 'email':
-            component.props.email = childComponent.state.value;
+            component.props.email = childComponent.props.value;
             break;
 
             case 'organization':
-            component.props.org = childComponent.state.value;
+            component.props.org = childComponent.props.value;
             break;
 
             case 'password':
-            component.props.password = childComponent.state.value;
+            component.props.password = childComponent.props.value;
             break;
 
             default:
             break;
         }     
-        console.log(childComponent.state.value);
+        console.log(childComponent.props.value);
     }
 });
 

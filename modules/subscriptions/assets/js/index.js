@@ -16,7 +16,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
     },
 
     run: function() {
-        var regApp = require('./components/regapp').getComponentClass();
+        var regApp = require('./components/regapp');
         if (!regAppComponent) {
             regAppComponent = React.render(
                 React.createElement(regApp, {

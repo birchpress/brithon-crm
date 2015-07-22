@@ -1,6 +1,6 @@
 var ns = birchpress.provide('brithoncrm.subscriptions.stores', {
 
-    init: function() {
+    __init__: function() {
         birchpress.addAction('brithoncrm.subscriptions.actions.submitAfter', 
             function(first_name, last_name, email, org, password) {
                 first_name = first_name.trim();

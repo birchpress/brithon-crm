@@ -23,9 +23,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input',
     },
 
     handleChange: function(component, event) {
-        component.setState({
-            value: event.target.value
-        });
+        component.props.value = event.target.value;
         component.props.onChange(component, event);
     },
 
@@ -38,7 +36,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input',
                 className={ component.props.className }
                 placeholder={ component.props.placeholder }
                 onChange={ component.handleChange }
-                value={ component.state.value }
+                value={ component.props.value }
             />
         );
     }

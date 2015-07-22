@@ -4,7 +4,7 @@ var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.modal', {
 
-    __mixins__: [ReactMixinCompositor];
+    __mixins__: [ReactMixinCompositor],
 
     killClick: function(component, event){
         // clicks on the content shouldn't close the modal
