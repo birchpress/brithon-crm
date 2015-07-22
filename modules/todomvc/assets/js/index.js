@@ -5,9 +5,9 @@ var actions = require('./actions');
 
 var todoAppComponent;
 
-var ns = birchpress.namespace('brithoncrm.todomvc', {
+var ns = birchpress.provide('brithoncrm.todomvc', {
 
-    init: function() {
+    __init__: function() {
         birchpress.addAction('brithoncrm.todomvc.initModuleAfter', ns.run);
     },
     
@@ -16,7 +16,7 @@ var ns = birchpress.namespace('brithoncrm.todomvc', {
     },
 
     run: function() {
-        var TodoApp = require('./components/todoapp').getComponentClass();
+        var TodoApp = require('./components/todoapp');
         if (!todoAppComponent) {
             todoAppComponent = React.render(
                 React.createElement(TodoApp, {

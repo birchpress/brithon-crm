@@ -1,23 +1,20 @@
 var React = require('react');
 var ImmutableRenderMixin = require('react-immutable-render-mixin')
 
-var ns = birchpress.namespace('brithoncrm.todomvc.components.todoapp', {
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-    getComponentClass: function() {
-        var TodoApp = React.createClass({
+var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoApp', {
 
-            mixins: [ImmutableRenderMixin],
+    __mixins__: [ReactMixinCompositor],
 
-            render: function() { return ns.render(this); }
-        });
-
-        return TodoApp;
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
     },
 
     render: function(component) {
-        var Footer = require('./footer').getComponentClass();
-        var Header = require('./header').getComponentClass();
-        var MainSection = require('./mainsection').getComponentClass();
+        var Footer = require('./footer');
+        var Header = require('./header');
+        var MainSection = require('./mainsection');
 
         return (
             <div>
@@ -31,4 +28,4 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todoapp', {
         );
     }
 });
-module.exports = ns;
+module.exports = clazz;

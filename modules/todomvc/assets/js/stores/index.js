@@ -11,9 +11,9 @@ var createCursor = function() {
 };
 var todosCursor = createCursor();
 
-var ns = birchpress.namespace('brithoncrm.todomvc.stores', {
+var ns = birchpress.provide('brithoncrm.todomvc.stores', {
 
-    init: function() {
+    __init__: function() {
         birchpress.addAction('brithoncrm.todomvc.actions.createAfter', function(text) {
             text = text.trim();
             if (text !== '') {

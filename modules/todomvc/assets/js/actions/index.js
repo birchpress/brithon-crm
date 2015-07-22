@@ -1,4 +1,4 @@
-var ns = birchpress.namespace('brithoncrm.todomvc.actions', {
+var ns = birchpress.provide('brithoncrm.todomvc.actions', {
 
 	init: function() {},
 
