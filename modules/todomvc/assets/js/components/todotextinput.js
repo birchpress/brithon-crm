@@ -5,7 +5,6 @@ var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
-var actions = require('../actions');
 
 var ENTER_KEY_CODE = 13;
 

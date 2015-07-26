@@ -4,8 +4,6 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var actions = require('../actions');
-
 var clazz = birchpress.provide('brithoncrm.todomvc.components.Footer', {
 
     __mixins__: [ReactMixinCompositor],
@@ -42,7 +40,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.Footer', {
             clearCompletedButton = (
                 <button
                     id = "clear-completed"
-                    onClick = { component.onClearCompletedClick } >
+                    onClick = { component.props.onClearCompletedClick } >
                     Clear completed({ completed })
                 </button>
             );
@@ -57,10 +55,6 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.Footer', {
                 { clearCompletedButton }
             </footer>
         );
-    },
-    
-    onClearCompletedClick: function (component) {
-        actions.destroyCompleted();
     }
 
 });

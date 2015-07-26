@@ -6,7 +6,6 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var cx = require('react/lib/cx');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
-var actions = require('../actions');
 
 var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
 
@@ -52,7 +51,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
                         className="toggle"
                         type="checkbox"
                         checked={todo.complete}
-                        onChange={ component.onToggleComplete }
+                        onChange={ component.onTextChange }
                     />
                     <label onDoubleClick={ component.onDoubleClick }>
                         {todo.text}
@@ -64,8 +63,8 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
         );
     },
 
-    onToggleComplete: function (component) {
-        actions.toggleComplete(component.props.todo.toJS());
+    onTextChange: function (component) {
+        component.props.onToggleComplete(component.props.todo.toJS());
     },
 
     onDoubleClick: function (component) {
@@ -75,14 +74,14 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
     },
 
     onSave: function (component, text) {
-        actions.updateText(component.props.todo.toJS().id, text);
+        component.props.onUpdate(component.props.todo.toJS().id, text);
         component.setState({
             isEditing: false
         });
     },
 
     onDestroyClick: function (component) {
-        actions.destroy(component.props.todo.toJS().id);
+        component.props.onDestroy(component.props.todo.toJS().id);
     }
 
 });
