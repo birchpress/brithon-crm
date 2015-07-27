@@ -107,23 +107,23 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
     handleChange: function(component, childComponent, event) {
         switch(childComponent.props.name){
             case 'first_name':
-            component.props.first_name = childComponent.props.value;
+            component.setProps({first_name: childComponent.props.value});
             break;
 
             case 'last_name':
-            component.props.last_name = childComponent.props.value;
+            component.setProps({last_name: childComponent.props.value});
             break;
 
             case 'email':
-            component.props.email = childComponent.props.value;
+            component.setProps({email: childComponent.props.value});
             break;
 
             case 'organization':
-            component.props.org = childComponent.props.value;
+            component.setProps({org: childComponent.props.value});
             break;
 
             case 'password':
-            component.props.password = childComponent.props.value;
+            component.setProps({password: childComponent.props.value});
             break;
 
             default:

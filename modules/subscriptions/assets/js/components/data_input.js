@@ -23,7 +23,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input',
     },
 
     handleChange: function(component, event) {
-        component.props.value = event.target.value;
+        component.setProps({
+            value: event.target.value
+        });
         component.props.onChange(component, event);
     },
 
