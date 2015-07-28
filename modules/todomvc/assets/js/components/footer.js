@@ -2,23 +2,18 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-var actions = require('../actions');
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var ns = birchpress.namespace('brithoncrm.todomvc.components.footer', {
+var clazz = birchpress.provide('brithoncrm.todomvc.components.Footer', {
 
-    getComponentClass: function () {
-        var Footer = React.createClass({
+    __mixins__: [ReactMixinCompositor],
 
-            mixins: [ImmutableRenderMixin],
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
-            propTypes: {
-                allTodos: ReactPropTypes.object.isRequired
-            },
-
-            render: function() { return ns.render(this); }
-        });
-
-        return Footer;
+    propTypes: {
+        allTodos: ReactPropTypes.object.isRequired
     },
 
     render: function (component) {
@@ -45,7 +40,7 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.footer', {
             clearCompletedButton = (
                 <button
                     id = "clear-completed"
-                    onClick = { _.partial(ns.onClearCompletedClick, component) } >
+                    onClick = { component.props.onClearCompletedClick } >
                     Clear completed({ completed })
                 </button>
             );
@@ -60,11 +55,7 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.footer', {
                 { clearCompletedButton }
             </footer>
         );
-    },
-    
-    onClearCompletedClick: function (component) {
-        actions.destroyCompleted();
     }
 
 });
-module.exports = ns;
+module.exports = clazz;

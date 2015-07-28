@@ -1,45 +1,40 @@
 var React = require('react');
+var Immutable = require('immutable');
 
-var stores = require('./stores');
-var actions = require('./actions');
+var TodoStore = require('./stores/todostore');
 
 var todoAppComponent;
 
-var ns = birchpress.namespace('brithoncrm.todomvc', {
+var ns = birchpress.provide('brithoncrm.todomvc', {
 
-    init: function() {
+    __init__: function() {
         birchpress.addAction('brithoncrm.todomvc.initModuleAfter', ns.run);
     },
-    
+
     initModule: function() {
         birchpress.initNamespace(brithoncrm.todomvc);
     },
 
     run: function() {
-        var TodoApp = require('./components/todoapp').getComponentClass();
+        var TodoApp = require('./components/todoapp');
+        var todos = Immutable.fromJS({});
         if (!todoAppComponent) {
+            var store = TodoStore(todos);
             todoAppComponent = React.render(
                 React.createElement(TodoApp, {
-                    todoStore: ns.getTodoStore()
+                    store: store,
+                    cursor: store.getCursor()
                 }),
                 document.getElementById('todoapp')
             );
-            birchpress.addAction('brithoncrm.todomvc.stores.onChangeAfter', function() {
-                todoAppComponent.setProps({
-                    todoStore: ns.getTodoStore()
+            store.setAttr('component', todoAppComponent);
+            birchpress.addAction('brithoncrm.todomvc.stores.TodoStore.onChangeAfter', function(store, newCursor) {
+                store.getAttr('component').setProps({
+                    store: store,
+                    cursor: newCursor
                 });
             });
         }
-    },
-
-    /**
-     * Retrieve the current TODO data from the TodoStore
-     */
-    getTodoStore: function() {
-        return {
-            allTodos: stores.getAll(),
-            areAllComplete: stores.areAllComplete()
-        };
     }
 });
 birchpress.addAction('birchpress.initFrameworkAfter', ns.initModule);

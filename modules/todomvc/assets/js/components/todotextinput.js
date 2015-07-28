@@ -4,29 +4,24 @@ var Immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-var actions = require('../actions');
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var ENTER_KEY_CODE = 13;
 
-var ns = birchpress.namespace('brithoncrm.todomvc.components.todotextinput', {
+var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoTextInput', {
 
-    getComponentClass: function() {
-        var TodoTextInput = React.createClass({
+    __mixins__: [ReactMixinCompositor],
 
-            propTypes: {
-                className: ReactPropTypes.string,
-                id: ReactPropTypes.string,
-                placeholder: ReactPropTypes.string,
-                onSave: ReactPropTypes.func.isRequired,
-                value: ReactPropTypes.string
-            },
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
-            getInitialState: function() { return ns.getInitialState(this); },
-
-            render: function() { return ns.render(this); }
-        });
-
-        return TodoTextInput;
+    propTypes: {
+        className: ReactPropTypes.string,
+        id: ReactPropTypes.string,
+        placeholder: ReactPropTypes.string,
+        onSave: ReactPropTypes.func.isRequired,
+        value: ReactPropTypes.string
     },
 
     getInitialState: function (component) {
@@ -41,9 +36,9 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todotextinput', {
                 className={ component.props.className }
                 id={ component.props.id }
                 placeholder={ component.props.placeholder }
-                onBlur={ _.partial(ns.onBlur, component) }
-                onChange={ _.partial(ns.onChange, component) }
-                onKeyDown={ _.partial(ns.onKeyDown, component) }
+                onBlur={ component.onBlur }
+                onChange={ component.onChange }
+                onKeyDown={ component.onKeyDown }
                 value={ component.state.value }
                 autoFocus={ true }
             />
@@ -51,7 +46,7 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todotextinput', {
     },
 
     onBlur: function(component) {
-        ns.save(component);
+        component.save();
     },
 
     onChange: function (component, event) {
@@ -69,9 +64,9 @@ var ns = birchpress.namespace('brithoncrm.todomvc.components.todotextinput', {
 
     onKeyDown: function (component, event) {
         if (event.keyCode === ENTER_KEY_CODE) {
-            ns.save(component);
+            component.save();
         }
     }
 
 });
-module.exports = ns;
+module.exports = clazz;

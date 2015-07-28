@@ -1,39 +1,27 @@
 var React = require('react');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-var actions = require('../actions');
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var ns = birchpress.namespace('brithoncrm.todomvc.components.header', {
+var clazz = birchpress.provide('brithoncrm.todomvc.components.Header', {
 
-    getComponentClass: function () {
-        var Header = React.createClass({
+    __mixins__: [ReactMixinCompositor],
 
-            mixins: [ImmutableRenderMixin],
-
-            render: function() { return ns.render(this); }
-        });
-
-        return Header;
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
     },
 
     render: function(component) {
-        var TodoTextInput = require('./todotextinput').getComponentClass();
+        var TodoTextInput = require('./todotextinput');
         return (
             <header id="header">
                 <h1>todos</h1>
                 <TodoTextInput
                     id="new-todo"
                     placeholder="What needs to be done?"
-                    onSave={ _.partial(ns.onSave, component) }
-                />
+                    onSave={ component.props.onSaveText } />
             </header>
         );
-    },
-
-    onSave: function(component, text) {
-        if (text.trim()) {
-            actions.create(text);
-        }
     }
 });
-module.exports = ns;
+module.exports = clazz;
