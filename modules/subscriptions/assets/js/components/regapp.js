@@ -1,8 +1,7 @@
 var React = require('react/addons');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var Modal = require('./modal');
-var stores = require('../stores');
-var actions = require('../actions');
 
 var ReactLayeredComponentMixin = {
 
@@ -31,15 +30,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
     __mixins__: [ReactMixinCompositor],
 
     getReactMixins: function(component) {
-        return [ReactLayeredComponentMixin];
-    },
-
-    propTypes: {
-        first_name: React.PropTypes.string,
-        last_name: React.PropTypes.string,
-        email: React.PropTypes.string,
-        password: React.PropTypes.string,
-        org: React.PropTypes.string
+        return [ReactLayeredComponentMixin, ImmutableRenderMixin];
     },
 
     handleClick: function(component) {
@@ -73,7 +64,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
                         <Input type="text" name="email" id="" className="" placeholder="Email address" onChange={ component.handleChange } />
                     </div>
                     <div className="row">
-                        <Input type="text" name="organization" id="" className="width-1-1" placeholder="Organization" onChange={ component.handleChange } />
+                        <Input type="text" name="org" id="" className="width-1-1" placeholder="Organization" onChange={ component.handleChange } />
                     </div>
                     <div className="row">
                         <Input type="password" name="password" id="" className="width-1-1" placeholder="Password" onChange={ component.handleChange } />
@@ -94,42 +85,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
 
     buttonClick: function(component, event){
         event.preventDefault();
-
-        actions.submit(
-            component.props.first_name,
-            component.props.last_name,
-            component.props.email,
-            component.props.org,
-            component.props.password
-        );
+        component.submit();
     },
 
     handleChange: function(component, childComponent, event) {
-        switch(childComponent.props.name){
-            case 'first_name':
-            component.setProps({first_name: childComponent.props.value});
-            break;
+        component.props.store.insert(childComponent.props.name, childComponent.props.value);
+    },
 
-            case 'last_name':
-            component.setProps({last_name: childComponent.props.value});
-            break;
-
-            case 'email':
-            component.setProps({email: childComponent.props.value});
-            break;
-
-            case 'organization':
-            component.setProps({org: childComponent.props.value});
-            break;
-
-            case 'password':
-            component.setProps({password: childComponent.props.value});
-            break;
-
-            default:
-            break;
-        }     
-        console.log(childComponent.props.value);
+    submit: function(component) {
+        component.props.store.submit();
     }
 });
 

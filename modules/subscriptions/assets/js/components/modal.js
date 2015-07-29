@@ -1,10 +1,15 @@
 var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.modal', {
 
     __mixins__: [ReactMixinCompositor],
+
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
     killClick: function(component, event){
         // clicks on the content shouldn't close the modal

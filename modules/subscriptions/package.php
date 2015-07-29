@@ -125,7 +125,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->return_err_msg = function( $msg ) use ( $ns ) {
-            die( "{'error':'$msg'}" );
+            die( "{'message':'$msg'}" );
         };
 
         $ns->get_clean_basedomain = function() use ( $ns ) {

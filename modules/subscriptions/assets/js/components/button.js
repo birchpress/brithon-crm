@@ -1,10 +1,15 @@
 var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.button', {
 
     __mixins__: [ReactMixinCompositor],
+
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
     propTypes: {
         type: React.PropTypes.string,
@@ -27,7 +32,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.button', {
 
     handleClick: function(component, event) {
         event.preventDefault();
-        component.props.onClick();
+        return component.props.onClick();
     }
 });
 

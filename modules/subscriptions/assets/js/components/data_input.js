@@ -1,10 +1,15 @@
 var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input', {
 
     __mixins__: [ReactMixinCompositor],
+
+    getReactMixins: function(component) {
+        return [ImmutableRenderMixin];
+    },
 
     propTypes: {
         type: React.PropTypes.string,
@@ -23,13 +28,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input',
     },
 
     handleChange: function(component, event) {
-        component.setProps({
-            value: event.target.value
-        });
-        component.props.onChange(component, event);
+        component.props.value = event.target.value;
+        return component.props.onChange(component, event);
     },
 
-    render: function(component) { 
+    render: function(component) {
         return (
             <input
                 type={ component.props.type }
@@ -38,8 +41,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.data_input',
                 className={ component.props.className }
                 placeholder={ component.props.placeholder }
                 onChange={ component.handleChange }
-                value={ component.props.value }
-            />
+                value={ component.props.value } />
         );
     }
 });
