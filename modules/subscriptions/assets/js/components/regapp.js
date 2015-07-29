@@ -25,7 +25,7 @@ var ReactLayeredComponentMixin = {
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.subscriptions.components.regapp', {
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
 
     __mixins__: [ReactMixinCompositor],
 
