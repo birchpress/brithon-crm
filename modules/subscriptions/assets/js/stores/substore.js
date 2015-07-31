@@ -17,7 +17,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubStore', {
 
     submit: function(self) {
         self.postApi(
-            bp_urls.ajax_url, 
+            bp_urls.ajax_url,
             {
                 'action': 'register_birchpress_account',
                 'username': self.getCursor().get('email'),
@@ -28,7 +28,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubStore', {
                 'org': self.getCursor().get('org')
             },
             function(err, r) {
-                if(err){
+                if (err) {
                     alert(err.error || err.message);
                 } else {
                     location.assign(bp_urls.admincp_url);
@@ -53,11 +53,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubStore', {
             }
             return callback && callback(null, r);
         }).fail(function(jqXHR, textStatus) {
-            return callback && callback({error: 'HTTP ' + jqXHR.status, message: 'Network error (HTTP ' + jqXHR.status + ')'});
+            return callback && callback({
+                error: 'HTTP ' + jqXHR.status,
+                message: 'Network error (HTTP ' + jqXHR.status + ')'
+            });
         });
     },
 
-    getApi: function (self, url, data, callback) {
+    getApi: function(self, url, data, callback) {
         if (arguments.length === 2) {
             callback = data;
             data = {};
@@ -71,7 +74,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubStore', {
             data = {};
         }
         self._ajax('POST', url, data, callback);
-    }   
+    }
 });
 
 module.exports = clazz;
