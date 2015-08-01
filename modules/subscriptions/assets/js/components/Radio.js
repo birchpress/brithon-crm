@@ -12,17 +12,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.Radio', {
   },
 
   propTypes: {
-    description: React.PropTypes.string,
+    desc: React.PropTypes.string,
     checked: React.PropTypes.bool,
     value: React.PropTypes.number,
     name: React.PropTypes.string,
     id: React.PropTypes.string,
     className: React.PropTypes.string,
     onClick: React.PropTypes.func
-  },
-
-  getInitialState: function(component) {
-    return component.props.checked || false;
   },
 
   render: function(component) {
@@ -35,12 +31,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.Radio', {
         <input
                type="radio"
                name={ component.props.name }
-               value={ component.props.value }
+               defaultValue={ component.props.value }
+               defaultChecked={ component.props.checked }
                className={ component.props.className }
                id={ component.props.id }
                onClick={ component.props.onClick } />
         <label>
-          { component.props.description }
+          { component.props.desc }
         </label>
         <br />
       </div>

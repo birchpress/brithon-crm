@@ -39,9 +39,9 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
 
     return (
       <li className={ cx({
-                                      'completed': todo.complete,
-                                      'editing': component.state.isEditing
-                                  }) } key={ todo.id }>
+                          'completed': todo.complete,
+                          'editing': component.state.isEditing
+                      }) } key={ todo.id }>
         <div className="view">
           <input
                  className="toggle"

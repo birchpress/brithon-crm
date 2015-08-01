@@ -22,7 +22,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.CreditCardLa
           <b>Credit card</b>
         </p>
         <p>
-          Your credit card on file is
+          Your credit card on file is&nbsp;
           { component.props.cardnum }
         </p>
       </div>

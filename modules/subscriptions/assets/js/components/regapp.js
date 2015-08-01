@@ -1,9 +1,9 @@
-const React = require('react/addons');
-const ImmutableRenderMixin = require('react-immutable-render-mixin');
+var React = require('react/addons');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-const Modal = require('./Modal');
+var Modal = require('./Modal');
 
-const ReactLayeredComponentMixin = {
+var ReactLayeredComponentMixin = {
 
   componentWillUnmount: function() {
     React.unmountComponentAtNode(this._target);
@@ -20,9 +20,9 @@ const ReactLayeredComponentMixin = {
   }
 };
 
-const ReactMixinCompositor = birchpress.react.MixinCompositor;
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-const clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
 
   __mixins__: [ReactMixinCompositor],
 

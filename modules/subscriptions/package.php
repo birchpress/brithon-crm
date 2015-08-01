@@ -50,6 +50,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
         $ns->render_setting_page = function() use ( $ns ) {
 ?>
+            <h3>Billing and invoices</h3>
             <section id="birchpress-settings"></section>
 <?php
         };
