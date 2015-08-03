@@ -41,11 +41,11 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->wp_admin_init = function() use ( $ns, $brithoncrm ) {
-
+            $ns->create_payment_dbtable();
         };
 
         $ns->create_admin_menus = function() use ( $ns ) {
-            add_menu_page( 'Billing and invoices', 'Settings', 'read', 
+            add_menu_page( 'Billing and invoices', 'Settings', 'read',
                 'brithoncrm/subscriptions', array( $ns, 'render_setting_page' ), '', 81 );
         };
         $ns->render_setting_page = function() use ( $ns ) {
@@ -150,5 +150,110 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         $ns->generate_blog_dir = function( $first_name, $last_name ) use ( $ns ) {
             return '/'.$first_name.'_'.$last_name.rand();
+        };
+
+        $ns->create_payment_dbtable = function() use ( $ns ) {
+            global $wpdb;
+
+            $subscription_meta = $wpdb->prefix . 'subscriptionmeta';
+            $bill_meta = $wpdb->prefix . 'billmeta';
+
+            $sql = "CREATE TABLE `$subscription_meta` (
+                        `id` int(11) PRIMARY KEY AUTO_INCREMENT,
+                        `user_id` int(11) NOT NULL,
+                        `plan_id` int(11) NOT NULL,
+                        `plan_charge` int(11) NOT NULL,
+                        `plan_max_providers` int(11) NOT NULL,
+                        `start_date` datetime NOT NULL,
+                        `expire_date` datetime NOT NULL,
+                        `remain_credit` int(11) NOT NULL,
+                        `card_token` text
+                    );
+                    CREATE TABLE `$bill_meta` (
+                        `id` int(11) PRIMARY KEY AUTO_INCREMENT,
+                        `user_id` int(11) NOT NULL,
+                        `charge_value` int(11) NOT NULL,
+                        `charge_date` datetime NOT NULL,
+                        `plan_id` int(11) NOT NULL
+                    );";
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '$subscription_meta';" ) != $subscription_meta ) {
+                if ( $wpdb->get_var( "SHOW TABLES LIKE '$bill_meta';" ) != $bill_meta ) {
+                    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+                    dbDelta( $sql );
+                }
+            }
+        };
+
+        $ns->create_subscription = function( $uid, $plan_id, $plan_charge, $plan_providers, $pays, $months, $card_token ) use ( $ns ) {
+            global $wpdb;
+
+            $record = array(
+                'user_id' => $uid,
+                'plan_id' => $plan_id,
+                'plan_charge' => $plan_charge,
+                'plan_max_providers' => $plan_providers,
+                'start_date' => date( 'Y-m-d' ),
+                'expire_date' => date( 'Y-m-d', time() + 86400 * 30 * $months ),
+                'remain_credit' => $pays - $plan_charge,
+                'card_token' => $card_token
+            );
+
+            return $wpdb->insert( $wpdb->prefix.'subscriptionmeta', $record );
+        };
+
+        $ns->create_bill_record = function( $uid, $charge_value, $plan_id ) use ( $ns ) {
+            global $wpdb;
+
+            $record = array(
+                'user_id' => $uid,
+                'charge_value' => $charge_value,
+                'charge_date' => date( 'Y-m-d' ),
+                'plan_id' => $plan_id
+            );
+
+            return $wpdb->insert( $wpdb->prefix.'billmeta', $record );
+        };
+
+        $ns->update_subscription_plan = function( $uid, $plan_id, $plan_charge, $plan_providers ) use ( $ns ) {
+            global $wpdb;
+
+            $record = array(
+                'plan_id' => $plan_id,
+                'plan_charge' => $plan_charge,
+                'plan_max_providers' => $plan_providers
+            );
+
+            return $wpdb->update( $wpdb->prefix.'subscriptionmeta', $record, array( 'user_id' => $uid ) );
+        };
+
+        $ns->update_credit_card = function( $uid, $token ) use ( $ns ) {
+            global $wpdb;
+
+            return $wpdb->update(
+                $wpdb->prefix.'subscriptionmeta',
+                array( 'card_token' => $token ),
+                array( 'user_id' => $uid )
+            );
+        };
+
+        $ns->query_subscription = function( $uid ) use ( $ns ) {
+            global $wpdb;
+            $table_name = $wpdb->prefix.'subscriptionmeta';
+            return $wpdb->get_results( "SELECT * from $table_name WHERE user_id=$uid" );
+        };
+
+        $ns->query_bill_records = function( $uid ) use ( $ns ) {
+            global $wpdb;
+            $table_name = $wpdb->prefix.'billmeta';
+            return $wpdb->get_results( "SELECT * FROM $table_name WHERE user_id=$uid" );
+        };
+
+        $ns->get_stripe_publishable_key = function() use ( $ns ) {
+            return 'pk_test_6pRNASCoBOKtIshFeQd4XMUh';
+        };
+
+        $ns->get_stripe_private_key = function() use ($ns ){
+            return 'sk_test_zk5XKLEhfi6nyfmCcxxFM2bQ';
         };
     } );

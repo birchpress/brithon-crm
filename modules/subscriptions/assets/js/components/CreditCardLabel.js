@@ -12,7 +12,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.CreditCardLa
   },
 
   propTypes: {
-    cardnum: React.PropTypes.string
+    cardnum: React.PropTypes.string,
   },
 
   render: function(component) {

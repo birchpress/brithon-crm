@@ -13,6 +13,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
 
   propTypes: {
     currentCardNo: React.PropTypes.string,
+    userEmail: React.PropTypes.string,
     name: React.PropTypes.string,
     className: React.PropTypes.string,
     id: React.PropTypes.string,
@@ -40,7 +41,20 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     return (
       <div>
         <h4>Change or update your credit card</h4>
-        <div></div>
+        <div>
+          <form method="POST">
+            <script
+                    src="https://checkout.stripe.com/checkout.js"
+                    class="stripe-button"
+                    data-key="pk_test_UXg1SpQF3oMNygpdyln3cokz"
+                    data-image="/img/documentation/checkout/marketplace.png"
+                    data-name="Brithon Inc."
+                    data-email={ component.props.userEmail }
+                    data-label="Update"
+                    data-description="Update your credit card">
+            </script>
+          </form>
+        </div>
         <div>
           <p>
             Changes to your credit card will be effective immediately. All future
