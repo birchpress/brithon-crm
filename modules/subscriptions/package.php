@@ -334,7 +334,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         $ns->charge_user_from_id = function( $customer_token, $amount, $description ) use ( $ns ) {
             return $ns->charge_user( $amount, $description, array( 'customer' => $customer_token ) );
-        }
+        };
 
         $ns->create_customer = function( $stripe_token, $email, $user_id ) use ( $ns ) {
             \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
