@@ -1,7 +1,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 
-var SubStore = require('./stores/SubStore')
+var RegStore = require('./stores/RegStore')
 
 var regAppComponent;
 var settingAppComponent;
@@ -21,7 +21,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
     var regData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     if (!regAppComponent && registerAppContainer) {
-      var store = SubStore(regData);
+      var store = RegStore(regData);
       regAppComponent = React.render(
         React.createElement(regApp, {
           store: store,
