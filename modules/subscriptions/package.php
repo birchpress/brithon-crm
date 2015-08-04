@@ -7,7 +7,6 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         $ns->init = function() use ( $ns ) {
             add_action( 'init', array( $ns, 'wp_init' ) );
             add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
-            add_action( 'admin_menu', array( $ns, 'create_admin_menus' ) )
             add_action( 'wp_head', array( $ns, 'wp_header' ) );
         };
 
@@ -42,17 +41,6 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         $ns->wp_admin_init = function() use ( $ns, $brithoncrm ) {
 
-        };
-
-        $ns->create_admin_menus = function() use ( $ns ) {
-            add_menu_page( 'Billing and invoices', 'Settings', 'read', 
-                'brithoncrm/subscriptions', array( $ns, 'render_setting_page' ), '', 81 );
-        };
-
-        $ns->render_setting_page = function() use ( $ns ) {
-?>
-
-<?php
         };
 
         $ns->wp_header = function() use ( $ns, $brithoncrm ) {
