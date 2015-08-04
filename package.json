@@ -6,16 +6,14 @@
     "type": "git",
     "url": "https://github.com/birchpress/brithon-crm.git"
   },
-  "dependencies": {
-    "browserify": "^9.0.4",
-    "immutable": "^3.7.1",
-    "react-immutable-render-mixin": "^0.8.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "browserify": "^9.0.8",
     "browserify-shim": "^3.8.3",
-    "jsonfile": "^2.0.0",
+    "immutable": "^3.7.4",
     "react": "^0.13.1",
-    "react-tools": "^0.13.1",
+    "react-immutable-render-mixin": "^0.8.1",
+    "react-tools": "^0.13.3",
     "reactify": "^1.1.0"
   },
   "browserify": {
@@ -30,7 +28,7 @@
     "react": "global:React"
   },
   "scripts": {
-    "bundle": "browserify modules/todomvc/assets/js/index.js -o modules/todomvc/assets/js/index.bundle.js"
+    "bundle": "for m in $(ls -d modules/*/); do browserify $m/assets/js/index.js -o $m/assets/js/index.bundle.js; done"
   },
   "private": true,
   "author": "Brithon Inc.",
