@@ -32,11 +32,6 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 add_action( 'wp_ajax_nopriv_register_birchpress_account', array( $ns, 'register_account' ) );
                 wp_enqueue_script( 'brithoncrm_subscriptions_index' );
             }
-
-            wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
-                array(
-                    'description' => 'Register a new account'
-                ) );
         };
 
         $ns->wp_admin_init = function() use ( $ns, $brithoncrm ) {
@@ -44,7 +39,10 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->wp_header = function() use ( $ns, $brithoncrm ) {
-
+            wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
+                array(
+                    'description' => 'Register a new account'
+                ) );
         };
 
         $ns->render_registration_widget = function( $args ) {
