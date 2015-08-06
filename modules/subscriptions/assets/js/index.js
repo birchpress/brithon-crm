@@ -1,7 +1,8 @@
 var React = require('react');
 var Immutable = require('immutable');
 
-var RegStore = require('./stores/RegStore')
+var RegStore = require('./stores/RegStore');
+var SubscriptionStore = require('./stores/SubscriptionStore');
 
 var regAppComponent;
 var settingAppComponent;
@@ -30,7 +31,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
         registerAppContainer
       );
       store.setAttr('component', regAppComponent);
-      birchpress.addAction('brithoncrm.subscriptions.stores.SubStore.onChangeAfter', function(store, newCursor) {
+      birchpress.addAction('brithoncrm.subscriptions.stores.RegStore.onChangeAfter', function(store, newCursor) {
         store.getAttr('component').setProps({
           store: store,
           cursor: newCursor
@@ -39,14 +40,24 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
     }
 
     var settingApp = require('./components/SettingApp');
+    var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     if (!settingAppComponent && settingAppContainer) {
+      var store = SubscriptionStore(settingData);
       settingAppComponent = React.render(
         React.createElement(settingApp, {
-
+          store: store,
+          cursor: store.getCursor(),
         }),
         settingAppContainer
       );
+      store.setAttr('component', settingAppComponent);
+      birchpress.addAction('birchpress.subscriptions.stores.SubscriptionStore.onChangeAfter', function(store, newCursor) {
+        store.getAttr('component').setProps({
+          store: store,
+          cursor: newCursor
+        });
+      });
     }
   }
 });

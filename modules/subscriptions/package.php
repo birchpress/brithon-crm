@@ -1,14 +1,21 @@
 <?php
 
+require(__DIR__.'/vendor/autoload.php');
+
 birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         global $brithoncrm;
 
         $ns->init = function() use ( $ns ) {
+            register_activation_hook(__FILE__, array($ns, 'plugin_init'));
             add_action( 'init', array( $ns, 'wp_init' ) );
             add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
             add_action( 'admin_menu', array( $ns, 'create_admin_menus' ) );
-            add_action( 'wp_head', array( $ns, 'wp_header' ) );
+            add_action( 'widgets_init', array( $ns, 'register_widgets' ) );
+        };
+
+        $ns->plugin_init = function() use ($ns) {
+            register_post_type('subscription');
         };
 
         $ns->wp_init = function() use ( $ns, $brithoncrm ) {
@@ -18,6 +25,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'admincp_url' => admin_url()
             );
+            $bp_uid = array('uid' => get_current_user_id());
 
             if ( is_main_site() ) {
                 $birchpress->view->register_3rd_scripts();
@@ -30,19 +38,24 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                     $brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/index.bundle.js',
                     array( 'birchpress', 'react-with-addons', 'immutable' ) );
                 wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_urls', $bp_urls );
+                wp_localize_script('brithoncrm_subscriptions_index', 'bp_uid', $bp_uid);
                 add_action( 'wp_ajax_nopriv_register_birchpress_account', array( $ns, 'register_account' ) );
                 add_action('wp_ajax_nopriv_birchpress_subscriptions_getplans', array($ns, 'retrieve_all_plans'));
+                add_action('wp_ajax_nopriv_birchpress_subscriptions_getcustomer', array($ns, 'retrieve_customer_info'));
+
                 wp_enqueue_script( 'brithoncrm_subscriptions_index' );
             }
-
-            wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
-                array(
-                    'description' => 'Register a new account'
-                ) );
         };
 
         $ns->wp_admin_init = function() use ( $ns, $brithoncrm ) {
             $ns->create_payment_dbtable();
+        };
+
+        $ns->register_widgets = function() use ($ns) {
+            wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
+                array(
+                    'description' => 'Register a new account'
+                ) );
         };
 
         $ns->create_admin_menus = function() use ( $ns ) {
@@ -54,10 +67,6 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             <h3>Billing and invoices</h3>
             <section id="birchpress-settings"></section>
 <?php
-        };
-
-        $ns->wp_header = function() use ( $ns, $brithoncrm ) {
-
         };
 
         $ns->render_registration_widget = function( $args ) {
@@ -115,6 +124,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 add_user_meta( $user_id, 'organization', $org );
                 $site_id = wpmu_create_blog( $ns->get_clean_basedomain(),
                     $subdir, "$first_name $last_name", $user_id );
+                $ns->register_subscription_to_db($user_id, 0, 0, 0, 0, 1, '');
 
                 if ( !is_wp_error( $site_id ) ) {
                     $creds = array();
@@ -158,6 +168,20 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         $ns->generate_blog_dir = function( $first_name, $last_name ) use ( $ns ) {
             return '/'.$first_name.'_'.$last_name.rand();
+        };
+
+        $ns->get_max_providers = function($plan_id) use ($ns) {
+            if($plan_id == 1){
+                return 1;
+            } else if($plan_id == 2){
+                return 5;
+            } else if($plan_id == 3){
+                return 10;
+            } else if($plan_id == 4){
+                return 20;
+            } else {
+                return 0;
+            }
         };
 
         $ns->retrieve_all_plans = function() use ($ns) {
@@ -208,103 +232,61 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-        $ns->create_payment_dbtable = function() use ( $ns ) {
-            global $wpdb;
+        $ns->register_subscription_to_db = function( $plan_id, $customer_token ) use ( $ns ) {
+            $plan = $ns->get_certain_plan($paln_id);
+            $info = array(
+                'blog_id' => get_current_blog_id(),
+                'plan_id' => $plan_id,
+                'plan_charge' => $plan['charge'],
+                'plan_max_providers' => get_max_providers($plan_id),
+                'plan_desc' => $plan['desc'],
+                'customer_token' => $customer_token
+            );
+            $post_id = wp_insert_post(
+                array(
+                    'post_content' => json_encode($info),
+                    'post_name' => 'subscription',
+                    'post_title' => 'Subscription',
+                    'post_excerpt' => '',
+                    'post_type' => 'subscription'
+                ), false
+            );
+            return wp_add_post_meta($post_id, 'validate_time', date('Y-m-d H:i:s'));
+        };
 
-            $subscription_meta = $wpdb->prefix . 'subscriptionmeta';
-            $bill_meta = $wpdb->prefix . 'billmeta';
-
-            $sql = "CREATE TABLE `$subscription_meta` (
-                        `id` int(11) PRIMARY KEY AUTO_INCREMENT,
-                        `user_id` int(11) NOT NULL,
-                        `plan_id` int(11) NOT NULL,
-                        `plan_charge` int(11) NOT NULL,
-                        `plan_max_providers` int(11) NOT NULL,
-                        `start_date` datetime NOT NULL,
-                        `expire_date` datetime NOT NULL,
-                        `remain_credit` int(11) NOT NULL,
-                        `customer_token` text
-                    );
-                    CREATE TABLE `$bill_meta` (
-                        `id` int(11) PRIMARY KEY AUTO_INCREMENT,
-                        `user_id` int(11) NOT NULL,
-                        `charge_value` int(11) NOT NULL,
-                        `charge_date` datetime NOT NULL
-                    );";
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '$subscription_meta';" ) != $subscription_meta ) {
-                if ( $wpdb->get_var( "SHOW TABLES LIKE '$bill_meta';" ) != $bill_meta ) {
-                    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
-                    dbDelta( $sql );
-                }
+        $ns->query_subscription = function() use ( $ns ) {
+            $query = new WP_Query(array(
+                'author__in' => get_current_user_id(),
+                'post_type' => 'subscription',
+                'orderby' => 'date',
+                'order' => 'DESC'
+            ));
+            if(!$query->post_count){
+                return false;
+            } else {
+                $query->the_post();
+                return json_decode(get_the_content());
             }
         };
 
-        $ns->create_subscription = function( $uid, $plan_id, $plan_charge, $plan_providers, $pays, $months, $customer_token ) use ( $ns ) {
-            global $wpdb;
-
-            $record = array(
-                'user_id' => $uid,
-                'plan_id' => $plan_id,              // For trial user the id is 0.
-                'plan_charge' => $plan_charge,
-                'plan_max_providers' => $plan_providers,
-                'start_date' => date( 'Y-m-d' ),
-                'expire_date' => date( 'Y-m-d', time() + 86400 * 30 * $months ),
-                'remain_credit' => $pays - $plan_charge,
-                'customer_token' => $card_token
-            );
-
-            return $wpdb->insert( $wpdb->prefix.'subscriptionmeta', $record );
-        };
-
-        $ns->create_bill_record = function( $uid, $charge_value ) use ( $ns ) {
-            global $wpdb;
-
-            $record = array(
-                'user_id' => $uid,
-                'charge_value' => $charge_value,
-                'charge_date' => date( 'Y-m-d' )
-            );
-
-            return $wpdb->insert( $wpdb->prefix.'billmeta', $record );
-        };
-
-        $ns->update_subscription_plan = function( $uid, $plan_id, $plan_charge, $plan_providers ) use ( $ns ) {
-            global $wpdb;
-
-            $record = array(
-                'plan_id' => $plan_id,
-                'plan_charge' => $plan_charge,
-                'plan_max_providers' => $plan_providers
-            );
-
-            return $wpdb->update( $wpdb->prefix.'subscriptionmeta', $record, array( 'user_id' => $uid ) );
-        };
-
-        $ns->update_credit_card = function( $uid, $token ) use ( $ns ) {
-            global $wpdb;
-
-            return $wpdb->update(
-                $wpdb->prefix.'subscriptionmeta',
-                array( 'customer_token' => $token ),
-                array( 'user_id' => $uid )
-            );
-        };
-
-        $ns->query_subscription = function( $uid ) use ( $ns ) {
-            global $wpdb;
-            $table_name = $wpdb->prefix.'subscriptionmeta';
-            return $wpdb->get_row( "SELECT * from $table_name WHERE user_id=$uid" );
-        };
-
-        $ns->query_bill_records = function( $uid ) use ( $ns ) {
-            global $wpdb;
-            $table_name = $wpdb->prefix.'billmeta';
-            return $wpdb->get_results( "SELECT * FROM $table_name WHERE user_id=$uid" );
+        $ns->query_sub_records = function( $uid ) use ( $ns ) {
+            $query = new WP_Query(array(
+                'author__in' => get_current_user_id(),
+                'post_type' => 'subscription',
+                'orderby' => 'date',
+                'order' => 'DESC'
+            ));
+            $res = array();
+            while ($query->have_posts()) {
+                $query->the_post();
+                $post_id = the_ID();
+                array_push($res, get_post_meta($post_id, 'validate_time'));
+            }
+            return $res;
         };
 
         $ns->get_stripe_publishable_key = function() use ( $ns ) {
-            return 'pk_test_6pRNASCoBOKtIshFeQd4XMUh';
+            return 'pk_test_UXg1SpQF3oMNygpdyln3cokz';
         };
 
         $ns->get_stripe_private_key = function() use ( $ns ) {
@@ -341,7 +323,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
             try {
                 $customer = \Stripe\Customer::create( array(
-                        'source' => $stripeToken,
+                        'source' => $stripe_token,
                         'email' => $email,
                         'metadata' => array( 'user_id' => $user_id )
                     ) );
@@ -356,7 +338,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
 
             try {
-                $customer = \Stripe::Customer::retrieve( $customer_token );
+                $customer = \Stripe\Customer::retrieve( $customer_token );
                 return $ns->return_result( true, $customer );
             } catch ( \Stripe\Error $e ) {
                 return $ns->return_result( false, $e->getMessage() );
@@ -372,11 +354,29 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
+        $ns->set_customer_card = function($customer_token, $stripe_token) use ($ns) {
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+
+            $res = $ns->get_customer($customer_token);
+            if($res['succeed']){
+                $customer = $res['data'];
+                try {
+                    $customer->source = $stripe_token;
+                    $customer->save();
+                    return $ns->return_result(true, true);
+                } catch (\Stripe\Error $e) {
+                    return $ns->return_result(false, $e->getMessage());
+                }
+            } else {
+                return $res;
+            }
+        };
+
         $ns->set_customer_plan = function( $customer_token, $plan_id ) use ( $ns ) {
             \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
 
             try {
-                $customer = \Stripe::Customer::retrieve( $customer_token );
+                $customer = \Stripe\Customer::retrieve( $customer_token );
                 $subs_list = $customer->subscriptions->all()['data'];
                 if(!$subs_list){
                     $new_sub = $customer->subscriptions->create(array('plan' => $plan_id));
@@ -415,5 +415,15 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-
+        $ns->get_certain_plan = function($id) use ($ns) {
+            $res = $ns->get_all_plans();
+            if($res['succeed']){
+                foreach ($res['data'] as $item) {
+                    if($item['id'] == $id){
+                        return $item;
+                    }
+                }
+            }
+            return false;
+        };
     } );

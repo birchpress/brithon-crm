@@ -27,6 +27,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     setPlanLink.hidden = !component.state.shown;
   },
 
+  handleSubmit: function(component, event) {
+    event.preventDefault();
+
+  },
+
   getInitialState: function(component) {
     return {
       shown: false
@@ -41,8 +46,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     return (
       <div>
         <h4>Change or update your credit card</h4>
-        <div>
-          <form method="POST">
+        <form method="POST">
+          <div>
             <script
                     src="https://checkout.stripe.com/checkout.js"
                     class="stripe-button"
@@ -53,19 +58,19 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
                     data-label="Update"
                     data-description="Update your credit card">
             </script>
-          </form>
-        </div>
-        <div>
-          <p>
-            Changes to your credit card will be effective immediately. All future
-            <br /> charges will be charged to this card. Thanks for updating your billing
-            <br /> info.
-          </p>
-          <p>
-            <Button type="" text="Update my credit card" />&nbsp;&nbsp;
-            <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
-          </p>
-        </div>
+          </div>
+          <div>
+            <p>
+              Changes to your credit card will be effective immediately. All future
+              <br /> charges will be charged to this card. Thanks for updating your billing
+              <br /> info.
+            </p>
+            <p>
+              <Button type="submit" text="Update my credit card" />&nbsp;&nbsp;
+              <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
+            </p>
+          </div>
+        </form>
       </div>
       );
   },
