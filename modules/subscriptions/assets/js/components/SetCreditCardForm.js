@@ -17,14 +17,19 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     name: React.PropTypes.string,
     className: React.PropTypes.string,
     id: React.PropTypes.string,
+    shown: React.PropTypes.bool,
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown,
-    });
-    var setPlanLink = document.getElementById('set-card-link');
-    setPlanLink.hidden = !component.state.shown;
+    component.props.shown = !component.props.shown;
+    if (component.props.shown) {
+      formDiv = document.createElement('div');
+      component.props._target = document.getElementById('set-credit-card-form').appendChild(formDiv);
+      React.render(component.renderLayer(), component.props._target);
+    } else {
+      React.unmountComponentAtNode(component.props._target);
+      document.removeChild(component.props._target);
+    }
   },
 
   handleSubmit: function(component, event) {
@@ -39,7 +44,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   },
 
   renderLayer: function(component) {
-    if (!component.state.shown) {
+    if (!component.props.shown) {
       return <span />;
     }
     var Button = require('./Button');
@@ -88,25 +93,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
       </div>
       );
   },
-
-  componentDidMount: function(component) {
-    component.setState({
-      shown: false,
-    });
-    formDiv = document.createElement('div');
-    component.props._target = document.getElementById('set-credit-card-form').appendChild(formDiv);
-  },
-
-  componentDidUpdate: function(component) {
-    React.render(component.renderLayer(), component.props._target);
-  },
-
-  onHide: function(component) {
-    React.unmountComponentAtNode(component.props._target);
-    document.removeChild(component.props._target);
-  },
-
-
 });
 
 module.exports = clazz;

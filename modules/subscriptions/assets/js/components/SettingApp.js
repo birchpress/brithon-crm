@@ -15,6 +15,35 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
     var store = component.props.store;
     var plans = store.getAllPlans();
     var customer = store.getCustomerInfo(bp_uid.uid);
+    //for test
+    plans = [
+      {
+        id: 1,
+        desc: '$15 / month - 1 Service Provider',
+      },
+      {
+        id: 2,
+        desc: '$30 / month - 5 Service providers',
+      },
+      {
+        id: 3,
+        desc: '$40 / month - 10 Service providers',
+      },
+      {
+        id: 4,
+        desc: '$60 / month - 20 Service providers',
+      },
+    ];
+    customer = {
+      plan_id: 1,
+      customer_token: 'cus_325rewafdsar432r',
+      has_card: true,
+      card_last4: '4242',
+      plan_charge: 15,
+      plan_max_providers: 1,
+      expire_date: 'Sep 1st, 2016',
+    };
+    // end of test
     var SetPlanForm = require('./SetPlanForm');
     var SetCreditCardForm = require('./SetCreditCardForm');
     var TrialForm = require('./TrialForm');

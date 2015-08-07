@@ -48,7 +48,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->wp_admin_init = function() use ( $ns, $brithoncrm ) {
-            $ns->create_payment_dbtable();
+
         };
 
         $ns->register_widgets = function() use ($ns) {

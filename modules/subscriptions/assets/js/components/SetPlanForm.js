@@ -20,25 +20,24 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     id: React.PropTypes.string,
     radioClassName: React.PropTypes.string,
     radioId: React.PropTypes.string,
-    radioOnClick: React.PropTypes.func
+    radioOnClick: React.PropTypes.func,
+    shown: React.PropTypes.bool,
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown,
-    });
-    var setPlanLink = document.getElementById('set-plan-link');
-    setPlanLink.hidden = !component.state.shown;
-  },
-
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
+    component.props.shown = !component.props.shown;
+    if (component.props.shown) {
+      formDiv = document.createElement('div');
+      component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
+      React.render(component.renderLayer(), component.props._target);
+    } else {
+      React.unmountComponentAtNode(component.props._target);
+      document.removeChild(component.props._target);
+    }
   },
 
   renderLayer: function(component) {
-    if (!component.state.shown) {
+    if (!component.props.shown) {
       return <span />;
     }
     var Radio = require('./Radio');
@@ -83,23 +82,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
            onClick={ component.handleClick }>See plans and upgrade or downgrade</a>
       </div>
       );
-  },
-
-  componentDidMount: function(component) {
-    component.setState({
-      shown: false,
-    });
-    formDiv = document.createElement('div');
-    component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
-  },
-
-  componentDidUpdate: function(component) {
-    React.render(component.renderLayer(), component.props._target);
-  },
-
-  onHide: function(component) {
-    React.unmountComponentAtNode(component.props._target);
-    document.removeChild(component.props._target);
   },
 });
 
