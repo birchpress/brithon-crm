@@ -21,6 +21,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     radioClassName: React.PropTypes.string,
     radioId: React.PropTypes.string,
     radioOnClick: React.PropTypes.func,
+    radioOnChange: React.PropTypes.func,
     shown: React.PropTypes.bool,
   },
 
@@ -34,6 +35,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
       React.unmountComponentAtNode(component.props._target);
       document.removeChild(component.props._target);
     }
+  },
+
+  handleChange: function(component, event) {
+    component.props.value = event.target.value;
+    return component.props.radioOnChange(component, event);
   },
 
   renderLayer: function(component) {
@@ -55,7 +61,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
                  name={ component.props.name }
                  id={ component.props.radioId }
                  className={ component.props.radioClassName }
-                 onClick={ component.props.onHide } />
+                 onClick={ component.props.onHide }
+                 onChange={ component.props.radioOnChange } />
         </p>
       );
     }

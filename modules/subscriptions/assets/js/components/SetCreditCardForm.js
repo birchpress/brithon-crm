@@ -24,7 +24,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     component.props.shown = !component.props.shown;
     if (component.props.shown) {
       formDiv = document.createElement('div');
-      component.props._target = document.getElementById('set-credit-card-form').appendChild(formDiv);
+      component.props._target = document.getElementById('set-credit-card-div').appendChild(formDiv);
       React.render(component.renderLayer(), component.props._target);
     } else {
       React.unmountComponentAtNode(component.props._target);
@@ -37,33 +37,22 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
 
   },
 
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
-  },
-
   renderLayer: function(component) {
     if (!component.props.shown) {
       return <span />;
     }
-    var Button = require('./Button');
+    var StripeControl = require('./stripecontrol');
+    var handler = StripeCheckout.configure({
+      key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
+      image: '/img/documentation/checkout/marketplace.png',
+      token: function(token) {
+        component.props.onUpdateCard(token.id);
+      }
+    });
     return (
       <div>
         <h4>Change or update your credit card</h4>
-        <form method="POST">
-          <div>
-            <script
-                    src="https://checkout.stripe.com/checkout.js"
-                    class="stripe-button"
-                    data-key="pk_test_UXg1SpQF3oMNygpdyln3cokz"
-                    data-image="/img/documentation/checkout/marketplace.png"
-                    data-name="Brithon Inc."
-                    data-email={ component.props.userEmail }
-                    data-label="Update"
-                    data-description="Update your credit card">
-            </script>
-          </div>
+        <form method="POST" id="set-credit-card-form">
           <div>
             <p>
               Changes to your credit card will be effective immediately. All future
@@ -71,7 +60,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
               <br /> info.
             </p>
             <p>
-              <Button type="submit" text="Update my credit card" />&nbsp;&nbsp;
+              <StripeControl handler={ handler } />&nbsp;
               <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
             </p>
           </div>
@@ -84,7 +73,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     var CreditCardLabel = require('./CreditCardLabel');
 
     return (
-      <div id="set-credit-card-form">
+      <div id="set-credit-card-div">
         <CreditCardLabel cardnum={ component.props.currentCardNo } />
         <a
            id="set-card-link"

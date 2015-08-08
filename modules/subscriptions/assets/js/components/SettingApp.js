@@ -58,11 +58,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
                        currentPlanDesc={ _desc }
                        currentPlanMeta={ _meta }
                        name='planChecker'
-                       onChange={ component.handlePlanChange }
+                       radioOnChange={ component.handlePlanChange }
                        onSubmitClick={ component.submitPlan } />
           <SetCreditCardForm
                              currentCardNo={ _card }
-                             onChange={ component.handleCardChange }
+                             onUpdateCard={ component.updateCardToken }
                              onSubmitClick={ component.submitCreditCard } />
         </div>
         );
@@ -77,12 +77,19 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
 
   handlePlanChange: function(component, childComponent, event) {
     var store = component.props.store;
+    // for test
+    console.log(childComponent.props.value);
+    // end of test
     store.insertSubscription(bp_uid.uid, childComponent.props.value);
   },
 
-  handleCardChange: function(component, childComponent, event) {
+  updateCardToken: function(component, token) {
     var store = component.props.store;
-    store.insertCardToken(bp_uid.uid, childComponent.props.value);
+    store.insertCardToken(bp_uid.uid, token);
+    store.updateCreditCard();
+    // for test
+    console.log(token);
+  // end of test
   },
 
   submitPlan: function(component) {

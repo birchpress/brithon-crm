@@ -44,6 +44,8 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 add_action('wp_ajax_nopriv_birchpress_subscriptions_getcustomer', array($ns, 'retrieve_customer_info'));
 
                 wp_enqueue_script( 'brithoncrm_subscriptions_index' );
+
+                wp_enqueue_script('checkout_script', 'https://checkout.stripe.com/checkout.js');
             }
         };
 
@@ -124,7 +126,6 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 add_user_meta( $user_id, 'organization', $org );
                 $site_id = wpmu_create_blog( $ns->get_clean_basedomain(),
                     $subdir, "$first_name $last_name", $user_id );
-                $ns->register_subscription_to_db($user_id, 0, 0, 0, 0, 1, '');
 
                 if ( !is_wp_error( $site_id ) ) {
                     $creds = array();
@@ -132,6 +133,8 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                     $creds['user_password'] = $password;
                     $creds['remember'] = true;
                     $usr = wp_signon( $creds, false );
+    
+                    $ns->register_subscription_to_db(0, '');
 
                     die( json_encode(
                             array(
@@ -229,6 +232,21 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 die(json_encode($result));
             } else {
                 return_err_msg('User does not exist.');
+            }
+        };
+
+        $ns->update_user_plan = function() use ($ns) {
+            if(isset($_POST['plan_id'])) {
+
+            }
+        };
+
+        $ns->update_user_card = function() use ($ns) {
+            if(isset($_POST['card_token'])) {
+                $current_cus = $ns->query_subscription();
+                if(!$current_sub['customer_token']){
+                    
+                }
             }
         };
 
