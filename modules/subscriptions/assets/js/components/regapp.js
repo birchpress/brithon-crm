@@ -1,3 +1,4 @@
+'use strict';
 var React = require('react/addons');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 

@@ -1,3 +1,4 @@
+'use strict';
 var React = require('react');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
@@ -43,6 +44,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
     var Modal = require('./Modal');
     var Button = require('./Button');
 
+    var StripeControl = require('./stripecontrol');
+    var handler = StripeCheckout.configure({
+      key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
+      image: '/img/documentation/checkout/marketplace.png',
+      token: function(token) {
+        component.props.onUpdateCard(token.id);
+      }
+    });
+
     var formRows = [];
     var allPlans = component.props.plans;
     for (var key in allPlans) {
@@ -65,16 +75,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
         { formRows }
         <h4>Credit card</h4>
         <form method="POST">
-          <script
-                  src="https://checkout.stripe.com/checkout.js"
-                  class="stripe-button"
-                  data-key="pk_test_UXg1SpQF3oMNygpdyln3cokz"
-                  data-image="/img/documentation/checkout/marketplace.png"
-                  data-name="Brithon Inc."
-                  data-email={ component.props.userEmail }
-                  data-label="Update"
-                  data-description="Update your credit card">
-          </script>
+          <StripeControl handler={ handler } />
         </form>
         <Button type="" text="Purchase" />&nbsp;&nbsp;
         <a href="javascript:;" onClick={ component.handleClick }>Hide</a>

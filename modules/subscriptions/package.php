@@ -197,23 +197,21 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->retrieve_customer_info = function() use ($ns) {
-            if(!isset($_POST['uid'])){
-                return_err_msg('Missing UID');
-            }
-            $uid = $_POST['uid'];
+            $uid = get_current_user_id();
             $result = array();
-            $user_info = $ns->query_subscription($uid);
-            if($user_info) {
+            $sub_info = $ns->query_subscription($uid);
+            if($sub_info) {
                 array_push($result, array(
                     'user_id' => $uid,
-                    'plan_id' => $user_info->plan_id,
-                    'plan_charge' => $user_info->plan_charge,
-                    'plan_max_providers' => $user_info->plan_max_providers,
-                    'expire_date' => $user_info->expire_date,
-                    'customer_token' => $user_info->customer_token
+                    'blog_id' => $sub_info['blog_id'],
+                    'plan_id' => $sub_info['plan_id'],
+                    'plan_charge' => $sub_info['plan_charge'],
+                    'plan_max_providers' => $sub_info['plan_max_providers'],
+                    'plan_desc' => $sub_info['plan_desc'],
+                    'customer_token' => $sub_info['customer_token']
                 ));
                 
-                $token = $user_info->customer_token;
+                $token = $sub_info['customer_token'];
                 if($token){
                     $cards = $ns->get_cards($token);
                     if($cards){
@@ -237,15 +235,38 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         $ns->update_user_plan = function() use ($ns) {
             if(isset($_POST['plan_id'])) {
-
+                $plan_id = $_POST['plan_id'];
+                $sub_info = $ns->query_subscription();
+                $cus_token = $sub_info['customer_token'];
+                if($cus_token){
+                    $card = $ns->get_cards($cus_token);
+                    if($card){
+                        $ns->set_customer_plan($cus_token, $plan_id);
+                        $ns->register_subscription_to_db($plan_id, $cus_token);
+                        die(json_encode($card));
+                    } else {
+                        return_err_msg('No credit card.');
+                    }
+                } else {
+                    return_err_msg('No customer info.');
+                }
             }
         };
 
         $ns->update_user_card = function() use ($ns) {
-            if(isset($_POST['card_token'])) {
-                $current_cus = $ns->query_subscription();
-                if(!$current_sub['customer_token']){
-                    
+            if(isset($_POST['stripe_token'])) {
+                $sub_info = $ns->query_subscription();
+                if($sub_info['customer_token']){
+                    $cus_token = $sub_info['customer_token'];
+                    $stripe_token = $_POST['stripe_token'];
+                    $res = $ns->set_customer_card($cus_token, $stripe_token);
+                    if($res['succeed']){
+                        die(json_encode($sub_info));
+                    } else {
+                        return_err_msg($res['data']);
+                    }
+                } else {
+                    return_err_msg('No customer info.');
                 }
             }
         };

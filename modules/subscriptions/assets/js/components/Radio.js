@@ -1,3 +1,4 @@
+'use strict';
 var React = require('react');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
@@ -27,10 +28,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.Radio', {
   },
 
   render: function(component) {
-    is_check = '';
-    if (component.props.checked) {
-      is_check = 'checked';
-    }
     return (
       <div>
         <input
