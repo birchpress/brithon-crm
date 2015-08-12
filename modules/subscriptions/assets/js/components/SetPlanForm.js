@@ -23,13 +23,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     radioId: React.PropTypes.string,
     radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
+    onSubmitClick: React.PropTypes.func,
     shown: React.PropTypes.bool,
   },
 
   handleClick: function(component) {
     component.props.shown = !component.props.shown;
     if (component.props.shown) {
-      formDiv = document.createElement('div');
+      var formDiv = document.createElement('div');
       component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
       React.render(component.renderLayer(), component.props._target);
     } else {
@@ -72,7 +73,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
       <div>
         <h4>Choose plan</h4>
         { formRows }
-        <Button type="" text="Update" />&nbsp;&nbsp;
+        <Button
+                type=""
+                text="Update"
+                onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
         <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
       </div>
       );

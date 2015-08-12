@@ -4,23 +4,6 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var Modal = require('./Modal');
 
-var ReactLayeredComponentMixin = {
-
-  componentWillUnmount: function() {
-    React.unmountComponentAtNode(this._target);
-    document.body.removeChild(this._target);
-  },
-  componentDidUpdate: function() {
-    React.render(this.renderLayer(), this._target);
-  },
-
-  componentDidMount: function() {
-    this._target = document.createElement('div');
-    document.body.appendChild(this._target);
-    React.render(this.renderLayer(), this._target);
-  }
-};
-
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
@@ -28,13 +11,19 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
   __mixins__: [ReactMixinCompositor],
 
   getReactMixins: function(component) {
-    return [ReactLayeredComponentMixin, ImmutableRenderMixin];
+    return [ImmutableRenderMixin];
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown,
-    });
+    component.props.shown = !component.props.shown;
+    if (component.props.shown) {
+      component.props._target = document.createElement('div');
+      document.body.appendChild(component.props._target);
+      React.render(component.renderLayer(), component.props._target);
+    } else {
+      React.unmountComponentAtNode(component.props._target);
+      document.removeChild(component.props._target);
+    }
   },
 
   getInitialState: function(component) {
@@ -45,7 +34,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
   },
 
   renderLayer: function(component) {
-    if (!component.state.shown) {
+    if (!component.props.shown) {
       return <span />;
     }
     var Button = require('./Button');
@@ -116,10 +105,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
   },
 
   render: function(component) {
-    return <a
-              href="javascript:;"
-              role="button"
-              onClick={ component.handleClick }>Click here to register</a>;
+    return (<a
+               href="javascript:;"
+               role="button"
+               onClick={ component.handleClick }>Click here to register</a>);
   },
 
   buttonClick: function(component, event) {

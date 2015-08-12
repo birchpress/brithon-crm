@@ -12,7 +12,7 @@ RONMENTS
   "node": true,
 
   // Allow ES6.
-  "esnext": true,
+  "esnext": false,
 
   /*
    * ENFORCING OPTIONS

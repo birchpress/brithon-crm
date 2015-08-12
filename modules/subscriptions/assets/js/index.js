@@ -44,15 +44,15 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
     var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     if (!settingAppComponent && settingAppContainer) {
-      var store = SubscriptionStore(settingData);
+      var store2 = SubscriptionStore(settingData);
       settingAppComponent = React.render(
         React.createElement(settingApp, {
-          store: store,
-          cursor: store.getCursor(),
+          store: store2,
+          cursor: store2.getCursor(),
         }),
         settingAppContainer
       );
-      store.setAttr('component', settingAppComponent);
+      store2.setAttr('component', settingAppComponent);
       birchpress.addAction('birchpress.subscriptions.stores.SubscriptionStore.onChangeAfter', function(store, newCursor) {
         store.getAttr('component').setProps({
           store: store,

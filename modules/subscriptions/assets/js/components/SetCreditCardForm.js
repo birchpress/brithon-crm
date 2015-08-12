@@ -24,18 +24,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   handleClick: function(component) {
     component.props.shown = !component.props.shown;
     if (component.props.shown) {
-      formDiv = document.createElement('div');
+      var formDiv = document.createElement('div');
       component.props._target = document.getElementById('set-credit-card-div').appendChild(formDiv);
       React.render(component.renderLayer(), component.props._target);
     } else {
       React.unmountComponentAtNode(component.props._target);
       document.removeChild(component.props._target);
     }
-  },
-
-  handleSubmit: function(component, event) {
-    event.preventDefault();
-
   },
 
   renderLayer: function(component) {

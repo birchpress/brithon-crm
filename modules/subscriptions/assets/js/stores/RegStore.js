@@ -48,7 +48,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.RegStore', {
       data: data,
       dataType: 'json'
     }).done(function(r) {
-      if (r && r.error) {
+      if (r && (r.message || r.error)) {
         return callback && callback(r);
       }
       return callback && callback(null, r);

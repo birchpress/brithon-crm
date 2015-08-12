@@ -15,66 +15,105 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
     self.getCursor().set('card_token', token);
   },
 
-  insertSubscription: function(self, userId, planId) {
-    self.getCursor().set('user_id', userId);
+  insertSubscription: function(self, planId) {
     self.getCursor().set('plan_id', planId);
   },
 
-  getAllPlans: function(self) {
-    return self.retrieveApi({
-      'action': 'birchpress_subscriptions_getplans',
-    });
+  insertPurchase: function(self, stripeToken, email) {
+    self.getCursor().set('stripe_token', stripeToken);
+    self.getCursor().set('email', email);
   },
 
-  /**
-    Data get via this function:
-    
-    customer_token
-    card_number
-    plan_id
+  getAllPlans: function(self) {
+    self.postApi(
+      bp_urls.ajax_url,
+      {
+        action: 'birchpress_subscriptions_getplans'
+      },
+      function(err, r) {
+        if (err) {
+          alert(err.message);
+          return false;
+        }
+        return self.getCursor().set('plans', r);
+      }
+    );
+  },
 
-    If returns nothing it indicates trial version.
-  */
-  getCustomerInfo: function(self, userId) {
-    return self.retrieveApi({
-      'action': 'birchpress_subscriptions_getcustomer',
-      'uid': userId,
-    });
+  getCustomerInfo: function(self) {
+    self.postApi(
+      bp_urls.ajax_url,
+      {
+        'action': 'birchpress_subscriptions_getcustomer'
+      }, function(err, r) {
+        if (err) {
+          alert(err.message);
+          return false;
+        }
+        return self.getCursor().set('customer', r);
+      });
+  },
+
+  registerCustomer: function(self) {
+    var stripeToken = self.getCursor().get('stripe_token');
+    var email = self.getCursor().get('email');
+    self.postApi(
+      bp_urls.ajax_url,
+      {
+        action: 'birchpress_subscriptions_regcustomer',
+        email: email,
+        stripe_token: stripeToken
+      }, function(err, r) {
+        if (err) {
+          alert('Purchase failed - ' + err.message);
+          return false;
+        }
+        self.getCursor().set('customer_id', r.id);
+        // --test--
+        alert(r.id);
+      }
+    )
   },
 
   updateCreditCard: function(self) {
     var newCardToken = self.getCursor().get('card_token');
     if (newCardToken) {
-      self.submitApi({
-        'action': 'birchpress_subscriptions_updatecard',
-        'card_token': newCardToken,
-      }, function(err, r) {
-        if (err) {
-          alert(err.error || err.message);
-          return false;
-        } else {
-          return true;
-        }
-      });
+      self.postApi(
+        bp_urls.ajax_url,
+        {
+          'action': 'birchpress_subscriptions_updatecard',
+          'stripe_token': newCardToken,
+        }, function(err, r) {
+          if (err) {
+            alert(err.error + ': ' + err.message);
+            return false;
+          } else {
+            // --test--
+            alert('Update Complete - Card');
+            return true;
+          }
+        });
     }
   },
 
   updatePlan: function(self) {
-    var currentUId = self.getCursor().get('user_id');
     var newPlanId = self.getCursor().get('plan_id');
-    if (currentUId && newPlanId) {
-      self.submitApi({
-        'action': 'birchpress_subscriptions_updateplan',
-        'uid': currentUId,
-        'plan_id': newPlanId,
-      }, function(err, r) {
-        if (err) {
-          alert(err.error || err.message);
-          return false;
-        } else {
-          return true;
-        }
-      });
+    if (newPlanId) {
+      self.postApi(
+        bp_urls.ajax_url,
+        {
+          'action': 'birchpress_subscriptions_updateplan',
+          'plan_id': newPlanId
+        }, function(err, r) {
+          if (err) {
+            alert(err.error + ': ' + err.message);
+            return false;
+          } else {
+            // --test--
+            alert('Update Complete - Plan')
+            return true;
+          }
+        });
     }
   },
 
@@ -83,7 +122,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       type: method,
       url: url,
       data: data,
-      dataType: 'json'
+      dataType: 'json',
+      async: false
     }).done(function(r) {
       if (r && r.error) {
         return callback && callback(r);
@@ -97,29 +137,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
     });
   },
 
-  _post: function(self, url, data, callback) {
+  postApi: function(self, url, data, callback) {
     if (arguments.length === 2) {
       callback = data;
       data = {};
     }
     self._ajax('POST', url, data, callback);
-  },
-
-  retrieveApi: function(self, postData) {
-    self._post(bp_urls.ajax_url, postData,
-      function(err, r) {
-        if (err) {
-          alert(err.error || err.message);
-        } else {
-          return r;
-        }
-      }
-    );
-  },
-
-  submitApi: function(self, postData, callback) {
-    self._post(bp_urls.ajax_url, postData, callback);
   }
 });
 
 module.exports = clazz;
+

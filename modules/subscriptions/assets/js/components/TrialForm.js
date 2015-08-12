@@ -19,25 +19,30 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
     id: React.PropTypes.string,
     radioClassName: React.PropTypes.string,
     radioId: React.PropTypes.string,
-    radioOnClick: React.PropTypes.func
+    radioOnChange: React.PropTypes.func,
+    onUpdateCard: React.PropTypes.func,
+    onSubmitClick: React.PropTypes.func
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown,
-    });
-    var setPlanLink = document.getElementById('set-plan-link');
-    setPlanLink.hidden = !component.state.shown;
+    component.props.shown = !component.props.shown;
+    if (component.props.shown) {
+      var formDiv = document.createElement('div');
+      component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
+      React.render(component.renderLayer(), component.props._target);
+    } else {
+      React.unmountComponentAtNode(component.props._target);
+      document.removeChild(component.props._target);
+    }
   },
 
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
+  handleChange: function(component, event) {
+    component.props.value = event.target.value;
+    return component.props.radioOnChange(component, event);
   },
 
   renderLayer: function(component) {
-    if (!component.state.shown) {
+    if (!component.props.shown) {
       return <span />;
     }
     var Radio = require('./Radio');
@@ -49,7 +54,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
       key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
       image: '/img/documentation/checkout/marketplace.png',
       token: function(token) {
-        component.props.onUpdateCard(token.id);
+        component.props.onUpdateCard(token.id, token.email);
       }
     });
 
@@ -64,7 +69,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
                  name={ component.props.name }
                  id={ component.props.radioId }
                  className={ component.props.radioClassName }
-                 onClick={ component.props.onHide } />
+                 onChange={ component.props.radioOnChange } />
         </p>
       );
     }
@@ -77,7 +82,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
         <form method="POST">
           <StripeControl handler={ handler } />
         </form>
-        <Button type="" text="Purchase" />&nbsp;&nbsp;
+        <Button
+                type=""
+                text="Purchase"
+                onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
         <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
       </div>
       );
@@ -96,24 +104,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
            onClick={ component.handleClick }>Buy subscription</a>
       </div>
       );
-  },
-
-  componentDidMount: function(component) {
-    component.setState({
-      shown: false,
-    });
-    formDiv = document.createElement('div');
-    component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
-  },
-
-  componentDidUpdate: function(component) {
-    React.render(component.renderLayer(), component.props._target);
-  },
-
-  onHide: function(component) {
-    React.unmountComponentAtNode(component.props._target);
-    document.removeChild(component.props._target);
-  },
+  }
 });
 
 module.exports = clazz;

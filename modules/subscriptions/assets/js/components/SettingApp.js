@@ -14,44 +14,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
 
   render: function(component) {
     var store = component.props.store;
-    var plans = store.getAllPlans();
-    var customer = store.getCustomerInfo(bp_uid.uid);
-    //for test
-    plans = [
-      {
-        id: 1,
-        desc: '$15 / month - 1 Service Provider',
-      },
-      {
-        id: 2,
-        desc: '$30 / month - 5 Service providers',
-      },
-      {
-        id: 3,
-        desc: '$40 / month - 10 Service providers',
-      },
-      {
-        id: 4,
-        desc: '$60 / month - 20 Service providers',
-      },
-    ];
-    customer = {
-      plan_id: 1,
-      customer_token: 'cus_325rewafdsar432r',
-      has_card: true,
-      card_last4: '4242',
-      plan_charge: 15,
-      plan_max_providers: 1,
-      expire_date: 'Sep 1st, 2016',
-    };
-    // end of test
+    store.getAllPlans();
+    store.getCustomerInfo();
+    var plans = store.getCursor().get('plans');
+    var customer = store.getCursor().get('customer');
+
     var SetPlanForm = require('./SetPlanForm');
     var SetCreditCardForm = require('./SetCreditCardForm');
     var TrialForm = require('./TrialForm');
-    if (customer.plan_id && customer.customer_token && customer.has_card) {
-      _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
-      _desc = '$' + customer.plan_charge + ' / month - ' + customer.plan_max_providers + ' Service provider(s)';
-      _meta = 'Your next cahrge is $' + customer.plan_charge + ' on ' + customer.expire_date;
+    if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
+      var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
+      var _desc = '$' + customer.plan_charge / 100 + ' / month - ' + customer.plan_max_providers + ' Service provider(s)';
+      var _meta = 'Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + customer.expire_date;
       return (
         <div>
           <SetPlanForm
@@ -70,7 +44,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
     } else {
       return (
         <div>
-          <TrialForm plans={ plans } name='planChecker' />
+          <TrialForm
+                     plans={ plans }
+                     name='planChecker'
+                     radioOnChange={ component.handlePlanChange }
+                     onUpdateCard={ component.updatePurchase }
+                     onSubmitClick={ component.submitPurchase } />
         </div>
         );
     }
@@ -81,16 +60,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
     // for test
     console.log(childComponent.props.value);
     // end of test
-    store.insertSubscription(bp_uid.uid, childComponent.props.value);
+    store.insertSubscription(childComponent.props.value);
   },
 
   updateCardToken: function(component, token) {
     var store = component.props.store;
-    store.insertCardToken(bp_uid.uid, token);
+    store.insertCardToken(token);
     store.updateCreditCard();
-    // for test
-    console.log(token);
-  // end of test
+  },
+
+  updatePurchase: function(component, id, email) {
+    var store = component.props.store;
+    store.insertPurchase(id, email);
   },
 
   submitPlan: function(component) {
@@ -101,7 +82,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
     return component.props.store.updateCreditCard();
   },
 
-  submitPurchase: function(component) {},
+  submitPurchase: function(component) {
+    var store = component.props.store;
+    var customerRes;
+    store.registerCustomer();
+    customerRes = store.getCursor().get('customer')
+    if (customerRes) {
+      var isUpdateSucceed = store.updatePlan();
+      if (isUpdateSucceed) {
+        alert('Purchase completed.');
+      }
+    }
+  }
 });
 
 module.exports = clazz;

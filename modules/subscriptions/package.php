@@ -1,21 +1,21 @@
 <?php
 
-require(__DIR__.'/vendor/autoload.php');
+require __DIR__.'/vendor/autoload.php';
 
 birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         global $brithoncrm;
 
         $ns->init = function() use ( $ns ) {
-            register_activation_hook(__FILE__, array($ns, 'plugin_init'));
+            register_activation_hook( __FILE__, array( $ns, 'plugin_init' ) );
             add_action( 'init', array( $ns, 'wp_init' ) );
             add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
             add_action( 'admin_menu', array( $ns, 'create_admin_menus' ) );
-            add_action( 'widgets_init', array( $ns, 'register_widgets' ) );
+            add_action( 'wp_head', array( $ns, 'wp_header' ) );
         };
 
-        $ns->plugin_init = function() use ($ns) {
-            register_post_type('subscription');
+        $ns->plugin_init = function() use ( $ns ) {
+            register_post_type( 'subscription' );
         };
 
         $ns->wp_init = function() use ( $ns, $brithoncrm ) {
@@ -25,7 +25,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'admincp_url' => admin_url()
             );
-            $bp_uid = array('uid' => get_current_user_id());
+            $bp_uid = array( 'uid' => get_current_user_id() );
 
             if ( is_main_site() ) {
                 $birchpress->view->register_3rd_scripts();
@@ -38,14 +38,17 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                     $brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/index.bundle.js',
                     array( 'birchpress', 'react-with-addons', 'immutable' ) );
                 wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_urls', $bp_urls );
-                wp_localize_script('brithoncrm_subscriptions_index', 'bp_uid', $bp_uid);
+                wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_uid', $bp_uid );
                 add_action( 'wp_ajax_nopriv_register_birchpress_account', array( $ns, 'register_account' ) );
-                add_action('wp_ajax_nopriv_birchpress_subscriptions_getplans', array($ns, 'retrieve_all_plans'));
-                add_action('wp_ajax_nopriv_birchpress_subscriptions_getcustomer', array($ns, 'retrieve_customer_info'));
+                add_action( 'wp_ajax_birchpress_subscriptions_getplans', array( $ns, 'retrieve_all_plans' ) );
+                add_action( 'wp_ajax_birchpress_subscriptions_getcustomer', array( $ns, 'retrieve_customer_info' ) );
+                add_action( 'wp_ajax_birchpress_subscriptions_regcustomer', array( $ns, 'register_customer' ) );
+                add_action( 'wp_ajax_birchpress_subscriptions_updateplan', array( $ns, 'update_user_plan' ) );
+                add_action( 'wp_ajax_birchpress_subscriptions_updatecard', array( $ns, 'update_user_card' ) );
 
                 wp_enqueue_script( 'brithoncrm_subscriptions_index' );
 
-                wp_enqueue_script('checkout_script', 'https://checkout.stripe.com/checkout.js');
+                wp_enqueue_script( 'checkout_script', 'https://checkout.stripe.com/checkout.js' );
             }
         };
 
@@ -53,7 +56,11 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
         };
 
-        $ns->register_widgets = function() use ($ns) {
+        $ns->wp_header = function() use ($ns){
+            $ns->register_widgets();
+        };
+
+        $ns->register_widgets = function() use ( $ns ) {
             wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
                 array(
                     'description' => 'Register a new account'
@@ -133,8 +140,8 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                     $creds['user_password'] = $password;
                     $creds['remember'] = true;
                     $usr = wp_signon( $creds, false );
-    
-                    $ns->register_subscription_to_db(0, '');
+
+                    $ns->register_subscription_to_db( 0, '' );
 
                     die( json_encode(
                             array(
@@ -150,8 +157,11 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-        $ns->return_err_msg = function( $msg ) use ( $ns ) {
-            die( "{'message':'$msg'}" );
+        $ns->return_err_msg = function( $msg, $error='Error' ) use ( $ns ) {
+            die( json_encode( array(
+                        'error' => $error,
+                        'message' => $msg
+                    ) ) );
         };
 
         $ns->return_result = function( $succeed, $data ) use ( $ns ) {
@@ -173,153 +183,167 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             return '/'.$first_name.'_'.$last_name.rand();
         };
 
-        $ns->get_max_providers = function($plan_id) use ($ns) {
-            if($plan_id == 1){
+        $ns->get_max_providers = function( $plan_id ) use ( $ns ) {
+            if ( $plan_id == 1 ) {
                 return 1;
-            } else if($plan_id == 2){
+            } else if ( $plan_id == 2 ) {
                 return 5;
-            } else if($plan_id == 3){
+            } else if ( $plan_id == 3 ) {
                 return 10;
-            } else if($plan_id == 4){
+            } else if ( $plan_id == 4 ) {
                 return 20;
             } else {
                 return 0;
             }
         };
 
-        $ns->retrieve_all_plans = function() use ($ns) {
+        $ns->retrieve_all_plans = function() use ( $ns ) {
             $res = $ns->get_all_plans();
-            if($res['succeed']){
-                die(json_encode($res['data']));
+            if ( $res['succeed'] ) {
+                die( json_encode( $res['data'] ) );
             } else {
-                return_err_msg($res['data']);
+                $ns->return_err_msg( $res['data'] );
             }
         };
 
-        $ns->retrieve_customer_info = function() use ($ns) {
+        $ns->retrieve_customer_info = function() use ( $ns ) {
             $uid = get_current_user_id();
             $result = array();
-            $sub_info = $ns->query_subscription($uid);
-            if($sub_info) {
-                array_push($result, array(
-                    'user_id' => $uid,
-                    'blog_id' => $sub_info['blog_id'],
-                    'plan_id' => $sub_info['plan_id'],
-                    'plan_charge' => $sub_info['plan_charge'],
-                    'plan_max_providers' => $sub_info['plan_max_providers'],
-                    'plan_desc' => $sub_info['plan_desc'],
-                    'customer_token' => $sub_info['customer_token']
-                ));
-                
-                $token = $sub_info['customer_token'];
-                if($token){
-                    $cards = $ns->get_cards($token);
-                    if($cards){
+            $sub_info = $ns->query_subscription( $uid );
+            if ( $sub_info ) {
+                $result = array_merge( $result, array(
+                        'user_id' => $uid,
+                        'blog_id' => $sub_info->blog_id,
+                        'plan_id' => $sub_info->plan_id,
+                        'plan_charge' => $sub_info->plan_charge,
+                        'plan_max_providers' => $sub_info->plan_max_providers,
+                        'plan_desc' => $sub_info->plan_desc,
+                        'customer_token' => $sub_info->customer_token
+                    ) );
+
+                $token = $sub_info->customer_token;
+                if ( $token ) {
+                    $cards = $ns->get_cards( $token );
+                    if ( $cards ) {
                         $card = $cards[0];
-                        array_push($result, array(
-                            'has_card' => true,
-                            'card_last4' => $card->last4,
-                            'card_id' => $card->id
-                        ));
+                        $result = array_merge( $result, array(
+                                'has_card' => true,
+                                'card_last4' => $card->last4,
+                                'card_id' => $card->id
+                            ) );
                     } else {
-                        array_push($result, array(
-                            'has_card' => false
-                        ));
+                        $result = array_merge( $result, array(
+                                'has_card' => false
+                            ) );
                     }
                 }
-                die(json_encode($result));
+                die( json_encode( $result ) );
             } else {
-                return_err_msg('User does not exist.');
+                $ns->return_err_msg( 'User does not exist.' );
             }
         };
 
-        $ns->update_user_plan = function() use ($ns) {
-            if(isset($_POST['plan_id'])) {
+        $ns->register_customer = function() use ( $ns ) {
+            if ( isset( $_POST['stripe_token'] ) ) {
+                $stripe_token = $_POST['stripe_token'];
+                $email = $_POST['email'];
+                $res = $ns->create_customer( $stripe_token, $email );
+                if ( $res['succeed'] ) {
+                    $ns->register_subscription_to_db( 0, $res['data'] );
+                    die( json_encode( array( 'id' => $res['data'] ) ) );
+                } else {
+                    $ns->return_err_msg( $res['data'] );
+                }
+            }
+        };
+
+        $ns->update_user_plan = function() use ( $ns ) {
+            if ( isset( $_POST['plan_id'] ) ) {
                 $plan_id = $_POST['plan_id'];
                 $sub_info = $ns->query_subscription();
-                $cus_token = $sub_info['customer_token'];
-                if($cus_token){
-                    $card = $ns->get_cards($cus_token);
-                    if($card){
-                        $ns->set_customer_plan($cus_token, $plan_id);
-                        $ns->register_subscription_to_db($plan_id, $cus_token);
-                        die(json_encode($card));
+                $cus_token = $sub_info->customer_token;
+                if ( $cus_token ) {
+                    $card = $ns->get_cards( $cus_token );
+                    if ( $card ) {
+                        $ns->set_customer_plan( $cus_token, $plan_id );
+                        $ns->register_subscription_to_db( $plan_id, $cus_token );
+                        die( json_encode( $card ) );
                     } else {
-                        return_err_msg('No credit card.');
+                        $ns->return_err_msg( 'No credit card.' );
                     }
                 } else {
-                    return_err_msg('No customer info.');
+                    $ns->return_err_msg( 'No customer info.' );
                 }
             }
         };
 
-        $ns->update_user_card = function() use ($ns) {
-            if(isset($_POST['stripe_token'])) {
+        $ns->update_user_card = function() use ( $ns ) {
+            if ( isset( $_POST['stripe_token'] ) ) {
                 $sub_info = $ns->query_subscription();
-                if($sub_info['customer_token']){
-                    $cus_token = $sub_info['customer_token'];
+                if ( $sub_info->customer_token ) {
+                    $cus_token = $sub_info->customer_token;
                     $stripe_token = $_POST['stripe_token'];
-                    $res = $ns->set_customer_card($cus_token, $stripe_token);
-                    if($res['succeed']){
-                        die(json_encode($sub_info));
+                    $res = $ns->set_customer_card( $cus_token, $stripe_token );
+                    if ( $res['succeed'] ) {
+                        die( json_encode( $sub_info ) );
                     } else {
-                        return_err_msg($res['data']);
+                        $ns->return_err_msg( $res['data'] );
                     }
                 } else {
-                    return_err_msg('No customer info.');
+                    $ns->return_err_msg( 'No customer info.' );
                 }
             }
         };
 
         $ns->register_subscription_to_db = function( $plan_id, $customer_token ) use ( $ns ) {
-            $plan = $ns->get_certain_plan($paln_id);
+            $plan = $ns->get_certain_plan( $plan_id );
             $info = array(
                 'blog_id' => get_current_blog_id(),
                 'plan_id' => $plan_id,
                 'plan_charge' => $plan['charge'],
-                'plan_max_providers' => get_max_providers($plan_id),
+                'plan_max_providers' => $ns->get_max_providers( $plan_id ),
                 'plan_desc' => $plan['desc'],
                 'customer_token' => $customer_token
             );
             $post_id = wp_insert_post(
                 array(
-                    'post_content' => json_encode($info),
+                    'post_content' => json_encode( $info ),
                     'post_name' => 'subscription',
                     'post_title' => 'Subscription',
                     'post_excerpt' => '',
                     'post_type' => 'subscription'
                 ), false
             );
-            return wp_add_post_meta($post_id, 'validate_time', date('Y-m-d H:i:s'));
+            return add_post_meta( $post_id, 'validate_time', date( 'Y-m-d H:i:s' ) );
         };
 
         $ns->query_subscription = function() use ( $ns ) {
-            $query = new WP_Query(array(
-                'author__in' => get_current_user_id(),
-                'post_type' => 'subscription',
-                'orderby' => 'date',
-                'order' => 'DESC'
-            ));
-            if(!$query->post_count){
+            $query = new WP_Query( array(
+                    'author__in' => get_current_user_id(),
+                    'post_type' => 'subscription',
+                    'orderby' => 'date',
+                    'order' => 'DESC'
+                ) );
+            if ( !$query->post_count ) {
                 return false;
             } else {
                 $query->the_post();
-                return json_decode(get_the_content());
+                return json_decode( get_the_content() );
             }
         };
 
         $ns->query_sub_records = function( $uid ) use ( $ns ) {
-            $query = new WP_Query(array(
-                'author__in' => get_current_user_id(),
-                'post_type' => 'subscription',
-                'orderby' => 'date',
-                'order' => 'DESC'
-            ));
+            $query = new WP_Query( array(
+                    'author__in' => get_current_user_id(),
+                    'post_type' => 'subscription',
+                    'orderby' => 'date',
+                    'order' => 'DESC'
+                ) );
             $res = array();
-            while ($query->have_posts()) {
+            while ( $query->have_posts() ) {
                 $query->the_post();
                 $post_id = the_ID();
-                array_push($res, get_post_meta($post_id, 'validate_time'));
+                array_push( $res, get_post_meta( $post_id, 'validate_time' ) );
             }
             return $res;
         };
@@ -333,7 +357,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->charge_user = function( $amount, $description, $data ) use ( $ns ) {
-            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key() );
 
             $info = array_merge( array(
                     'amount' => $amount,
@@ -357,14 +381,14 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             return $ns->charge_user( $amount, $description, array( 'customer' => $customer_token ) );
         };
 
-        $ns->create_customer = function( $stripe_token, $email, $user_id ) use ( $ns ) {
-            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+        $ns->create_customer = function( $stripe_token, $email ) use ( $ns ) {
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key() );
 
             try {
                 $customer = \Stripe\Customer::create( array(
                         'source' => $stripe_token,
                         'email' => $email,
-                        'metadata' => array( 'user_id' => $user_id )
+                        'metadata' => array( 'user_id' => get_current_user_id() )
                     ) );
                 return $ns->return_result( true, $customer->id );
 
@@ -373,8 +397,8 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-        $ns->get_customer = function($customer_token) use ($ns) {
-            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+        $ns->get_customer = function( $customer_token ) use ( $ns ) {
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key() );
 
             try {
                 $customer = \Stripe\Customer::retrieve( $customer_token );
@@ -384,27 +408,27 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-        $ns->get_cards = function($customer_token) use ($ns) {
-            $result = $ns->get_customer($customer_token);
-            if($result['succeed']){
-                return $result['data']->sources->all(array('limit' => 1,'object' => 'card'))['data'];
+        $ns->get_cards = function( $customer_token ) use ( $ns ) {
+            $result = $ns->get_customer( $customer_token );
+            if ( $result['succeed'] ) {
+                return $result['data']->sources->all( array( 'limit' => 1, 'object' => 'card' ) )['data'];
             } else {
                 return false;
             }
         };
 
-        $ns->set_customer_card = function($customer_token, $stripe_token) use ($ns) {
-            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+        $ns->set_customer_card = function( $customer_token, $stripe_token ) use ( $ns ) {
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key() );
 
-            $res = $ns->get_customer($customer_token);
-            if($res['succeed']){
+            $res = $ns->get_customer( $customer_token );
+            if ( $res['succeed'] ) {
                 $customer = $res['data'];
                 try {
                     $customer->source = $stripe_token;
                     $customer->save();
-                    return $ns->return_result(true, true);
-                } catch (\Stripe\Error $e) {
-                    return $ns->return_result(false, $e->getMessage());
+                    return $ns->return_result( true, true );
+                } catch ( \Stripe\Error $e ) {
+                    return $ns->return_result( false, $e->getMessage() );
                 }
             } else {
                 return $res;
@@ -412,19 +436,19 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->set_customer_plan = function( $customer_token, $plan_id ) use ( $ns ) {
-            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key() );
 
             try {
                 $customer = \Stripe\Customer::retrieve( $customer_token );
                 $subs_list = $customer->subscriptions->all()['data'];
-                if(!$subs_list){
-                    $new_sub = $customer->subscriptions->create(array('plan' => $plan_id));
+                if ( !$subs_list ) {
+                    $new_sub = $customer->subscriptions->create( array( 'plan' => $plan_id ) );
                     return $ns->return_result( true, $new_sub->id );
                 } else {
                     $current_sub = $subs_list[0];
-                    $current_sub->plan = $paln_id;
+                    $current_sub->plan = $plan_id;
                     $current_sub->save();
-                    return $ns->return_result(true, $current_sub->id);
+                    return $ns->return_result( true, $current_sub->id );
                 }
             } catch ( \Stripe\Error $e ) {
                 return $ns->return_result( false, $e->getMessage() );
@@ -432,7 +456,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
         };
 
         $ns->get_all_plans = function() use ( $ns ) {
-            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key );
+            \Stripe\Stripe::setApiKey( $ns->get_stripe_private_key() );
             global $wpdb;
 
             $result = array();
@@ -454,11 +478,11 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-        $ns->get_certain_plan = function($id) use ($ns) {
+        $ns->get_certain_plan = function( $id ) use ( $ns ) {
             $res = $ns->get_all_plans();
-            if($res['succeed']){
-                foreach ($res['data'] as $item) {
-                    if($item['id'] == $id){
+            if ( $res['succeed'] ) {
+                foreach ( $res['data'] as $item ) {
+                    if ( $item['id'] == $id ) {
                         return $item;
                     }
                 }
