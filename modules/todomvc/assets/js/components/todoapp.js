@@ -1,7 +1,8 @@
 'use react';
 
 var React = require('react');
-var ImmutableRenderMixin = require('react-immutable-render-mixin')
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var birchpress = require('birchpress');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 

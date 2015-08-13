@@ -2,10 +2,12 @@
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var Immutable = require('immutable');
-var Cursor = require('immutable/contrib/cursor');
+// never used
+// var Immutable = require('immutable');
+// var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var cx = require('react/lib/cx');
+var birchpress = require('birchpress');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
@@ -33,10 +35,10 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
 
     var input;
     if (component.state.isEditing) {
-      input = <TodoTextInput
+      input = (<TodoTextInput
                              className="edit"
                              onSave={ component.onSave }
-                             value={todo.text} />;
+                             value={todo.text} />);
     }
 
     return (
