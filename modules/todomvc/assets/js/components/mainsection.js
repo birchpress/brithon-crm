@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var ImmutableRenderMixin = require('react-immutable-render-mixin')

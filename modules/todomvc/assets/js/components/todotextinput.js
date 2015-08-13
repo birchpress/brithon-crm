@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var Immutable = require('immutable');
@@ -69,4 +71,5 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoTextInput', {
   }
 
 });
+
 module.exports = clazz;
