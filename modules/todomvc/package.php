@@ -18,7 +18,7 @@ birch_ns( 'brithoncrm.todomvc', function( $ns ) {
 			add_action( 'admin_enqueue_scripts', function( $hook ) use ( $ns, $brithoncrm ) {
 					global $birchpress;
 
-					if ( strpos( $hook, 'brithoncrm/todomvc' ) > 0 ) {
+					if ( strpos( $hook, 'brithoncrm/todomvc' ) !== false ) {
 						$birchpress->view->register_3rd_scripts();
 						$birchpress->view->register_core_scripts();
 
