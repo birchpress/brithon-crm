@@ -13,7 +13,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   },
 
   propTypes: {
-    plans: React.PropTypes.array,
+    plansFetcher: React.PropTypes.func,
     name: React.PropTypes.string,
     className: React.PropTypes.string,
     id: React.PropTypes.string,
@@ -42,11 +42,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   },
 
   renderLayer: function(component) {
-    if (!component.props.shown) {
-      return <span />;
-    }
     var Radio = require('./Radio');
-    var Modal = require('./Modal');
     var Button = require('./Button');
 
     var StripeControl = require('./stripecontrol');
@@ -59,7 +55,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
     });
 
     var formRows = [];
-    var allPlans = component.props.plans;
+    var allPlans = component.props.plansFetcher();
+    if (!component.props.shown) {
+      return <span />;
+    }
     for (var key in allPlans) {
       formRows.push(
         <p>

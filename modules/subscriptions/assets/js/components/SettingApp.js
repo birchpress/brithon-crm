@@ -14,22 +14,21 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
 
   render: function(component) {
     var store = component.props.store;
-    store.getAllPlans();
     store.getCustomerInfo();
-    var plans = store.getCursor().get('plans');
     var customer = store.getCursor().get('customer');
 
     var SetPlanForm = require('./SetPlanForm');
     var SetCreditCardForm = require('./SetCreditCardForm');
     var TrialForm = require('./TrialForm');
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
+      var expireDate = new Date(customer.expire_date * 1000);
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
       var _desc = '$' + customer.plan_charge / 100 + ' / month - ' + customer.plan_max_providers + ' Service provider(s)';
-      var _meta = 'Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + customer.expire_date;
+      var _meta = 'Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + expireDate.toDateString();
       return (
         <div>
           <SetPlanForm
-                       plans={ plans }
+                       plansFetcher={ component.retrieveAllPlans }
                        currentPlanDesc={ _desc }
                        currentPlanMeta={ _meta }
                        name='planChecker'
@@ -45,7 +44,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
       return (
         <div>
           <TrialForm
-                     plans={ plans }
+                     plansFetcher={ component.retrieveAllPlans }
                      name='planChecker'
                      radioOnChange={ component.handlePlanChange }
                      onUpdateCard={ component.updatePurchase }
@@ -55,11 +54,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
     }
   },
 
+  retrieveAllPlans: function(component) {
+    var store = component.props.store;
+    store.getAllPlans();
+    return store.getCursor().get('plans');
+  },
+
   handlePlanChange: function(component, childComponent, event) {
     var store = component.props.store;
-    // for test
-    console.log(childComponent.props.value);
-    // end of test
     store.insertSubscription(childComponent.props.value);
   },
 
@@ -86,7 +88,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SettingApp',
     var store = component.props.store;
     var customerRes;
     store.registerCustomer();
-    customerRes = store.getCursor().get('customer')
+    customerRes = store.getCursor().get('customer_id');
     if (customerRes) {
       var isUpdateSucceed = store.updatePlan();
       if (isUpdateSucceed) {

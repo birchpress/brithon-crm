@@ -29,7 +29,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
   getInitialState: function(component) {
     return {
       shown: false,
-      modalShown: false,
+      modalShown: false
     };
   },
 

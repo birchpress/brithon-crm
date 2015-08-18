@@ -13,7 +13,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.StripeContro
   },
 
   propTypes: {
-    onUpdateToken: React.PropTypes.func,
+    onUpdateToken: React.PropTypes.func
   },
 
   getStripeHandler: function(component) {
@@ -23,7 +23,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.StripeContro
   handleClick: function(component, event) {
     var handler = component.getStripeHandler();
     handler.open({
-      name: 'Brithon Inc.',
+      name: 'Brithon Inc.'
     });
     event.preventDefault();
   },
@@ -41,7 +41,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.StripeContro
                      text="Update My Card"
                      onClick={ component.handleClick } />
            </div>;
-  },
+  }
 });
 
 module.exports = clazz;

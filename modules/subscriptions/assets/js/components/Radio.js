@@ -19,7 +19,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.Radio', {
     name: React.PropTypes.string,
     id: React.PropTypes.string,
     className: React.PropTypes.string,
-    onChange: React.PropTypes.func,
+    onChange: React.PropTypes.func
   },
 
   handleChange: function(component, event) {
@@ -44,7 +44,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.Radio', {
         <br />
       </div>
       );
-  },
+  }
 });
 
 module.exports = clazz;

@@ -18,7 +18,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
     name: React.PropTypes.string,
     className: React.PropTypes.string,
     id: React.PropTypes.string,
-    shown: React.PropTypes.bool,
+    shown: React.PropTypes.bool
   },
 
   handleClick: function(component) {
@@ -77,7 +77,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
            onClick={ component.handleClick }>Change your credit card and billing information</a>
       </div>
       );
-  },
+  }
 });
 
 module.exports = clazz;

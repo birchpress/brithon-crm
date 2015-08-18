@@ -13,7 +13,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
   },
 
   propTypes: {
-    plans: React.PropTypes.array,
+    plansFetcher: React.PropTypes.func,
     currentPlanDesc: React.PropTypes.string,
     currentPlanMeta: React.PropTypes.string,
     name: React.PropTypes.string,
@@ -24,7 +24,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
     onSubmitClick: React.PropTypes.func,
-    shown: React.PropTypes.bool,
+    shown: React.PropTypes.bool
   },
 
   handleClick: function(component) {
@@ -53,7 +53,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     var Button = require('./Button');
 
     var formRows = [];
-    var allPlans = component.props.plans;
+    var allPlans = component.props.plansFetcher();
     for (var key in allPlans) {
       formRows.push(
         <p>
@@ -94,7 +94,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
            onClick={ component.handleClick }>See plans and upgrade or downgrade</a>
       </div>
       );
-  },
+  }
 });
 
 module.exports = clazz;

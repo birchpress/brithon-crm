@@ -72,7 +72,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
         // --test--
         alert(r.id);
       }
-    )
+    );
   },
 
   updateCreditCard: function(self) {
@@ -82,7 +82,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
         bp_urls.ajax_url,
         {
           'action': 'birchpress_subscriptions_updatecard',
-          'stripe_token': newCardToken,
+          'stripe_token': newCardToken
         }, function(err, r) {
           if (err) {
             alert(err.error + ': ' + err.message);
