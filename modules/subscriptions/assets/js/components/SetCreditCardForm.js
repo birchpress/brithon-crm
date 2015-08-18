@@ -66,7 +66,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   },
 
   render: function(component) {
-    var CreditCardLabel = require('./CreditCardLabel');
+    var CreditCardLabel = require('./creditcardlabel');
 
     return (
       <div id="set-credit-card-div">

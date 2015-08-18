@@ -2,8 +2,8 @@
 var React = require('react');
 var Immutable = require('immutable');
 
-var RegStore = require('./stores/RegStore');
-var SubscriptionStore = require('./stores/SubscriptionStore');
+var RegStore = require('./stores/regstore');
+var SubscriptionStore = require('./stores/subscriptionstore');
 
 var regAppComponent;
 var settingAppComponent;
@@ -19,7 +19,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
   },
 
   run: function() {
-    var regApp = require('./components/RegApp');
+    var regApp = require('./components/regapp');
     var regData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     if (!regAppComponent && registerAppContainer) {
@@ -40,7 +40,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
       });
     }
 
-    var settingApp = require('./components/SettingApp');
+    var settingApp = require('./components/settingapp');
     var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     if (!settingAppComponent && settingAppContainer) {

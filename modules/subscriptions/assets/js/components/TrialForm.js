@@ -42,8 +42,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   },
 
   renderLayer: function(component) {
-    var Radio = require('./Radio');
-    var Button = require('./Button');
+    var Radio = require('./radio');
+    var Button = require('./button');
 
     var StripeControl = require('./stripecontrol');
     var handler = StripeCheckout.configure({

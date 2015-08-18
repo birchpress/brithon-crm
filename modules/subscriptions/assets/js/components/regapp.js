@@ -2,7 +2,7 @@
 var React = require('react/addons');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-var Modal = require('./Modal');
+var Modal = require('./modal');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
@@ -37,8 +37,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
     if (!component.props.shown) {
       return <span />;
     }
-    var Button = require('./Button');
-    var Input = require('./DataInput');
+    var Button = require('./button');
+    var Input = require('./datainput');
     return (
       <Modal onRequestClose={ component.handleClick }>
         <h1>Welcome to register!</h1>

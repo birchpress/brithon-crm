@@ -48,9 +48,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     if (!component.props.shown) {
       return <span />;
     }
-    var Radio = require('./Radio');
-    var Modal = require('./Modal');
-    var Button = require('./Button');
+    var Radio = require('./radio');
+    var Modal = require('./modal');
+    var Button = require('./button');
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
@@ -83,7 +83,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
   },
 
   render: function(component) {
-    var PlanLabel = require('./PlanLabel');
+    var PlanLabel = require('./planlabel');
 
     return (
       <div id="set-plan-form">
