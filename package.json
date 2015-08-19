@@ -7,14 +7,13 @@
     "url": "https://github.com/birchpress/brithon-crm.git"
   },
   "dependencies": {},
-
   "devDependencies": {
     "browserify": "^9.0.8",
     "browserify-shim": "^3.8.3",
     "immutable": "^3.7.4",
     "react": "^0.13.1",
     "react-immutable-render-mixin": "^0.8.1",
-    "react-tools": "^0.13.1",
+    "react-tools": "^0.13.3",
     "reactify": "^1.1.0"
   },
   "browserify": {

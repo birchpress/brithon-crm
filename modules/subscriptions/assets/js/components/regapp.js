@@ -2,7 +2,7 @@
 var React = require('react/addons');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
-var Modal = require('./modal');
+var Modal = require('./Modal');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
