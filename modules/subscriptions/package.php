@@ -220,12 +220,15 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
 				$token = $sub_info->customer_token;
 				if ( $token ) {
-					$plan_info = $ns->get_customer_plan( $token );
-					if ( $plan_info['succeed'] ) {
-						// Valid subscription
-						if ( $plan_info['data']['expire_date'] >= time() ) {
-							$result = array_merge( $result, $plan_info['data'] );
-						}
+					// Check subscription validity
+					if( $ns->check_subscription($sub_info) ){
+						$result = array_merge($result, array(
+							'plan_id' => $sub_info->plan_id,
+							'plan_desc' => $sub_info->plan_desc,
+							'plan_max_providers' => $sub_info->plan_max_providers,
+							'plan_charge' => $sub_info->plan_charge,
+							'expire_date' => $sub_info->plan_period_end,
+						));
 					}
 					$cards = $ns->get_cards( $token );
 					if ( $cards ) {
@@ -269,8 +272,10 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 				if ( $cus_token ) {
 					$card = $ns->get_cards( $cus_token );
 					if ( $card ) {
-						$ns->set_customer_plan( $cus_token, $plan_id );
-						$ns->register_subscription_to_db( $plan_id, $cus_token );
+						$sub = $ns->set_customer_plan( $cus_token, $plan_id );
+						if($sub['succeed']){
+							$ns->register_subscription_to_db( $plan_id, $cus_token, $sub['data'] );
+						}
 						die( json_encode( $card ) );
 					} else {
 						$ns->return_err_msg( 'No credit card.' );
@@ -299,11 +304,20 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 			}
 		};
 
-		$ns->register_subscription_to_db = function( $plan_id, $customer_token ) use ( $ns ) {
+		$ns->register_subscription_to_db = function( $plan_id, $customer_token, $subscription = null ) use ( $ns ) {
 			$info = array(
 				'blog_id' => get_current_blog_id(),
+				'plan_id' => $plan_id,
 				'customer_token' => $customer_token,
 			);
+			if($subscription){
+				$info = array_merge($info, array(
+					'plan_desc' => $subscription->plan->name,
+					'plan_charge' => $subscription->plan->amount,
+					'plan_max_providers' => $ns->get_max_providers($plan_id),
+					'plan_period_end' => $subscription->current_period_end
+				));
+			}
 			$post_id = wp_insert_post(
 				array(
 					'post_content' => json_encode( $info ),
@@ -329,6 +343,24 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 				$query->the_post();
 				return json_decode( get_the_content() );
 			}
+		};
+
+		$ns->check_subscription = function($subscription) use ($ns){
+			if(isset($subscription->plan_period_end)){
+				if($subscription->plan_period_end > time()){
+					return true;
+				}
+				if(isset($subscription->customer_token)){
+					$subscription_on_server = $ns->get_customer_plan($subscription->customer_token);	
+					if($subscription_on_server->current_period_end >= time()){
+						$ns->register_subscription_to_db($subscription->plan_id, $subscription->customer_token, $subscription_on_server);
+						return true;
+					}
+				} else {
+					return false;
+				}
+			}
+			return false;
 		};
 
 		$ns->query_sub_records = function( $uid ) use ( $ns ) {
@@ -409,7 +441,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
 		$ns->get_cards = function( $customer_token ) use ( $ns ) {
 			$result = $ns->get_customer( $customer_token );
-			if ( $result['succeed'] ) {
+			if ( $result['succeed'] && $result['data']->sources ) {
 				return $result['data']->sources->all( array( 'limit' => 1, 'object' => 'card' ) )['data'];
 			} else {
 				return false;
@@ -442,12 +474,12 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 				$subs_list = $customer->subscriptions->all()['data'];
 				if ( ! $subs_list ) {
 					$new_sub = $customer->subscriptions->create( array( 'plan' => $plan_id ) );
-					return $ns->return_result( true, $new_sub->id );
+					return $ns->return_result( true, $new_sub );
 				} else {
 					$current_sub = $subs_list[0];
 					$current_sub->plan = $plan_id;
 					$current_sub->save();
-					return $ns->return_result( true, $current_sub->id );
+					return $ns->return_result( true, $current_sub );
 				}
 			} catch ( \Stripe\Error $e ) {
 				return $ns->return_result( false, $e->getMessage() );
