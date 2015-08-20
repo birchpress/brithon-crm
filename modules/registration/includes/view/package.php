@@ -29,4 +29,4 @@ birch_ns( 'brithoncrm.registration', function( $ns ) {
             echo $args['after_widget'];
         };
 
-} );
+    } );

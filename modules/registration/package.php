@@ -38,4 +38,4 @@ birch_ns( 'brithoncrm.registration', function( $ns ) {
             }
         };
 
-} );
+    } );

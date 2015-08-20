@@ -97,4 +97,4 @@ birch_ns( 'brithoncrm.registration', function( $ns ) {
             return '/'.$first_name.'_'.$last_name.rand();
         };
 
-} );
+    } );

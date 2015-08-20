@@ -23,4 +23,4 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 <?php
         };
 
-} );
+    } );

@@ -56,14 +56,14 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 $token = $sub_info->customer_token;
                 if ( $token ) {
                     // Check subscription validity
-                    if( $ns->check_subscription($sub_info) ){
-                        $result = array_merge($result, array(
-                            'plan_id' => $sub_info->plan_id,
-                            'plan_desc' => $sub_info->plan_desc,
-                            'plan_max_providers' => $sub_info->plan_max_providers,
-                            'plan_charge' => $sub_info->plan_charge,
-                            'expire_date' => $sub_info->plan_period_end,
-                        ));
+                    if ( $ns->check_subscription( $sub_info ) ) {
+                        $result = array_merge( $result, array(
+                                'plan_id' => $sub_info->plan_id,
+                                'plan_desc' => $sub_info->plan_desc,
+                                'plan_max_providers' => $sub_info->plan_max_providers,
+                                'plan_charge' => $sub_info->plan_charge,
+                                'expire_date' => $sub_info->plan_period_end,
+                            ) );
                     }
                     $cards = $ns->get_cards( $token );
                     if ( $cards ) {
@@ -108,7 +108,7 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                     $card = $ns->get_cards( $cus_token );
                     if ( $card ) {
                         $sub = $ns->set_customer_plan( $cus_token, $plan_id );
-                        if($sub['succeed']){
+                        if ( $sub['succeed'] ) {
                             $ns->register_subscription_to_db( $plan_id, $cus_token, $sub['data'] );
                         }
                         die( json_encode( $card ) );
@@ -145,13 +145,13 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
                 'plan_id' => $plan_id,
                 'customer_token' => $customer_token,
             );
-            if($subscription){
-                $info = array_merge($info, array(
-                    'plan_desc' => $subscription->plan->name,
-                    'plan_charge' => $subscription->plan->amount,
-                    'plan_max_providers' => $ns->get_max_providers($plan_id),
-                    'plan_period_end' => $subscription->current_period_end
-                ));
+            if ( $subscription ) {
+                $info = array_merge( $info, array(
+                        'plan_desc' => $subscription->plan->name,
+                        'plan_charge' => $subscription->plan->amount,
+                        'plan_max_providers' => $ns->get_max_providers( $plan_id ),
+                        'plan_period_end' => $subscription->current_period_end
+                    ) );
             }
             $post_id = wp_insert_post(
                 array(
@@ -180,15 +180,15 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
         };
 
-        $ns->check_subscription = function($subscription) use ($ns){
-            if(isset($subscription->plan_period_end)){
-                if($subscription->plan_period_end > time()){
+        $ns->check_subscription = function( $subscription ) use ( $ns ) {
+            if ( isset( $subscription->plan_period_end ) ) {
+                if ( $subscription->plan_period_end > time() ) {
                     return true;
                 }
-                if(isset($subscription->customer_token)){
-                    $subscription_on_server = $ns->get_customer_plan($subscription->customer_token);    
-                    if($subscription_on_server->current_period_end >= time()){
-                        $ns->register_subscription_to_db($subscription->plan_id, $subscription->customer_token, $subscription_on_server);
+                if ( isset( $subscription->customer_token ) ) {
+                    $subscription_on_server = $ns->get_customer_plan( $subscription->customer_token );
+                    if ( $subscription_on_server->current_period_end >= time() ) {
+                        $ns->register_subscription_to_db( $subscription->plan_id, $subscription->customer_token, $subscription_on_server );
                         return true;
                     }
                 } else {
@@ -326,10 +326,10 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
             try {
                 $customer = \Stripe\Customer::retrieve( $customer_token );
-                if (! $customer){
-                    return $ns->return_result( false, 'Invalid customer token.');
+                if ( ! $customer ) {
+                    return $ns->return_result( false, 'Invalid customer token.' );
                 }
-                
+
                 $subs_list = $customer->subscriptions->all()['data'];
                 if ( ! $subs_list ) {
                     return $ns->return_result( false, 'No subscription found.' );
@@ -382,4 +382,4 @@ birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
             }
             return false;
         };
-} );
+    } );
