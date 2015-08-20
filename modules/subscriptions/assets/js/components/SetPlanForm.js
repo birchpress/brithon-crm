@@ -4,7 +4,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', {
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm', {
 
   __mixins__: [ReactMixinCompositor],
 
@@ -14,14 +14,17 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
 
   propTypes: {
     plansFetcher: React.PropTypes.func,
+    currentPlanDesc: React.PropTypes.string,
+    currentPlanMeta: React.PropTypes.string,
     name: React.PropTypes.string,
     className: React.PropTypes.string,
     id: React.PropTypes.string,
     radioClassName: React.PropTypes.string,
     radioId: React.PropTypes.string,
+    radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
-    onUpdateCard: React.PropTypes.func,
-    onSubmitClick: React.PropTypes.func
+    onSubmitClick: React.PropTypes.func,
+    shown: React.PropTypes.bool
   },
 
   handleClick: function(component) {
@@ -42,23 +45,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   },
 
   renderLayer: function(component) {
-    var Radio = require('./radio');
-    var Button = require('./button');
-
-    var StripeControl = require('./stripecontrol');
-    var handler = StripeCheckout.configure({
-      key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
-      image: '/img/documentation/checkout/marketplace.png',
-      token: function(token) {
-        component.props.onUpdateCard(token.id, token.email);
-      }
-    });
-
-    var formRows = [];
-    var allPlans = component.props.plansFetcher();
     if (!component.props.shown) {
       return <span />;
     }
+    var Radio = require('./Radio');
+    var Button = require('./Button');
+
+    var formRows = [];
+    var allPlans = component.props.plansFetcher();
     for (var key in allPlans) {
       formRows.push(
         <p>
@@ -68,6 +62,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
                  name={ component.props.name }
                  id={ component.props.radioId }
                  className={ component.props.radioClassName }
+                 onClick={ component.props.onHide }
                  onChange={ component.props.radioOnChange } />
         </p>
       );
@@ -77,13 +72,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
       <div>
         <h4>Choose plan</h4>
         { formRows }
-        <h4>Credit card</h4>
-        <form method="POST">
-          <StripeControl handler={ handler } />
-        </form>
         <Button
                 type=""
-                text="Purchase"
+                text="Update"
                 onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
         <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
       </div>
@@ -92,15 +83,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
 
   render: function(component) {
     var PlanLabel = require('./PlanLabel');
-    var _meta = 'You are currently on a trial subscription. Your trial runs until' + component.props.expire_date;
 
     return (
       <div id="set-plan-form">
-        <PlanLabel description='Trial' metainfo={ _meta } />
+        <PlanLabel description={ component.props.currentPlanDesc } metainfo={ component.props.currentPlanMeta } />
         <a
            id="set-plan-link"
            href="javascript:;"
-           onClick={ component.handleClick }>Buy subscription</a>
+           onClick={ component.handleClick }>See plans and upgrade or downgrade</a>
       </div>
       );
   }

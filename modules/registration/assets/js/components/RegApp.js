@@ -6,7 +6,7 @@ var Modal = require('./Modal');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
+var clazz = birchpress.provide('brithoncrm.registration.components.RegApp', {
 
   __mixins__: [ReactMixinCompositor],
 
@@ -37,8 +37,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.RegApp', {
     if (!component.props.shown) {
       return <span />;
     }
-    var Button = require('./button');
-    var Input = require('./datainput');
+    var Button = require('./Button');
+    var Input = require('./DataInput');
     return (
       <Modal onRequestClose={ component.handleClick }>
         <h1>Welcome to register!</h1>

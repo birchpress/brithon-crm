@@ -34,7 +34,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.StripeContro
   },
 
   render: function(component) {
-    var Button = require('./button');
+    var Button = require('./Button');
     return <div>
              <Button
                      id="submitCardButton"
