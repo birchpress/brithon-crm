@@ -16,15 +16,21 @@ var clazz = birchpress.provide('brithoncrm.registration.components.index.registr
   },
 
   handleClick: function(component) {
-    component.setProps({
-      shown: !component.props.shown
+    component.setState({
+      shown: !component.state.shown
     });
+  },
+
+  getInitialState: function(component) {
+    return {
+      shown: false
+    };
   },
 
   renderLayer: function(component) {
     var Button = require('registration/components/common/Button');
     var Input = require('registration/components/common/DataInput');
-    if (!component.props.shown) {
+    if (!component.state.shown) {
       return <span />;
     }
     return (

@@ -27,9 +27,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   handleClick: function(component) {
-    component.setProps({
-      shown: !component.props.shown
+    component.setState({
+      shown: !component.state.shown
     });
+  },
+
+  getInitialState: function(component) {
+    return {
+      shown: false
+    };
   },
 
   handleChange: function(component, event) {
@@ -43,7 +49,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
-    if (!component.props.shown) {
+    if (!component.state.shown) {
       return <span />;
     }
     for (var key in allPlans) {

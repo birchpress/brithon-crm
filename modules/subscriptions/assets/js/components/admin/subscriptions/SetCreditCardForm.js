@@ -22,9 +22,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   handleClick: function(component) {
-    component.setProps({
-      shown: !component.props.shown
+    component.setState({
+      shown: !component.state.shown
     });
+  },
+
+  getInitialState: function(component) {
+    return {
+      shown: false
+    };
   },
 
   renderLayer: function(component) {
@@ -36,7 +42,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
         component.props.onUpdateCard(token.id);
       }
     });
-    if (!component.props.shown) {
+    if (!component.state.shown) {
       return <span />;
     }
     return (
