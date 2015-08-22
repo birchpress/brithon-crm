@@ -1,6 +1,7 @@
 'use strict';
 var React = require('react/addons');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Modal = require('./Modal');
 
@@ -15,26 +16,19 @@ var clazz = birchpress.provide('brithoncrm.registration.components.RegApp', {
   },
 
   handleClick: function(component) {
-    component.props.shown = !component.props.shown;
-    if (component.props.shown) {
-      component.props._target = document.createElement('div');
-      document.body.appendChild(component.props._target);
-      React.render(component.renderLayer(), component.props._target);
-    } else {
-      React.unmountComponentAtNode(component.props._target);
-      document.removeChild(component.props._target);
-    }
+    component.setState({
+      shown: !component.state.shown
+    });
   },
 
   getInitialState: function(component) {
     return {
-      shown: false,
-      modalShown: false
+      shown: false
     };
   },
 
   renderLayer: function(component) {
-    if (!component.props.shown) {
+    if (!component.state.shown) {
       return <span />;
     }
     var Button = require('./Button');
@@ -105,10 +99,15 @@ var clazz = birchpress.provide('brithoncrm.registration.components.RegApp', {
   },
 
   render: function(component) {
-    return (<a
-               href="javascript:;"
-               role="button"
-               onClick={ component.handleClick }>Click here to register</a>);
+    var registerForm = component.renderLayer();
+    return (<div id="reg" key="regdiv">
+              <a
+                 href="javascript:;"
+                 role="button"
+                 key="reglink"
+                 onClick={ component.handleClick }>Click here to register</a>
+              { registerForm }
+            </div>);
   },
 
   buttonClick: function(component, event) {

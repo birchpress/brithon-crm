@@ -24,19 +24,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
     radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
     onSubmitClick: React.PropTypes.func,
-    shown: React.PropTypes.bool
   },
 
   handleClick: function(component) {
-    component.props.shown = !component.props.shown;
-    if (component.props.shown) {
-      var formDiv = document.createElement('div');
-      component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
-      React.render(component.renderLayer(), component.props._target);
-    } else {
-      React.unmountComponentAtNode(component.props._target);
-      document.removeChild(component.props._target);
-    }
+    component.setState({
+      shown: !component.state.shown
+    });
+  },
+
+  getInitialState: function(component) {
+    return {
+      shown: false
+    };
   },
 
   handleChange: function(component, event) {
@@ -45,7 +44,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
   },
 
   renderLayer: function(component) {
-    if (!component.props.shown) {
+    if (!component.state.shown) {
       return <span />;
     }
     var Radio = require('./Radio');
@@ -83,6 +82,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
 
   render: function(component) {
     var PlanLabel = require('./PlanLabel');
+    var setPlanForm = component.renderLayer();
 
     return (
       <div id="set-plan-form">
@@ -91,6 +91,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
            id="set-plan-link"
            href="javascript:;"
            onClick={ component.handleClick }>See plans and upgrade or downgrade</a>
+        { setPlanForm }
       </div>
       );
   }

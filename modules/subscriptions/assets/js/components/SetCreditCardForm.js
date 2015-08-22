@@ -22,19 +22,19 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   },
 
   handleClick: function(component) {
-    component.props.shown = !component.props.shown;
-    if (component.props.shown) {
-      var formDiv = document.createElement('div');
-      component.props._target = document.getElementById('set-credit-card-div').appendChild(formDiv);
-      React.render(component.renderLayer(), component.props._target);
-    } else {
-      React.unmountComponentAtNode(component.props._target);
-      document.removeChild(component.props._target);
-    }
+    component.setState({
+      shown: !component.state.shown
+    });
+  },
+
+  getInitialState: function(components) {
+    return {
+      shown: false
+    };
   },
 
   renderLayer: function(component) {
-    if (!component.props.shown) {
+    if (!component.state.shown) {
       return <span />;
     }
     var StripeControl = require('./StripeControl');
@@ -67,6 +67,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
 
   render: function(component) {
     var CreditCardLabel = require('./CreditCardLabel');
+    var setCreditCardForm = component.renderLayer();
 
     return (
       <div id="set-credit-card-div">
@@ -75,6 +76,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
            id="set-card-link"
            href="javascript:;"
            onClick={ component.handleClick }>Change your credit card and billing information</a>
+        { setCreditCardForm }
       </div>
       );
   }

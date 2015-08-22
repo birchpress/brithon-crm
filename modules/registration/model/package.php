@@ -1,8 +1,20 @@
 <?php
 
-birch_ns( 'brithoncrm.registration', function( $ns ) {
+birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 
 		global $brithoncrm;
+
+		$ns->init = function() use ( $ns ) {
+			add_action( 'init', array( $ns, 'wp_init' ) );
+		};
+
+		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
+			global $birchpress;
+
+			if ( is_main_site() ) {
+				add_action( 'wp_ajax_nopriv_register_birchpress_account', array( $ns, 'register_account' ) );
+			}
+		};
 
 		$ns->register_account = function() use ( $ns ) {
 

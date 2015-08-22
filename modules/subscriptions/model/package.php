@@ -1,8 +1,29 @@
 <?php
 
-birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
+birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 
 		global $brithoncrm;
+
+		$ns->init = function() use ( $ns ) {
+			register_activation_hook( __FILE__, array( $ns, 'plugin_init' ) );
+			add_action( 'init', array( $ns, 'wp_init' ) );
+		};
+
+		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
+			global $birchpress;
+
+			if ( is_main_site() ) {
+				add_action( 'wp_ajax_birchpress_subscriptions_getplans', array( $ns, 'retrieve_all_plans' ) );
+				add_action( 'wp_ajax_birchpress_subscriptions_getcustomer', array( $ns, 'retrieve_customer_info' ) );
+				add_action( 'wp_ajax_birchpress_subscriptions_regcustomer', array( $ns, 'register_customer' ) );
+				add_action( 'wp_ajax_birchpress_subscriptions_updateplan', array( $ns, 'update_user_plan' ) );
+				add_action( 'wp_ajax_birchpress_subscriptions_updatecard', array( $ns, 'update_user_card' ) );
+			}
+		};
+
+		$ns->plugin_init = function() use ( $ns ) {
+			register_post_type( 'subscription' );
+		};
 
 		$ns->return_err_msg = function( $msg, $error = 'Error' ) use ( $ns ) {
 			die( json_encode( array(

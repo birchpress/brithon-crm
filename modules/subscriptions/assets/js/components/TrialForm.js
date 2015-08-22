@@ -25,15 +25,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   },
 
   handleClick: function(component) {
-    component.props.shown = !component.props.shown;
-    if (component.props.shown) {
-      var formDiv = document.createElement('div');
-      component.props._target = document.getElementById('set-plan-form').appendChild(formDiv);
-      React.render(component.renderLayer(), component.props._target);
-    } else {
-      React.unmountComponentAtNode(component.props._target);
-      document.removeChild(component.props._target);
-    }
+    component.setState({
+      shown: !component.state.shown
+    });
+  },
+
+  getInitialState: function(components) {
+    return {
+      shown: false
+    };
   },
 
   handleChange: function(component, event) {
@@ -93,6 +93,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   render: function(component) {
     var PlanLabel = require('./PlanLabel');
     var _meta = 'You are currently on a trial subscription. Your trial runs until' + component.props.expire_date;
+    var trialForm = component.renderLayer();
 
     return (
       <div id="set-plan-form">
@@ -101,6 +102,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
            id="set-plan-link"
            href="javascript:;"
            onClick={ component.handleClick }>Buy subscription</a>
+        { trialForm }
       </div>
       );
   }
