@@ -11,6 +11,7 @@
     "browserify": "^9.0.8",
     "browserify-shim": "^3.8.3",
     "immutable": "^3.7.4",
+    "pkgify": "^1.0.3",
     "react": "^0.13.1",
     "react-immutable-render-mixin": "^0.8.1",
     "react-tools": "^0.13.3",
@@ -19,7 +20,8 @@
   "browserify": {
     "transform": [
       "reactify",
-      "browserify-shim"
+      "browserify-shim",
+      "pkgify"
     ]
   },
   "browserify-shim": {
@@ -27,6 +29,11 @@
     "immutable": "global:Immutable",
     "react": "global:React",
     "birchpress": "global:birchpress"
+  },
+  "pkgify": {
+    "packages": {
+      "todomvc": "./modules/todomvc/assets/js"
+    }
   },
   "scripts": {
     "bundle": "for m in $(ls -d modules/*/); do browserify $m/assets/js/index.js -o $m/assets/js/index.bundle.js; done"
