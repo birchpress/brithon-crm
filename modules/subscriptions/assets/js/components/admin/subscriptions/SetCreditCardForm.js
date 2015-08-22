@@ -28,7 +28,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   },
 
   renderLayer: function(component) {
-    var StripeControl = require('./StripeControl');
+    var StripeControl = require('subscriptions/components/common/StripeControl');
     var handler = StripeCheckout.configure({
       key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
       image: '/img/documentation/checkout/marketplace.png',
@@ -60,7 +60,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   },
 
   render: function(component) {
-    var CreditCardLabel = require('./CreditCardLabel');
+    var CreditCardLabel = require('subscriptions/components/common/CreditCardLabel');
     var setCreditCardForm = component.renderLayer();
 
     return (

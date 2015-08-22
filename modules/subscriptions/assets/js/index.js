@@ -2,7 +2,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 
-var SubscriptionStore = require('./stores/SubscriptionStore');
+var SubscriptionStore = require('subscriptions/stores/SubscriptionStore');
 
 var settingAppComponent;
 
@@ -17,7 +17,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
   },
 
   run: function() {
-    var settingApp = require('./components/SettingApp');
+    var settingApp = require('subscriptions/components/admin/subscriptions/SettingApp');
     var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     if (!settingAppComponent && settingAppContainer) {

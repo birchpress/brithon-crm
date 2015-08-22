@@ -4,7 +4,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.registration.components.Button', {
+var clazz = birchpress.provide('brithoncrm.registration.components.common.Button', {
 
   __mixins__: [ReactMixinCompositor],
 
