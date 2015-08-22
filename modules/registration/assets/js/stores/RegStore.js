@@ -37,8 +37,8 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegStore', {
     );
   },
 
-  generateUserName: function(self, first_name, last_name) {
-    return first_name + '_' + last_name + Math.random().toString();
+  generateUserName: function(self, firstName, lastName) {
+    return firstName + '_' + lastName + Math.random().toString();
   },
 
   _ajax: function(self, method, url, data, callback) {

@@ -16,23 +16,17 @@ var clazz = birchpress.provide('brithoncrm.registration.components.RegApp', {
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
+    component.setProps({
+      shown: !component.props.shown
     });
   },
 
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
-  },
-
   renderLayer: function(component) {
-    if (!component.state.shown) {
-      return <span />;
-    }
     var Button = require('./Button');
     var Input = require('./DataInput');
+    if (!component.props.shown) {
+      return <span />;
+    }
     return (
       <Modal onRequestClose={ component.handleClick }>
         <h1>Welcome to register!</h1>

@@ -22,21 +22,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
+    component.setProps({
+      shown: !component.props.shown
     });
   },
 
-  getInitialState: function(components) {
-    return {
-      shown: false
-    };
-  },
-
   renderLayer: function(component) {
-    if (!component.state.shown) {
-      return <span />;
-    }
     var StripeControl = require('./StripeControl');
     var handler = StripeCheckout.configure({
       key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
@@ -45,6 +36,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetCreditCar
         component.props.onUpdateCard(token.id);
       }
     });
+    if (!component.props.shown) {
+      return <span />;
+    }
     return (
       <div>
         <h4>Change or update your credit card</h4>

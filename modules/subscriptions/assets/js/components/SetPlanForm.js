@@ -27,15 +27,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
+    component.setProps({
+      shown: !component.props.shown
     });
-  },
-
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
   },
 
   handleChange: function(component, event) {
@@ -44,14 +38,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.SetPlanForm'
   },
 
   renderLayer: function(component) {
-    if (!component.state.shown) {
-      return <span />;
-    }
     var Radio = require('./Radio');
     var Button = require('./Button');
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
+    if (!component.props.shown) {
+      return <span />;
+    }
     for (var key in allPlans) {
       formRows.push(
         <p>

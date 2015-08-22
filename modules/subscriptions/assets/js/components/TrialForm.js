@@ -25,15 +25,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.TrialForm', 
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
+    component.setProps({
+      shown: !component.props.shown
     });
-  },
-
-  getInitialState: function(components) {
-    return {
-      shown: false
-    };
   },
 
   handleChange: function(component, event) {
