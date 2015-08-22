@@ -4,7 +4,7 @@ var ImmutableRenderMixin = require('react-immutable-render-mixin');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.subscriptions.components.StripeControl', {
+var clazz = birchpress.provide('brithoncrm.subscriptions.components.common.StripeControl', {
 
   __mixins__: [ReactMixinCompositor],
 
@@ -34,7 +34,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.StripeContro
   },
 
   render: function(component) {
-    var Button = require('./Button');
+    var Button = require('subscriptions/components/common/Button');
     return <div>
              <Button
                      id="submitCardButton"
