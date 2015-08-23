@@ -28,8 +28,14 @@
 
 .ModalContent {
     background: white;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 500px;
+    margin-right: 500px;
     margin-top: 125px;
     width: 400px;
+    z-index: 1000;
+    position: absolute;
+}
+
+.site-content {
+    position: relative;
 }

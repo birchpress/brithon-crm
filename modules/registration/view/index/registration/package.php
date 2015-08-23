@@ -5,7 +5,6 @@ birch_ns( 'brithoncrm.registration.view.index.registration', function( $ns ) {
 		global $brithoncrm;
 
 		$ns->init = function() use ( $ns ) {
-			register_activation_hook(__FILE__, array($ns, 'register_widgets'));
 			add_action( 'init', array( $ns, 'wp_init' ) );
 			add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
 			add_action( 'wp_head', array( $ns, 'wp_header' ) );
@@ -21,8 +20,8 @@ birch_ns( 'brithoncrm.registration.view.index.registration', function( $ns ) {
 			$bp_uid = array( 'uid' => get_current_user_id() );
 
 			if ( is_main_site() ) {
-				$ns->register_widgets();
-				
+				add_shortcode('birchpress_registration', array($ns, 'render_registration_entry'));
+
 				$birchpress->view->register_3rd_scripts();
 				$birchpress->view->register_core_scripts();
 				wp_enqueue_style( 'brithoncrm_registration_base',
@@ -44,14 +43,13 @@ birch_ns( 'brithoncrm.registration.view.index.registration', function( $ns ) {
 		};
 
 		$ns->wp_header = function() use ( $ns ) {
-			//$ns->register_widgets();
+
 		};
 
-		$ns->register_widgets = function() use ( $ns ) {
-			wp_register_sidebar_widget( 'birchpress-register-form', 'User Area', array( $ns, 'render_registration_widget' ),
-				array(
-					'description' => 'Register a new account',
-				) );
+		$ns->render_registration_entry = function() use ( $ns ) {
+			$content = '<section><a href="wp-login.php">Log in</a></section>';
+			$content = $content.'<section id="registerapp"></section>';
+			return $content;
 		};
 
 		$ns->render_registration_widget = function( $args ) {

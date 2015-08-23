@@ -206,15 +206,18 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				if ( $subscription->plan_period_end > time() ) {
 					return true;
 				}
-				if ( isset( $subscription->customer_token ) ) {
-					$subscription_on_server = $ns->get_customer_plan( $subscription->customer_token );
-					if ( $subscription_on_server->current_period_end >= time() ) {
-						$ns->register_subscription_to_db( $subscription->plan_id, $subscription->customer_token, $subscription_on_server );
-						return true;
-					}
-				} else {
+			}
+			if ( isset( $subscription->customer_token ) ) {
+				$subscription_on_server = $ns->get_customer_plan( $subscription->customer_token );
+				if ( ! $subscription_on_server['succeed'] ) {
 					return false;
 				}
+				if ( $subscription_on_server['data']->current_period_end >= time() ) {
+					$ns->register_subscription_to_db( $subscription->plan_id, $subscription->customer_token, $subscription_on_server['data'] );
+					return true;
+				}
+			} else {
+				return false;
 			}
 			return false;
 		};
@@ -356,14 +359,8 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 					return $ns->return_result( false, 'No subscription found.' );
 				}
 				$current_subscription = $subs_list[0];
-				$result = array(
-					'plan_id' => $current_subscription->plan->id,
-					'plan_charge' => $current_subscription->plan->amount,
-					'plan_desc' => $current_subscription->plan->name,
-					'plan_max_providers' => $ns->get_max_providers( $current_subscription->plan->id ),
-					'expire_date' => $current_subscription->current_period_end,
-				);
-				return $ns->return_result( true, $result );
+
+				return $ns->return_result( true, $current_subscription );
 			} catch ( \Stripe\Error $e ) {
 				return $ns->return_result( false, $e->getMessage() );
 			}
@@ -403,4 +400,4 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 			}
 			return false;
 		};
-} );
+	} );
