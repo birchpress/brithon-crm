@@ -49,7 +49,11 @@ birch_ns( 'brithoncrm.registration.view.index.registration', function( $ns ) {
 		$ns->render_registration_entry = function() use ( $ns ) {
 			$content = '<section><a href="wp-login.php">Log in</a></section>';
 			$content = $content.'<section id="registerapp"></section>';
-			return $content;
+			if ( !is_user_logged_in() ) {
+				return $content;
+			} else {
+				return '';
+			}
 		};
 
 		$ns->render_registration_widget = function( $args ) {
