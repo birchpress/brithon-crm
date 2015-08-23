@@ -56,7 +56,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
   retrieveAllPlans: function(component) {
     var store = component.props.store;
-    store.getAllPlans();
+    if (!store.getCursor().get('plans')) {
+      store.getAllPlans();
+    }
     return store.getCursor().get('plans');
   },
 
