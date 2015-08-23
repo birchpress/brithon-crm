@@ -4,8 +4,8 @@ var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
 
-var TodoStore = require('todomvc/stores/todostore');
-var TodoApp = require('todomvc/components/todoapp');
+var TodoStore = require('brithoncrm/todomvc/stores/todostore');
+var TodoApp = require('brithoncrm/todomvc/components/todoapp');
 
 var ns = birchpress.provide('brithoncrm.todomvc', {
 

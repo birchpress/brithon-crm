@@ -32,7 +32,7 @@
   },
   "pkgify": {
     "packages": {
-      "todomvc": "./modules/todomvc/assets/js"
+      "brithoncrm/todomvc": "./modules/todomvc/assets/js"
     }
   },
   "scripts": {
