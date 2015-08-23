@@ -2,7 +2,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 
-var RegStore = require('brithoncrm/registration/stores/RegStore');
+var RegStore = require('brithoncrm/registration/stores/RegistrationStore');
 
 var regAppComponent;
 
@@ -17,7 +17,7 @@ var ns = birchpress.provide('brithoncrm.registration', {
   },
 
   run: function() {
-    var regApp = require('brithoncrm/registration/components/index/registration/RegApp');
+    var regApp = require('brithoncrm/registration/components/index/registration/RegistrationApp');
     var regData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     if (!regAppComponent && registerAppContainer) {
@@ -30,7 +30,7 @@ var ns = birchpress.provide('brithoncrm.registration', {
         registerAppContainer
       );
       store.setAttr('component', regAppComponent);
-      birchpress.addAction('brithoncrm.registration.stores.RegStore.onChangeAfter', function(store, newCursor) {
+      birchpress.addAction('brithoncrm.registration.stores.RegistrationStore.onChangeAfter', function(store, newCursor) {
         store.getAttr('component').setProps({
           store: store,
           cursor: newCursor
