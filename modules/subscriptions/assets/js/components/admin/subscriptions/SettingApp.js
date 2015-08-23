@@ -17,9 +17,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     store.getCustomerInfo();
     var customer = store.getCursor().get('customer');
 
-    var SetPlanForm = require('subscriptions/components/admin/subscriptions/SetPlanForm');
-    var SetCreditCardForm = require('subscriptions/components/admin/subscriptions/SetCreditCardForm');
-    var TrialForm = require('subscriptions/components/admin/subscriptions/TrialForm');
+    var SetPlanForm = require('brithoncrm/subscriptions/components/admin/subscriptions/SetPlanForm');
+    var SetCreditCardForm = require('brithoncrm/subscriptions/components/admin/subscriptions/SetCreditCardForm');
+    var TrialForm = require('brithoncrm/subscriptions/components/admin/subscriptions/TrialForm');
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
       var expireDate = new Date(customer.expire_date * 1000);
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;

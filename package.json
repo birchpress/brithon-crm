@@ -31,9 +31,9 @@
   },
   "pkgify": {
     "packages": {
-      "registration": "./modules/registration/assets/js",
-      "subscriptions": "./modules/subscriptions/assets/js",
-      "todomvc": "./modules/todomvc/assets/js"
+      "brithoncrm/registration": "./modules/registration/assets/js",
+      "brithoncrm/subscriptions": "./modules/subscriptions/assets/js",
+      "brithoncrm/todomvc": "./modules/todomvc/assets/js"
     }
   },
   "scripts": {

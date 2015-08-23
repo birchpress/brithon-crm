@@ -3,7 +3,7 @@ var React = require('react/addons');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-var Modal = require('registration/components/common/Modal');
+var Modal = require('brithoncrm/registration/components/common/Modal');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
@@ -28,8 +28,8 @@ var clazz = birchpress.provide('brithoncrm.registration.components.index.registr
   },
 
   renderLayer: function(component) {
-    var Button = require('registration/components/common/Button');
-    var Input = require('registration/components/common/DataInput');
+    var Button = require('brithoncrm/registration/components/common/Button');
+    var Input = require('brithoncrm/registration/components/common/DataInput');
     if (!component.state.shown) {
       return <span />;
     }

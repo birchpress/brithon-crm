@@ -42,10 +42,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   renderLayer: function(component) {
-    var Radio = require('subscriptions/components/common/Radio');
-    var Button = require('subscriptions/components/common/Button');
+    var Radio = require('brithoncrm/subscriptions/components/common/Radio');
+    var Button = require('brithoncrm/subscriptions/components/common/Button');
 
-    var StripeControl = require('subscriptions/components/common/StripeControl');
+    var StripeControl = require('brithoncrm/subscriptions/components/common/StripeControl');
     var handler = StripeCheckout.configure({
       key: 'pk_test_UXg1SpQF3oMNygpdyln3cokz',
       image: '/img/documentation/checkout/marketplace.png',
@@ -91,7 +91,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   render: function(component) {
-    var PlanLabel = require('subscriptions/components/common/PlanLabel');
+    var PlanLabel = require('brithoncrm/subscriptions/components/common/PlanLabel');
     var _meta = 'You are currently on a trial subscription. Your trial runs until' + component.props.expire_date;
     var trialForm = component.renderLayer();
 

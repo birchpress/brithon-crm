@@ -44,8 +44,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   renderLayer: function(component) {
-    var Radio = require('subscriptions/components/common/Radio');
-    var Button = require('subscriptions/components/common/Button');
+    var Radio = require('brithoncrm/subscriptions/components/common/Radio');
+    var Button = require('brithoncrm/subscriptions/components/common/Button');
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
@@ -81,7 +81,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   render: function(component) {
-    var PlanLabel = require('subscriptions/components/common/PlanLabel');
+    var PlanLabel = require('brithoncrm/subscriptions/components/common/PlanLabel');
     var setPlanForm = component.renderLayer();
 
     return (

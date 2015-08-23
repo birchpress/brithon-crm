@@ -2,7 +2,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 
-var RegStore = require('registration/stores/RegStore');
+var RegStore = require('brithoncrm/registration/stores/RegStore');
 
 var regAppComponent;
 
@@ -17,7 +17,7 @@ var ns = birchpress.provide('brithoncrm.registration', {
   },
 
   run: function() {
-    var regApp = require('registration/components/index/registration/RegApp');
+    var regApp = require('brithoncrm/registration/components/index/registration/RegApp');
     var regData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     if (!regAppComponent && registerAppContainer) {
