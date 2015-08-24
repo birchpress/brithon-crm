@@ -17,7 +17,7 @@ var ns = birchpress.provide('brithoncrm.registration', {
   },
 
   run: function() {
-    var regApp = require('brithoncrm/registration/components/index/registration/RegistrationApp');
+    var regApp = require('brithoncrm/registration/components/front/registration/RegistrationApp');
     var regData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     if (!regAppComponent && registerAppContainer) {

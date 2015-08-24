@@ -7,7 +7,7 @@ var Modal = require('brithoncrm/registration/components/common/Modal');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.registration.components.index.registration.RegistrationApp', {
+var clazz = birchpress.provide('brithoncrm.registration.components.front.registration.RegistrationApp', {
 
   __mixins__: [ReactMixinCompositor],
 
