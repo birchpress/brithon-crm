@@ -27,7 +27,8 @@
   "browserify-shim": {
     "jquery": "global:$",
     "immutable": "global:Immutable",
-    "react": "global:React"
+    "react": "global:React",
+    "birchpress": "global:birchpress"
   },
   "pkgify": {
     "packages": {

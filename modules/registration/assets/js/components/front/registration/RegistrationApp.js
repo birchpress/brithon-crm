@@ -1,7 +1,7 @@
 'use strict';
 var React = require('react/addons');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+var birchpress = require('birchpress');
 
 var Modal = require('brithoncrm/registration/components/common/Modal');
 

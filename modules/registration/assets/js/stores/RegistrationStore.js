@@ -2,6 +2,7 @@
 var Immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
 var ImmutableStore = birchpress.stores.ImmutableStore;
+var birchpress = require('birchpress');
 
 var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore', {
 

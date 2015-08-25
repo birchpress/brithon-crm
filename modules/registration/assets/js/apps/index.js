@@ -1,6 +1,7 @@
 'use strict';
 var React = require('react');
 var Immutable = require('immutable');
+var birchpress = require('birchpress');
 
 var RegStore = require('brithoncrm/registration/stores/RegistrationStore');
 
