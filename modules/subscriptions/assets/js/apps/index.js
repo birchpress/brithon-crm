@@ -6,10 +6,10 @@ var SubscriptionStore = require('brithoncrm/subscriptions/stores/SubscriptionSto
 
 var settingAppComponent;
 
-var ns = birchpress.provide('brithoncrm.subscriptions', {
+var ns = birchpress.provide('brithoncrm.subscriptions.apps', {
 
   __init__: function() {
-    birchpress.addAction('brithoncrm.subscriptions.initModuleAfter', ns.run);
+    birchpress.addAction('brithoncrm.subscriptions.apps.initModuleAfter', ns.run);
   },
 
   initModule: function() {

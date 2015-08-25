@@ -6,10 +6,10 @@ var RegStore = require('brithoncrm/registration/stores/RegistrationStore');
 
 var regAppComponent;
 
-var ns = birchpress.provide('brithoncrm.registration', {
+var ns = birchpress.provide('brithoncrm.registration.apps', {
 
   __init__: function() {
-    birchpress.addAction('brithoncrm.registration.initModuleAfter', ns.run);
+    birchpress.addAction('brithoncrm.registration.apps.initModuleAfter', ns.run);
   },
 
   initModule: function() {

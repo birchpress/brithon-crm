@@ -29,7 +29,7 @@ birch_ns( 'brithoncrm.registration.view.index.registration', function( $ns ) {
 				wp_enqueue_style( 'brithoncrm_registration_app',
 					$brithoncrm->plugin_url() . '/modules/registration/assets/css/app.css' );
 				wp_register_script( 'brithoncrm_registration_index',
-					$brithoncrm->plugin_url() . '/modules/registration/assets/js/index.bundle.js',
+					$brithoncrm->plugin_url() . '/modules/registration/assets/js/apps/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_registration_index', 'bp_urls', $bp_urls );
 				wp_localize_script( 'brithoncrm_registration_index', 'bp_uid', $bp_uid );

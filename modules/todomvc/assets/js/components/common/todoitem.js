@@ -26,7 +26,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
   },
 
   render: function(component) {
-    var TodoTextInput = require('./todotextinput');
+    var TodoTextInput = require('brithoncrm/todomvc/components/common/todotextinput');
     var todo = component.props.todo.toJS();
 
     var input;

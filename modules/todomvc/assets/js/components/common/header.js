@@ -12,7 +12,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.Header', {
   },
 
   render: function(component) {
-    var TodoTextInput = require('./todotextinput');
+    var TodoTextInput = require('brithoncrm/todomvc/components/common/todotextinput');
     return (
       <header id="header">
         <h1>todos</h1>
