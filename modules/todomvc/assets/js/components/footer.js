@@ -39,14 +39,16 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.Footer', {
     if (completed) {
       clearCompletedButton = (
         <button id="clear-completed" onClick={ component.props.onClearCompletedClick }>
-          Clear completed({ completed })
+          Clear completed(
+          { completed })
         </button>
       );
     }
 
     return (
       <footer id="footer">
-        <span id="todo-count"><strong >{ itemsLeft }</strong> { itemsLeftPhrase }</span> { clearCompletedButton }
+        <span id="todo-count"><strong >{ itemsLeft }</strong> { itemsLeftPhrase }</span>
+        { clearCompletedButton }
       </footer>
       );
   }
