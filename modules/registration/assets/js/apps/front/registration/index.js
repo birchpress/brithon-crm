@@ -11,7 +11,7 @@ var regAppComponent;
 var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
 
   __init__: function() {
-    birchpress.addAction('birchpress.initFrameworkAfter', ns.run, 50);
+    birchpress.addAction('birchpress.initFrameworkAfter', ns.run, 20);
   },
 
   initModule: function() {
