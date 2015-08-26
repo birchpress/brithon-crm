@@ -14,10 +14,6 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions',
     birchpress.addAction('birchpress.initFrameworkAfter', ns.run, 20);
   },
 
-  initModule: function() {
-    birchpress.initNamespace(brithoncrm.subscriptions);
-  },
-
   run: function() {
     var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingPanel');
     var settingData = Immutable.fromJS({});
@@ -41,5 +37,5 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions',
     }
   }
 });
-birchpress.addAction('birchpress.initFrameworkAfter', ns.initModule);
+
 module.exports = ns;

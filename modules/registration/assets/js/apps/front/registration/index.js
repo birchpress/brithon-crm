@@ -14,10 +14,6 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
     birchpress.addAction('birchpress.initFrameworkAfter', ns.run, 20);
   },
 
-  initModule: function() {
-    birchpress.initNamespace(brithoncrm.registration);
-  },
-
   run: function() {
     var regApp = require('brithoncrm/registration/components/front/registration/RegistrationPanel');
     var regData = Immutable.fromJS({});
@@ -41,5 +37,5 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
     }
   }
 });
-birchpress.addAction('birchpress.initFrameworkAfter', ns.initModule);
+
 module.exports = ns;
