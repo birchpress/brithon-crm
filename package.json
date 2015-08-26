@@ -38,7 +38,7 @@
     }
   },
   "scripts": {
-    "bundle": "for m in $(ls -d modules/*/); do browserify $m/assets/js/apps/index.js -o $m/assets/js/apps/index.bundle.js; done"
+    "bundle": "for m in $(ls -dR modules/*/assets/js/apps/**/); do [ -f $m/index.js ] && browserify $m/index.js -o $m/index.bundle.js || echo $m; done"
   },
   "private": true,
   "author": "Brithon Inc.",

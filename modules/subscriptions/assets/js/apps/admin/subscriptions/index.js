@@ -1,4 +1,5 @@
 'use strict';
+require('brithoncrm/subscriptions');
 var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
@@ -7,10 +8,10 @@ var SubscriptionStore = require('brithoncrm/subscriptions/stores/SubscriptionSto
 
 var settingAppComponent;
 
-var ns = birchpress.provide('brithoncrm.subscriptions.apps', {
+var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions', {
 
   __init__: function() {
-    birchpress.addAction('brithoncrm.subscriptions.apps.initModuleAfter', ns.run);
+    birchpress.addAction('brithoncrm.subscriptions.apps.admin.subscriptions.initModuleAfter', ns.run);
   },
 
   initModule: function() {
@@ -18,7 +19,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps', {
   },
 
   run: function() {
-    var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingApp');
+    var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingPanel');
     var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     if (!settingAppComponent && settingAppContainer) {
