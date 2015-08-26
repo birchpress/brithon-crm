@@ -11,7 +11,7 @@ var settingAppComponent;
 var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions', {
 
   __init__: function() {
-    birchpress.addAction('brithoncrm.subscriptions.apps.admin.subscriptions.initModuleAfter', ns.run);
+    birchpress.addAction('birchpress.initFrameworkAfter', ns.run, 50);
   },
 
   initModule: function() {
