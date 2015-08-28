@@ -1,9 +1,10 @@
+'use strict';
 var React = require('react');
 var Immutable = require('immutable');
 
-var SubStore = require('./stores/substore.js')
+var SubscriptionStore = require('brithoncrm/subscriptions/stores/SubscriptionStore');
 
-var regAppComponent;
+var settingAppComponent;
 
 var ns = birchpress.provide('brithoncrm.subscriptions', {
 
@@ -16,19 +17,20 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
   },
 
   run: function() {
-    var regApp = require('./components/RegApp');
-    var regData = Immutable.fromJS({});
-    if (!regAppComponent) {
-      var store = SubStore(regData);
-      regAppComponent = React.render(
-        React.createElement(regApp, {
-          store: store,
-          cursor: store.getCursor()
+    var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingApp');
+    var settingData = Immutable.fromJS({});
+    var settingAppContainer = document.getElementById('birchpress-settings');
+    if (!settingAppComponent && settingAppContainer) {
+      var store2 = SubscriptionStore(settingData);
+      settingAppComponent = React.render(
+        React.createElement(settingApp, {
+          store: store2,
+          cursor: store2.getCursor(),
         }),
-        document.getElementById('registerapp')
+        settingAppContainer
       );
-      store.setAttr('component', regAppComponent);
-      birchpress.addAction('brithoncrm.subscriptions.stores.SubStore.onChangeAfter', function(store, newCursor) {
+      store2.setAttr('component', settingAppComponent);
+      birchpress.addAction('birchpress.subscriptions.stores.SubscriptionStore.onChangeAfter', function(store, newCursor) {
         store.getAttr('component').setProps({
           store: store,
           cursor: newCursor

@@ -30,8 +30,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoApp', {
                      onToggleCompleteAll={ component.toggleCompleteAll }
                      onToggleComplete={ component.toggleComplete }
                      onUpdateItem={ component.updateItem }
-                     onDestroyItem={ component.destroyItem }
-        />
+                     onDestroyItem={ component.destroyItem } />
         <Footer allTodos={ store.getAll() } onClearCompletedClick={ component.clearCompleted } />
       </div>
       );

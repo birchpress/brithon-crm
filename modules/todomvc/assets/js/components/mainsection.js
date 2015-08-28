@@ -34,11 +34,11 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.MainSection', {
       var todo = component.props.allTodos.get(key);
       todos.push(
         <TodoItem
-                  key={key}
+                  key={ key }
                   onToggleComplete={ component.props.onToggleComplete }
                   onUpdate={ component.props.onUpdateItem }
                   onDestroy={ component.props.onDestroyItem }
-                  todo={todo} />);
+                  todo={ todo } />);
     }
 
     return (
@@ -46,13 +46,13 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.MainSection', {
         <input
                id="toggle-all"
                type="checkbox"
-               onChange={component.props.onToggleCompleteAll}
-               checked={component.props.areAllComplete ? 'checked' : ''} />
+               onChange={ component.props.onToggleCompleteAll }
+               checked={ component.props.areAllComplete ? 'checked' : '' } />
         <label htmlFor="toggle-all">
           Mark all as complete
         </label>
         <ul id="todo-list">
-          {todos}
+          { todos }
         </ul>
       </section>
       );

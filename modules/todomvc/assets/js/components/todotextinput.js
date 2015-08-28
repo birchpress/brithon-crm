@@ -44,8 +44,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoTextInput', {
              onChange={ component.onChange }
              onKeyDown={ component.onKeyDown }
              value={ component.state.value }
-             autoFocus={ true }
-      />
+             autoFocus={ true } />
       );
   },
 

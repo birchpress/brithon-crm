@@ -42,19 +42,19 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
     }
 
     return (
-      <li className={cx({ 'completed': todo.complete, 'editing': component.state.isEditing })} key={todo.id}>
+      <li className={ cx({ 'completed': todo.complete, 'editing': component.state.isEditing }) } key={ todo.id }>
         <div className="view">
           <input
                  className="toggle"
                  type="checkbox"
-                 checked={todo.complete}
+                 checked={ todo.complete }
                  onChange={ component.onTextChange } />
           <label onDoubleClick={ component.onDoubleClick }>
-            {todo.text}
+            { todo.text }
           </label>
           <button className="destroy" onClick={ component.onDestroyClick } />
         </div>
-        {input}
+        { input }
       </li>
       );
   },
