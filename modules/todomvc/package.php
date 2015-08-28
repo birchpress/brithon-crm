@@ -18,24 +18,26 @@ birch_ns( 'brithoncrm.todomvc', function( $ns ) {
 			add_action( 'admin_enqueue_scripts', function( $hook ) use ( $ns, $brithoncrm ) {
 					global $birchpress;
 
-					$birchpress->view->register_3rd_scripts();
-					$birchpress->view->register_core_scripts();
-					if ( strpos( $hook, 'birthoncrm/todomvc' ) > 0 ) {
+					if ( strpos( $hook, 'brithoncrm/todomvc' ) !== false ) {
+						$birchpress->view->register_3rd_scripts();
+						$birchpress->view->register_core_scripts();
+
 						wp_enqueue_style( 'brithoncrm_todomvc_base',
 							$brithoncrm->plugin_url() . '/modules/todomvc/assets/css/base.css' );
 						wp_enqueue_style( 'brithoncrm_todomvc_app',
 							$brithoncrm->plugin_url() . '/modules/todomvc/assets/css/app.css' );
+
 						wp_register_script( 'brithoncrm_todomvc_index',
-							$brithoncrm->plugin_url() . '/modules/todomvc/assets/js/index.bundle.js',
+							$brithoncrm->plugin_url() . '/modules/todomvc/assets/js/apps/index.bundle.js',
 							array( 'birchpress', 'react-with-addons', 'immutable' ) );
-						wp_enqueue_script( 'brithoncrm_todomvc_index');
+						wp_enqueue_script( 'brithoncrm_todomvc_index' );
 					}
 				} );
 		};
 
 		$ns->create_admin_menus = function() use ( $ns, $brithoncrm ) {
 			add_menu_page( 'Todo MVC', 'Todo MVC', 'manage_options',
-				'birthoncrm/todomvc', array( $ns, 'render_admin_page' ), '', 85 );
+				'brithoncrm/todomvc', array( $ns, 'render_admin_page' ), '', 85 );
 		};
 
 		$ns->render_admin_page = function() use ( $ns, $brithoncrm ) {

@@ -1,8 +1,12 @@
+'use strict';
+
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var Immutable = require('immutable');
-var Cursor = require('immutable/contrib/cursor');
+// never used
+// var Immutable = require('immutable');
+// var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var birchpress = require('birchpress');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
@@ -68,4 +72,5 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoTextInput', {
   }
 
 });
+
 module.exports = clazz;
