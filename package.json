@@ -43,7 +43,7 @@
     }
   },
   "scripts": {
-    "bundle": "./bundling.sh"
+    "bundle": "./bundle.sh"
   },
   "private": true,
   "author": "Brithon Inc.",
