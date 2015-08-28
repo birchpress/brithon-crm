@@ -1,6 +1,9 @@
 'use strict';
+
 var Immutable = require('immutable');
-var Cursor = require('immutable/contrib/cursor');
+// never used
+// var Cursor = require('immutable/contrib/cursor');
+var birchpress = require('birchpress');
 var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.todomvc.stores.TodoStore', {
@@ -44,7 +47,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.stores.TodoStore', {
    *     the data to be updated.  Used to mark all TODOs as completed.
    * @param  {object} updates An object literal containing only the data to be
    *     updated.
-   
+
    */
   updateAll: function(self, updates) {
     self.getCursor().valueOf().forEach(function(value, key) {

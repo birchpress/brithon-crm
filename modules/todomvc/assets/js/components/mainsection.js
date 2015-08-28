@@ -1,6 +1,9 @@
+'use strict';
+
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var ImmutableRenderMixin = require('react-immutable-render-mixin')
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
+var birchpress = require('birchpress');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
@@ -55,5 +58,6 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.MainSection', {
       );
   }
 });
+
 module.exports = clazz;
 
