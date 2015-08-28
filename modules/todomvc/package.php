@@ -28,7 +28,7 @@ birch_ns( 'brithoncrm.todomvc', function( $ns ) {
 							$brithoncrm->plugin_url() . '/modules/todomvc/assets/css/app.css' );
 
 						wp_register_script( 'brithoncrm_todomvc_index',
-							$brithoncrm->plugin_url() . '/modules/todomvc/assets/js/index.bundle.js',
+							$brithoncrm->plugin_url() . '/modules/todomvc/assets/js/apps/index.bundle.js',
 							array( 'birchpress', 'react-with-addons', 'immutable' ) );
 						wp_enqueue_script( 'brithoncrm_todomvc_index' );
 					}

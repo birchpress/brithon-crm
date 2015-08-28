@@ -36,7 +36,7 @@
     }
   },
   "scripts": {
-    "bundle": "for m in $(ls -d modules/*/); do browserify $m/assets/js/index.js -o $m/assets/js/index.bundle.js; done"
+    "bundle": "./bundling.sh"
   },
   "private": true,
   "author": "Brithon Inc.",
