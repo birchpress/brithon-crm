@@ -27,7 +27,7 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 				wp_enqueue_style( 'brithoncrm_subscriptions_app',
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/css/app.css' );
 				wp_register_script( 'brithoncrm_subscriptions_index',
-					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/index.bundle.js',
+					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/apps/admin/subscriptions/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_urls', $bp_urls );
 				wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_uid', $bp_uid );
