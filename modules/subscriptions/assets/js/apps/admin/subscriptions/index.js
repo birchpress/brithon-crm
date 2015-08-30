@@ -1,23 +1,20 @@
 'use strict';
 var React = require('react');
 var Immutable = require('immutable');
+var birchpress = require('birchpress');
 
 var SubscriptionStore = require('brithoncrm/subscriptions/stores/SubscriptionStore');
 
 var settingAppComponent;
 
-var ns = birchpress.provide('brithoncrm.subscriptions', {
+var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions', {
 
   __init__: function() {
-    birchpress.addAction('brithoncrm.subscriptions.initModuleAfter', ns.run);
-  },
-
-  initModule: function() {
-    birchpress.initNamespace(brithoncrm.subscriptions);
+    birchpress.addAction('birchpress.initFrameworkAfter', ns.run);
   },
 
   run: function() {
-    var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingApp');
+    var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingPanel');
     var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     if (!settingAppComponent && settingAppContainer) {
@@ -39,5 +36,5 @@ var ns = birchpress.provide('brithoncrm.subscriptions', {
     }
   }
 });
-birchpress.addAction('birchpress.initFrameworkAfter', ns.initModule);
+
 module.exports = ns;

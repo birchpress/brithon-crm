@@ -15,9 +15,9 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoApp', {
   },
 
   render: function(component) {
-    var Footer = require('./footer');
-    var Header = require('./header');
-    var MainSection = require('./mainsection');
+    var Footer = require('brithoncrm/todomvc/components/common/footer');
+    var Header = require('brithoncrm/todomvc/components/common/header');
+    var MainSection = require('brithoncrm/todomvc/components/common/mainsection');
 
     var store = component.props.store;
 

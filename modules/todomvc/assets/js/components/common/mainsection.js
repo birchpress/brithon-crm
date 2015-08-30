@@ -21,7 +21,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.MainSection', {
   },
 
   render: function(component) {
-    var TodoItem = require('./todoitem');
+    var TodoItem = require('brithoncrm/todomvc/components/common/todoitem');
     var allTodos = component.props.allTodos.toJS();
 
     if (Object.keys(allTodos).length < 1) {
