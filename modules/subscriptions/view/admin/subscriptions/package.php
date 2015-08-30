@@ -26,7 +26,6 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/apps/admin/subscriptions/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'bp_urls', $bp_urls );
-				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'bp_uid', $bp_uid );
 
 				wp_enqueue_script( 'brithoncrm_subscriptions_apps_admin_subscriptions' );
 

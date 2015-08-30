@@ -32,7 +32,6 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 					$brithoncrm->plugin_url() . '/modules/registration/assets/js/apps/front/registration/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'bp_urls', $bp_urls );
-				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'bp_uid', $bp_uid );
 
 				wp_enqueue_script( 'brithoncrm_registration_apps_front_registration' );
 			}
