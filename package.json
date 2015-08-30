@@ -8,26 +8,24 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "browserify": "^9.0.8",
-    "browserify-shim": "^3.8.3",
+    "browserify": "^10.2.6",
+    "browserify-shim": "^3.8.10",
     "immutable": "^3.7.4",
     "pkgify": "^1.0.3",
     "react": "^0.13.1",
     "react-immutable-render-mixin": "^0.8.1",
     "react-tools": "^0.13.3",
-    "reactify": "^1.1.0",
-    "datatables": "^1.10.8"
+    "reactify": "^1.1.0"
   },
   "browserify": {
     "transform": [
       "reactify",
       "browserify-shim",
-      "pkgify",
-      "datatables"
+      "pkgify"
     ]
   },
   "browserify-shim": {
-    "jQuery": "global:$",
+    "jquery": "global:jQuery",
     "immutable": "global:Immutable",
     "react": "global:React",
     "birchpress": "global:birchpress"

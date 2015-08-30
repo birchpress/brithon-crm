@@ -15,10 +15,11 @@ birch_ns( 'brithoncrm.datatables.view.admin.datatables', function( $ns ) {
 
             if ( is_main_site() ) {
                 $birchpress->view->register_3rd_scripts();
+                $birchpress->view->register_3rd_styles();
                 $birchpress->view->register_core_scripts();
                 wp_register_script( 'brithoncrm_datatables_apps_admin_datatables',
                     $brithoncrm->plugin_url() . '/modules/datatables/assets/js/apps/admin/datatables/index.bundle.js',
-                    array( 'birchpress', 'react-with-addons', 'immutable' ) );
+                    array( 'birchpress', 'react-with-addons', 'immutable', 'jquery.datatables' ) );
 
                 wp_enqueue_script( 'brithoncrm_datatables_apps_admin_datatables' );
             }
