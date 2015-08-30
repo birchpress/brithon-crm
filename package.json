@@ -15,13 +15,15 @@
     "react": "^0.13.1",
     "react-immutable-render-mixin": "^0.8.1",
     "react-tools": "^0.13.3",
-    "reactify": "^1.1.0"
+    "reactify": "^1.1.0",
+    "datatables": "^1.10.8"
   },
   "browserify": {
     "transform": [
       "reactify",
       "browserify-shim",
-      "pkgify"
+      "pkgify",
+      "datatables"
     ]
   },
   "browserify-shim": {
