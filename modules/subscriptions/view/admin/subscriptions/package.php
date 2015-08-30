@@ -22,13 +22,12 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 			if ( is_main_site() ) {
 				$birchpress->view->register_3rd_scripts();
 				$birchpress->view->register_core_scripts();
-				wp_register_script( 'brithoncrm_subscriptions_index',
+				wp_register_script( 'brithoncrm_subscriptions_apps_admin_subscriptions',
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/apps/admin/subscriptions/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
-				wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_urls', $bp_urls );
-				wp_localize_script( 'brithoncrm_subscriptions_index', 'bp_uid', $bp_uid );
+				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'bp_urls', $bp_urls );
 
-				wp_enqueue_script( 'brithoncrm_subscriptions_index' );
+				wp_enqueue_script( 'brithoncrm_subscriptions_apps_admin_subscriptions' );
 
 				wp_enqueue_script( 'checkout_script', 'https://checkout.stripe.com/checkout.js' );
 			}

@@ -93,7 +93,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
   render: function(component) {
     var PlanLabel = require('brithoncrm/subscriptions/components/common/PlanLabel');
-    var _meta = 'You are currently on a trial subscription. Your trial runs until' + component.props.expire_date;
+    var _meta = 'You are currently on a trial subscription.';
     var trialForm = component.renderLayer();
 
     return (
