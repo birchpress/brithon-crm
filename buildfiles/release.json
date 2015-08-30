@@ -19,13 +19,13 @@
     "editions": {
         "developer": {
             "addons": [
-                "subscriptions", "todomvc"
+                "subscriptions", "registration", "datatables", "todomvc"
             ]
         },
 
         "multisite": {
             "addons": [
-                "subscriptions"
+                "subscriptions", "registration"
             ]
         }
     }
