@@ -20,7 +20,14 @@ var clazz = birchpress.provide('brithoncrm.datatables.components.admin.datatable
   render: function(component) {
     var DataTable = require('brithoncrm/datatables/components/common/DataTable');
     var options = {
-      ajax: './data.json',
+      serverSide: true,
+      ajax: {
+        url: bp_props.ajax_url,
+        type: 'POST',
+        data: {
+          action: 'load_data'
+        }
+      },
       columns: [
         {
           title: 'Name'
