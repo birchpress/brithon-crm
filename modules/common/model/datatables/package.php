@@ -78,6 +78,20 @@ birch_ns( 'brithoncrm.common.datatables.model', function( $ns ) {
         };
 
         $ns->column_comparater = function( $element1, $element2, $id, $asc = true ) use ( $ns ) {
+            // Try converting number first
+            if ( preg_match('/^[0-9]+$/', $element1[$id]) && preg_match('/^[0-9]+$/', $element2[$id])) {
+                $num1 = intval($element1[$id]);
+                $num2 = intval($element2[$id]);
+                return $asc ? ($num1 - $num2) : ($num2 - $num1);
+            } else {
+                $currency = 'USD';
+                $format = numfmt_create( 'en_US', NumberFormatter::CURRENCY );
+                $num1 = numfmt_parse_currency($format, $element1[$id], $currency);
+                $num2 = numfmt_parse_currency($format, $element2[$id], $currency);
+                if ($num1 && $num2) {
+                    return $asc ? ($num1 - $num2) : ($num2 - $num1);
+                }
+            }
             if ( $asc ) {
                 return strcmp( $element1[$id], $element2[$id] );
             } else {

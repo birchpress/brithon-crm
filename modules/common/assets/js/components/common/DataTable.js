@@ -24,11 +24,7 @@ var clazz = birchpress.provide('brithoncrm.common.components.common.DataTable', 
     var tableId = properties.id ? properties.id : 'dataTable';
     var tableOptions = component.processOptions(properties);
 
-    React.render(<table
-                        id={ tableId }
-                        className="display"
-                        cellSpacing="0"
-                        width="100%">
+    React.render(<table id={ tableId }>
                  </table>, component.getDOMNode());
 
     $(document).ready(function() {
