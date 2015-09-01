@@ -18,7 +18,7 @@
     "editions": {
         "developer": {
             "addons": [
-                "subscriptions", "todomvc", "registration", "datatables"
+                "subscriptions", "todomvc", "registration", "common"
             ]
         },
 

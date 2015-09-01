@@ -7,7 +7,7 @@ var $ = jQuery;
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.datatables.components.common.DataTable', {
+var clazz = birchpress.provide('brithoncrm.common.components.common.DataTable', {
 
   __mixins__: [ReactMixinCompositor],
 

@@ -1,6 +1,6 @@
 <?php
 
-birch_ns( 'brithoncrm.datatables', function( $ns ) {
+birch_ns( 'brithoncrm.common', function( $ns ) {
 
         global $brithoncrm;
 

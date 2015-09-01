@@ -35,7 +35,7 @@
       "brithoncrm/registration": "./modules/registration/assets/js",
       "brithoncrm/subscriptions": "./modules/subscriptions/assets/js",
       "brithoncrm/todomvc": "./modules/todomvc/assets/js",
-      "brithoncrm/datatables": "./modules/datatables/assets/js"
+      "brithoncrm/common": "./modules/common/assets/js"
     }
   },
   "scripts": {

@@ -5,7 +5,7 @@ var birchpress = require('birchpress');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
-var clazz = birchpress.provide('brithoncrm.datatables.components.admin.datatables.DataTableDemo', {
+var clazz = birchpress.provide('brithoncrm.common.components.admin.datatables.DataTableDemo', {
 
   __mixins__: [ReactMixinCompositor],
 
@@ -18,7 +18,7 @@ var clazz = birchpress.provide('brithoncrm.datatables.components.admin.datatable
   },
 
   render: function(component) {
-    var DataTable = require('brithoncrm/datatables/components/common/DataTable');
+    var DataTable = require('brithoncrm/common/components/common/DataTable');
     var columns = [
       {
         title: 'Name',

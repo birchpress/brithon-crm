@@ -1,6 +1,6 @@
 <?php
 
-birch_ns( 'brithoncrm.datatables.model', function( $ns ) {
+birch_ns( 'brithoncrm.common.datatables.model', function( $ns ) {
 
         global $brithoncrm;
 
@@ -64,7 +64,7 @@ birch_ns( 'brithoncrm.datatables.model', function( $ns ) {
             static $content = '';
 
             if ( !$content ) {
-                $filepath = $brithoncrm->plugin_url() . '/modules/datatables/model/data.json';
+                $filepath = $brithoncrm->plugin_url() . '/modules/common/model/datatables/data.json';
                 $file = fopen( $filepath, 'r' );
                 if ( $file ) {
                     while ( !feof( $file ) ) {
