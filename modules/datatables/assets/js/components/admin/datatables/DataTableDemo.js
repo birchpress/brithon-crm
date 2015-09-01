@@ -19,37 +19,54 @@ var clazz = birchpress.provide('brithoncrm.datatables.components.admin.datatable
 
   render: function(component) {
     var DataTable = require('brithoncrm/datatables/components/common/DataTable');
-    var options = {
-      serverSide: true,
-      ajax: {
-        url: bp_props.ajax_url,
-        type: 'POST',
-        data: {
-          action: 'load_data'
-        }
+    var columns = [
+      {
+        title: 'Name',
+        searchable: true,
+        orderable: true
       },
-      columns: [
-        {
-          title: 'Name'
-        },
-        {
-          title: 'Position'
-        },
-        {
-          title: 'Office'
-        },
-        {
-          title: 'Extn.'
-        },
-        {
-          title: 'Start Date'
-        },
-        {
-          title: 'Salary'
-        }
-      ]
+      {
+        title: 'Position',
+        searchable: true,
+        orderable: false
+      },
+      {
+        title: 'Office',
+        searchable: true,
+        orderable: false
+      },
+      {
+        title: 'Extn.',
+        searchable: false,
+        orderable: true,
+        type: 'num'
+      },
+      {
+        title: 'Start Date',
+        searchable: false,
+        orderable: false,
+        type: 'date'
+      },
+      {
+        title: 'Salary',
+        searchable: false,
+        orderable: true,
+        type: 'num-fmt'
+      }
+    ];
+    var postData = {
+      action: 'load_data'
     };
-    return <DataTable id="example" options={ options } />;
+    var options = {};
+
+    return (<DataTable
+                       id="example"
+                       options={ options }
+                       columns={ columns }
+                       dataSrcType="server"
+                       ajaxUrl={ bp_props.ajax_url }
+                       ajaxPost={ true }
+                       ajaxFormData={ postData } />);
   }
 });
 
