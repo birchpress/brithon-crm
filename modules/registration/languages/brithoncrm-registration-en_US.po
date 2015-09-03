@@ -2,65 +2,68 @@
 # This file is distributed under the same license as the brithoncrm-registration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-09-03 13:11+0800\n"
+"PO-Revision-Date: 2015-09-03 12:29+0800\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 "Project-Id-Version: brithoncrm-registration\n"
 "POT-Creation-Date: \n"
 "Language-Team: \n"
 "Last-Translator: \n"
-"Language: zh_CN\n"
+"Language: en_US\n"
 
 msgid "Log in"
-msgstr "登录"
+msgstr "Log in"
 
 msgid "Register"
-msgstr "注册"
+msgstr "Register"
 
 msgid "Empty username!"
-msgstr "用户名为空！"
+msgstr "Empty username!"
 
 msgid "Empty password!"
-msgstr "密码为空！"
+msgstr "Empty password!"
 
 msgid "Empty email address!"
-msgstr "邮箱为空！"
+msgstr "Empty email address!"
 
 msgid "First name required!"
-msgstr "必须填写名字！"
+msgstr "First name required!"
 
 msgid "Last name required!"
-msgstr "必须填写姓！"
+msgstr "Last name required!"
 
 msgid "Organization required!"
-msgstr "必须填写你所在的组织！"
+msgstr "Organization required!"
 
 msgid "First Name"
-msgstr "名"
+msgstr "First Name"
 
 msgid "Last Name"
-msgstr "姓"
+msgstr "Last Name"
 
 msgid "Email address"
-msgstr "邮箱"
+msgstr "Email address"
 
 msgid "Organization"
-msgstr "组织/公司"
+msgstr "Organization"
 
 msgid "Submit"
-msgstr "提交"
+msgstr "Submit"
 
 msgid "Reset"
-msgstr "重置"
+msgstr "Reset"
 
 msgid "Network error"
-msgstr "网络错误"
+msgstr "Network error"
 
 msgid "Password"
-msgstr "密码"
+msgstr "Password"
 
 msgid "Welcome to register"
-msgstr "欢迎注册"
+msgid "Welcome to register"
+
+msgid "Register"
+msgid "Register"

@@ -35,7 +35,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
     }
     return (
       <Modal onRequestClose={ component.handleClick }>
-        <h1>Welcome to register!</h1>
+        <h2>{ component.__('Welcome to register') }</h2>
         <form>
           <div className="row">
             <Input
@@ -105,7 +105,9 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                  href="javascript:;"
                  role="button"
                  key="reglink"
-                 onClick={ component.handleClick }>Click here to register</a>
+                 onClick={ component.handleClick }>
+                { component.__('Register') }
+              </a>
               { registerForm }
             </div>);
   },
