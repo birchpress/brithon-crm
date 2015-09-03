@@ -22,7 +22,7 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions',
       settingAppComponent = React.render(
         React.createElement(settingApp, {
           store: store2,
-          cursor: store2.getCursor(),
+          cursor: store2.getCursor()
         }),
         settingAppContainer
       );

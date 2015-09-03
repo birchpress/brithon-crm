@@ -102,7 +102,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				}
 				die( json_encode( $result ) );
 			} else {
-				$ns->return_err_msg( 'User does not exist.' );
+				$ns->return_err_msg( $ns->__( 'User does not exist.' ) );
 			}
 		};
 
@@ -134,10 +134,10 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 						}
 						die( json_encode( $card ) );
 					} else {
-						$ns->return_err_msg( 'No credit card.' );
+						$ns->return_err_msg( $ns->__( 'No credit card.' ) );
 					}
 				} else {
-					$ns->return_err_msg( 'No customer info.' );
+					$ns->return_err_msg( $ns->__( 'No customer info.' ) );
 				}
 			}
 		};
@@ -155,7 +155,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 						$ns->return_err_msg( $res['data'] );
 					}
 				} else {
-					$ns->return_err_msg( 'No customer info.' );
+					$ns->return_err_msg( $ns->__( 'No customer info.' ) );
 				}
 			}
 		};
@@ -399,5 +399,9 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				}
 			}
 			return false;
+		};
+
+		$ns->__ = function( $str ) use ($ns) {
+			return __($str, 'brithoncrm-subscriptions');
 		};
 	} );

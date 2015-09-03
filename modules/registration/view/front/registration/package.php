@@ -49,11 +49,12 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 		};
 
 		$ns->load_i18n = function() use ( $ns ) {
-			load_plugin_textdomain( 'brithoncrm-registration', false, 'brithon-crm/modules/registration/languages' );
+			$lang_dir = 'brithon-crm/modules/registration/languages';
+			load_plugin_textdomain( 'brithoncrm-registration', false, $lang_dir );
 		};
 
 		$ns->render_registration_entry = function() use ( $ns ) {
-			$content = '<section><a href="wp-login.php">' . __('Log in', 'brithoncrm-registration') . '</a></section>';
+			$content = '<section><a href="wp-login.php">' . __( 'Log in', 'brithoncrm-registration' ) . '</a></section>';
 			$content = $content.'<section id="registerapp"></section>';
 			if ( !is_user_logged_in() ) {
 				return $content;

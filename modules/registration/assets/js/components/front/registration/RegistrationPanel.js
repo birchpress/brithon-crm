@@ -126,11 +126,11 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
   },
 
   __: function(component, string) {
-    var store = component.props.store;
-    if (!store.getCursor().get(string)) {
-      store.translate(string);
+    var translationStore = component.props.translationStore;
+    if (!translationStore.getCursor().get(string)) {
+      translationStore.translate(string);
     }
-    return store.getCursor().get(string);
+    return translationStore.getCursor().get(string);
   }
 
 });

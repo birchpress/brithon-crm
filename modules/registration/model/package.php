@@ -26,22 +26,22 @@ birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 			$org = $_POST['org'];
 
 			if ( ! $username ) {
-				$ns->return_err_msg( __('Empty username!', 'brithoncrm-registration') );
+				$ns->return_err_msg( __( 'Empty username!', 'brithoncrm-registration' ) );
 			}
 			if ( ! $password ) {
-				$ns->return_err_msg( __('Empty password!', 'brithoncrm-registration') );
+				$ns->return_err_msg( __( 'Empty password!', 'brithoncrm-registration' ) );
 			}
 			if ( ! $email ) {
-				$ns->return_err_msg( __('Empty email address!', 'brithoncrm-registration') );
+				$ns->return_err_msg( __( 'Empty email address!', 'brithoncrm-registration' ) );
 			}
 			if ( ! $first_name ) {
-				$ns->return_err_msg( __('First name required!', 'brithoncrm-registration') );
+				$ns->return_err_msg( __( 'First name required!', 'brithoncrm-registration' ) );
 			}
 			if ( ! $last_name ) {
-				$ns->return_err_msg( __('Last name required!', 'brithoncrm-registration') );
+				$ns->return_err_msg( __( 'Last name required!', 'brithoncrm-registration' ) );
 			}
 			if ( ! $org ) {
-				$ns->return_err_msg( __('Organization required!', 'brithoncrm-registration') );
+				$ns->return_err_msg( __( 'Organization required!', 'brithoncrm-registration' ) );
 			}
 
 			$userdata = array(
@@ -70,7 +70,7 @@ birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 					$usr = wp_signon( $creds, false );
 
 					die( json_encode(
-						array(
+							array(
 								'user_id' => $user_id,
 								'site_id' => $site_id,
 								'site_dir' => $subdir,
@@ -109,4 +109,4 @@ birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 			return '/'.$first_name.'_'.$last_name.rand();
 		};
 
-} );
+	} );
