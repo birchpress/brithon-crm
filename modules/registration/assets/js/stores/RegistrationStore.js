@@ -31,9 +31,26 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
       },
       function(err, r) {
         if (err) {
-          alert(err.error || err.message);
+          alert(err.message);
         } else {
           location.assign(bp_urls.admincp_url);
+        }
+      }
+    );
+  },
+
+  translate: function(self, string) {
+    self.postApi(
+      bp_urls.ajax_url,
+      {
+        'action': 'brithoncrm_registration_i18n',
+        'string': string
+      },
+      function(err, r) {
+        if (err) {
+          return self.getCursor().set(string, string);
+        } else {
+          return self.getCursor().set(string, r.result);
         }
       }
     );

@@ -43,14 +43,14 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="first_name"
                    id=""
                    className="width-1-2"
-                   placeholder="First Name"
+                   placeholder={ component.__('First Name') }
                    onChange={ component.handleChange } />
             <Input
                    type="text"
                    name="last_name"
                    id=""
                    className="width-1-2"
-                   placeholder="Last Name"
+                   placeholder={ component.__('Last Name') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -59,7 +59,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="email"
                    id=""
                    className=""
-                   placeholder="Email address"
+                   placeholder={ component.__('Email address') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -68,7 +68,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="org"
                    id=""
                    className="width-1-1"
-                   placeholder="Organization"
+                   placeholder={ component.__('Organization') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -77,7 +77,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="password"
                    id=""
                    className="width-1-1"
-                   placeholder="Password"
+                   placeholder={ component.__('Password') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row align-center">
@@ -85,13 +85,13 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                     type="submit"
                     id=""
                     className=""
-                    text="Submit"
+                    text={ component.__('Submit') }
                     onClick={ component.buttonClick } />
             <Button
                     type="reset"
                     id=""
                     className=""
-                    text="Reset" />
+                    text={ component.__('Reset') } />
           </div>
         </form>
       </Modal>
@@ -121,7 +121,16 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
 
   submit: function(component) {
     component.props.store.submit();
+  },
+
+  __: function(component, string) {
+    var store = component.props.store;
+    if (!store.getCursor().get(string)) {
+      store.translate(string);
+    }
+    return store.getCursor().get(string);
   }
+
 });
 
 module.exports = clazz;

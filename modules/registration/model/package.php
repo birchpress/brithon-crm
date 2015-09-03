@@ -26,22 +26,22 @@ birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 			$org = $_POST['org'];
 
 			if ( ! $username ) {
-				$ns->return_err_msg( 'Empty username!' );
+				$ns->return_err_msg( __('Empty username!', 'brithoncrm-registration') );
 			}
 			if ( ! $password ) {
-				$ns->return_err_msg( 'Empty password!' );
+				$ns->return_err_msg( __('Empty password!', 'brithoncrm-registration') );
 			}
 			if ( ! $email ) {
-				$ns->return_err_msg( 'Empty email address!' );
+				$ns->return_err_msg( __('Empty email address!', 'brithoncrm-registration') );
 			}
 			if ( ! $first_name ) {
-				$ns->return_err_msg( 'First name required!' );
+				$ns->return_err_msg( __('First name required!', 'brithoncrm-registration') );
 			}
 			if ( ! $last_name ) {
-				$ns->return_err_msg( 'Last name required!' );
+				$ns->return_err_msg( __('Last name required!', 'brithoncrm-registration') );
 			}
 			if ( ! $org ) {
-				$ns->return_err_msg( 'Organization required!' );
+				$ns->return_err_msg( __('Organization required!', 'brithoncrm-registration') );
 			}
 
 			$userdata = array(

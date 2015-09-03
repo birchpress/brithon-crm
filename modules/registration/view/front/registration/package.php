@@ -20,7 +20,7 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 			$bp_uid = array( 'uid' => get_current_user_id() );
 
 			if ( is_main_site() ) {
-				add_shortcode('birchpress_registration', array($ns, 'render_registration_entry'));
+				add_shortcode( 'birchpress_registration', array( $ns, 'render_registration_entry' ) );
 
 				$birchpress->view->register_3rd_scripts();
 				$birchpress->view->register_core_scripts();
@@ -33,7 +33,12 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'bp_urls', $bp_urls );
 
+				load_plugin_textdomain( 'brithoncrm-registration', false,
+					$brithoncrm->plugin_url() . '/modules/registration/languages/' );
+
 				wp_enqueue_script( 'brithoncrm_registration_apps_front_registration' );
+
+				add_action( 'wp_ajax_nopriv_brithoncrm_registration_i18n', array( $ns, 'i18n_string' ) );
 			}
 		};
 
@@ -65,4 +70,12 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 			echo $args['after_widget'];
 		};
 
-} );
+		$ns->i18n_string = function() use ( $ns ) {
+			if ( isset( $_POST['string'] ) ) {
+				$string = $_POST['string'];
+				$result = array( 'result' => __( $string, 'brithoncrm-registration' ) );
+				die( json_encode( $result ) );
+			}
+		};
+
+	} );
