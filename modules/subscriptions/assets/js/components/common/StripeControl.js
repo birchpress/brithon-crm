@@ -39,9 +39,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.common.Strip
     return <div>
              <Button
                      id="submitCardButton"
-                     text="Update My Card"
+                     text={ component.__('Update My Card') }
                      onClick={ component.handleClick } />
            </div>;
+  },
+
+  __: function(component, string) {
+    return component.props.__(string);
   }
 });
 

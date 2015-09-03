@@ -57,7 +57,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
       formRows.push(
         <p>
           <Radio
-                 desc={ allPlans[key].desc }
+                 desc={ component.__(allPlans[key].desc) }
                  value={ allPlans[key].id }
                  name={ component.props.name }
                  id={ component.props.radioId }
@@ -70,13 +70,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     return (
       <div>
-        <h4>Choose plan</h4>
+        <h4>{ component.__('Choose plan') }</h4>
         { formRows }
         <Button
                 type=""
-                text="Update"
+                text={ component.__('Update') }
                 onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
-        <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
+        <a href="javascript:;" onClick={ component.handleClick }>
+          { component.__('Hide') }
+        </a>
       </div>
       );
   },
@@ -87,14 +89,23 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     return (
       <div id="set-plan-form">
-        <PlanLabel description={ component.props.currentPlanDesc } metainfo={ component.props.currentPlanMeta } />
+        <PlanLabel
+                   description={ component.props.currentPlanDesc }
+                   metainfo={ component.props.currentPlanMeta }
+                   __={ component.__ } />
         <a
            id="set-plan-link"
            href="javascript:;"
-           onClick={ component.handleClick }>See plans and upgrade or downgrade</a>
+           onClick={ component.handleClick }>
+          { component.__('See plans and upgrade or downgrade') }
+        </a>
         { setPlanForm }
       </div>
       );
+  },
+
+  __: function(component, string) {
+    return component.props.__(string);
   }
 });
 

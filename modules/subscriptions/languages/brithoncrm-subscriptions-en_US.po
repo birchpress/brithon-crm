@@ -1,0 +1,92 @@
+# This file is distributed under the same license as the brithoncrm-registration package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-09-03 19:12+0800\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+"Project-Id-Version: brithoncrm-registration\n"
+"POT-Creation-Date: \n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"Language: en_US\n"
+
+msgid "Billing and invoices"
+msgstr ""
+
+msgid "User does not exist."
+msgstr ""
+
+msgid "No credit card."
+msgstr ""
+
+msgid "No customer info."
+msgstr ""
+
+msgid "Change or update your credit card"
+msgstr ""
+
+msgid "Changes to your credit card will be effective immediately."
+msgstr ""
+
+msgid "All future charges will be charged to this card."
+msgstr ""
+
+msgid "Thanks for updating your billing information."
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Change your credit card and billing information"
+msgstr ""
+
+msgid "See plans and upgrade or downgrade"
+msgstr ""
+
+msgid "Choose plan"
+msgstr ""
+
+msgid "Your next charge is $%s on %s"
+msgstr ""
+
+msgid "Purchase completed."
+msgstr ""
+
+msgid "You are currently on a trial subscription."
+msgstr ""
+
+msgid "Buy subscription"
+msgstr ""
+
+msgid "Trial"
+msgstr ""
+
+msgid "Purchase"
+msgstr ""
+
+msgid "Update My Card"
+msgstr ""
+
+msgid "Your credit card on file is"
+msgstr ""
+
+msgid "$%s / month - %s Service providers"
+msgstr ""
+
+msgid "Current plan:"
+msgstr ""
+
+msgid "Credit card"
+msgstr ""
+
+msgid "Update Complete - Plan"
+msgstr ""
+
+msgid "Purchase failed - "
+msgstr ""
+
+msgid "Update"
+msgstr ""

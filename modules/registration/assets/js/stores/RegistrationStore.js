@@ -39,23 +39,6 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
     );
   },
 
-  translate: function(self, string) {
-    self.postApi(
-      bp_urls.ajax_url,
-      {
-        'action': 'brithoncrm_registration_i18n',
-        'string': string
-      },
-      function(err, r) {
-        if (err) {
-          return self.getCursor().set(string, string);
-        } else {
-          return self.getCursor().set(string, r.result);
-        }
-      }
-    );
-  },
-
   generateUserName: function(self, firstName, lastName) {
     return firstName + '_' + lastName + Math.random().toString();
   },

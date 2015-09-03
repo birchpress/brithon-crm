@@ -22,7 +22,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.common.PlanL
     return (
       <div>
         <p>
-          <b>Current plan:</b>
+          <b>{ component.__('Current plan:') }</b>
           { component.props.description }
         </p>
         <p>
@@ -30,6 +30,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.common.PlanL
         </p>
       </div>
       );
+  },
+
+  __: function(component, string) {
+    return component.props.__(string);
   }
 });
 

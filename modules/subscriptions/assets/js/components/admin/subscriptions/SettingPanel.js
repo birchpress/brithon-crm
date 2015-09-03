@@ -24,8 +24,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
       var expireDate = new Date(customer.expire_date * 1000);
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
-      var _desc = '$' + customer.plan_charge / 100 + ' / month - ' + customer.plan_max_providers + ' Service provider(s)';
-      var _meta = 'Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + expireDate.toDateString();
+      var _desc = component.__('$' + customer.plan_charge / 100 + ' / month - ' + customer.plan_max_providers + ' Service provider(s)');
+      var _meta = component.__('Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + expireDate.toDateString());
       return (
         <div>
           <SetPlanForm
@@ -34,11 +34,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                        currentPlanMeta={ _meta }
                        name='planChecker'
                        radioOnChange={ component.handlePlanChange }
-                       onSubmitClick={ component.submitPlan } />
+                       onSubmitClick={ component.submitPlan }
+                       __={ component.__ } />
           <SetCreditCardForm
                              currentCardNo={ _card }
                              onUpdateCard={ component.updateCardToken }
-                             onSubmitClick={ component.submitCreditCard } />
+                             onSubmitClick={ component.submitCreditCard }
+                             __={ component.__ } />
         </div>
         );
     } else {
@@ -49,7 +51,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                      name='planChecker'
                      radioOnChange={ component.handlePlanChange }
                      onUpdateCard={ component.updatePurchase }
-                     onSubmitClick={ component.submitPurchase } />
+                     onSubmitClick={ component.submitPurchase }
+                     __={ component.__ } />
         </div>
         );
     }
@@ -57,7 +60,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
   retrieveAllPlans: function(component) {
     var store = component.props.store;
-    if (!store.getCursor().get('plans')) {
+    if (!store.getCursor().get('plans')) {
       store.getAllPlans();
     }
     return store.getCursor().get('plans');
@@ -95,9 +98,20 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     if (customerRes) {
       var isUpdateSucceed = store.updatePlan();
       if (isUpdateSucceed) {
-        alert('Purchase completed.');
+        alert(component.__('Purchase completed.'));
       }
     }
+  },
+
+  __: function(component, string) {
+    var key = string.replace(/ /g, '_');
+    var result;
+    if (subscriptionsTranslations && subscriptionsTranslations[key]) {
+      result = subscriptionsTranslations[key];
+    } else {
+      result = string;
+    }
+    return result;
   }
 });
 

@@ -18,7 +18,7 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'admincp_url' => admin_url(),
 			);
-			$bp_uid = array( 'uid' => get_current_user_id() );
+			$translations = $brithoncrm->registration->view->i18n->get_i18n_strings();
 
 			if ( is_main_site() ) {
 				add_shortcode( 'birchpress_registration', array( $ns, 'render_registration_entry' ) );
@@ -33,6 +33,7 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 					$brithoncrm->plugin_url() . '/modules/registration/assets/js/apps/front/registration/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'bp_urls', $bp_urls );
+				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'registrationTranslations', $translations);
 
 				wp_enqueue_script( 'brithoncrm_registration_apps_front_registration' );
 

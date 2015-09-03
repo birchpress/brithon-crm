@@ -64,7 +64,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
       formRows.push(
         <p>
           <Radio
-                 desc={ allPlans[key].desc }
+                 desc={ component.__(allPlans[key].desc) }
                  value={ allPlans[key].id }
                  name={ component.props.name }
                  id={ component.props.radioId }
@@ -76,36 +76,47 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     return (
       <div>
-        <h4>Choose plan</h4>
+        <h4>{ component.__('Choose plan') }</h4>
         { formRows }
-        <h4>Credit card</h4>
+        <h4>{ component.__('Credit card') }</h4>
         <form method="POST">
-          <StripeControl handler={ handler } />
+          <StripeControl handler={ handler } __={ component.props.__ } />
         </form>
         <Button
                 type=""
-                text="Purchase"
+                text={ component.__('Purchase') }
                 onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
-        <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
+        <a href="javascript:;" onClick={ component.handleClick }>
+          { component.__('Hide') }
+        </a>
       </div>
       );
   },
 
   render: function(component) {
     var PlanLabel = require('brithoncrm/subscriptions/components/common/PlanLabel');
-    var _meta = 'You are currently on a trial subscription.';
+    var _meta = component.__('You are currently on a trial subscription.');
     var trialForm = component.renderLayer();
 
     return (
       <div id="set-plan-form">
-        <PlanLabel description='Trial' metainfo={ _meta } />
+        <PlanLabel
+                   description={ component.__('Trial') }
+                   metainfo={ component.__(_meta) }
+                   __={ component.__ } />
         <a
            id="set-plan-link"
            href="javascript:;"
-           onClick={ component.handleClick }>Buy subscription</a>
+           onClick={ component.handleClick }>
+          { component.__('Buy subscription') }
+        </a>
         { trialForm }
       </div>
       );
+  },
+
+  __: function(component, string) {
+    return component.props.__(string);
   }
 });
 

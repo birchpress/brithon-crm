@@ -66,7 +66,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
         stripe_token: stripeToken
       }, function(err, r) {
         if (err) {
-          alert('Purchase failed - ' + err.message);
+          alert(self.__('Purchase failed - ') + err.message);
           return false;
         }
         self.getCursor().set('customer_id', r.id);
@@ -90,7 +90,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
             return false;
           } else {
             // --test--
-            alert('Update Complete - Card');
+            alert(self.__('Update Complete - Card'));
             return true;
           }
         });
@@ -111,11 +111,22 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
             return false;
           } else {
             // --test--
-            alert('Update Complete - Plan')
+            alert(self.__('Update Complete - Plan'));
             return true;
           }
         });
     }
+  },
+
+  __: function(self, string) {
+    var key = string.replace(/ /g, '_');
+    var result;
+    if (subscriptionsTranslations && subscriptionsTranslations[key]) {
+      result = subscriptionsTranslations[key];
+    } else {
+      result = string;
+    }
+    return result;
   },
 
   _ajax: function(self, method, url, data, callback) {

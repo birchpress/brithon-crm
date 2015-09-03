@@ -1,0 +1,92 @@
+# This file is distributed under the same license as the brithoncrm-registration package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-09-03 19:12+0800\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.8.4\n"
+"Project-Id-Version: brithoncrm-registration\n"
+"POT-Creation-Date: \n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"Language: zh_CN\n"
+
+msgid "Billing and invoices"
+msgstr "账单与票据"
+
+msgid "User does not exist."
+msgstr "用户不存在"
+
+msgid "No credit card."
+msgstr "没有信用卡"
+
+msgid "No customer info."
+msgstr "没有客户信息"
+
+msgid "Change or update your credit card"
+msgstr "更改您的信用卡"
+
+msgid "Changes to your credit card will be effective immediately."
+msgstr "对信用卡信息的修改将立即生效"
+
+msgid "All future charges will be charged to this card."
+msgstr "未来所有的费用将由此卡支付"
+
+msgid "Thanks for updating your billing information."
+msgstr "感谢您更新账单信息"
+
+msgid "Hide"
+msgstr "收起"
+
+msgid "Change your credit card and billing information"
+msgstr "修改信用卡与账单信息"
+
+msgid "See plans and upgrade or downgrade"
+msgstr "查看套餐，然后升级或降级"
+
+msgid "Choose plan"
+msgstr "选择一个套餐"
+
+msgid "Your next charge is $%s on %s"
+msgstr "您的下一次支付为 $%s, 在 %s"
+
+msgid "Purchase completed."
+msgstr "支付完成"
+
+msgid "You are currently on a trial subscription."
+msgstr "您正处在试用期"
+
+msgid "Buy subscription"
+msgstr "订购服务"
+
+msgid "Trial"
+msgstr "试用"
+
+msgid "Purchase"
+msgstr "购买"
+
+msgid "Update My Card"
+msgstr "更新我的信用卡"
+
+msgid "Your credit card on file is"
+msgstr "您记录的信用卡号是"
+
+msgid "$%s / month - %s Service providers"
+msgstr "每月 $%s, 可支持%s个服务提供者"
+
+msgid "Current plan:"
+msgstr "您正在使用："
+
+msgid "Credit card"
+msgstr "信用卡"
+
+msgid "Update Complete - Plan"
+msgstr "套餐更新完成"
+
+msgid "Purchase failed - "
+msgstr "购买失败 - "
+
+msgid "Update"
+msgstr "更新"
