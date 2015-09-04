@@ -26,7 +26,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
       var _desc = customer.plan_desc;
       var _meta = component.__('Your next charge is $%s on %s');
-      _meta = _meta.toString().replace(/%s/, customer.plan_charge / 100).replace(/%s/, expireDate);
+      _meta = _meta.replace(/%s/, customer.plan_charge / 100).replace(/%s/, expireDate.toLocaleString());
 
       return (
         <div>

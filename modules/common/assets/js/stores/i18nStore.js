@@ -24,7 +24,6 @@ var clazz = birchpress.provide('brithoncrm.common.stores.i18nStores', {
         var item = po.items[id];
         var key = item.msgid.replace(/ /g, '_');
         result[key] = item.msgstr;
-        console.log(item.msgstr);
       }
     }
     self.getCursor().set('translations', result);
@@ -36,7 +35,7 @@ var clazz = birchpress.provide('brithoncrm.common.stores.i18nStores', {
     if (!translations || !translations[key]) {
       return string;
     }
-    return translations[key];
+    return translations[key].toString();
   }
 
 });
