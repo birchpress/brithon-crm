@@ -8,53 +8,43 @@ birch_ns( 'brithoncrm.registration.view.i18n', function( $ns ) {
 
         };
 
-        $ns->get_original_strings = function() use ( $ns ) {
+        $ns->get_i18n_strings = function() use ( $ns ) {
             $str = array(
-                "Log in",
+                "Log_in" => __('Log in', 'brithoncrm-registration'),
 
-                "Register",
+                "Register" => __('Register', 'brithoncrm-registration'),
 
-                "Empty username!",
+                "Empty_username!" => __('Empty username!', 'brithoncrm-registration'),
 
-                "Empty password!",
+                "Empty_password!" => __('Empty password!', 'brithoncrm-registration'),
 
-                "Empty email address!",
+                "Empty_email_address!" => __('Empty email address!', 'brithoncrm-registration'),
 
-                "First name required!",
+                "First_name_required!" => __('First name required!', 'brithoncrm-registration'),
 
-                "Last name required!",
+                "Last_name_required!" => __('Last name required!', 'brithoncrm-registration'),
 
-                "Organization required!",
+                "Organization_required!" => __('Organization required!', 'brithoncrm-registration'),
 
-                "First Name",
+                "First_Name" => __('First Name', 'brithoncrm-registration'),
 
-                "Last Name",
+                "Last_Name" => __('Last Name', 'brithoncrm-registration'),
 
-                "Email address",
+                "Email_address" => __('Email address', 'brithoncrm-registration'),
 
-                "Organization",
+                "Organization" => __('Organization', 'brithoncrm-registration'),
 
-                "Submit",
+                "Submit" => __('Submit', 'brithoncrm-registration'),
 
-                "Reset",
+                "Reset" => __('Reset', 'brithoncrm-registration'),
 
-                "Network error",
+                "Network_error" => __('Network error', 'brithoncrm-registration'),
 
-                "Password",
+                "Password" => __('Password', 'brithoncrm-registration'),
 
-                "Welcome to register"
+                "Welcome_to_register" => __('Welcome to register', 'brithoncrm-registration')
 
             );
             return $str;
-        };
-
-        $ns->get_i18n_strings = function() use ( $ns ) {
-            $src = $ns->get_original_strings();
-            $result = array();
-            foreach ( $src as $item ) {
-                $key = str_replace( ' ', '_', $item );
-                $result = array_merge( $result, array( $key => __( $item, 'brithoncrm-registration' ) ) );
-            }
-            return $result;
         };
     } );
