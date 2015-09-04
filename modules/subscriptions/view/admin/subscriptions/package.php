@@ -8,7 +8,6 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 			add_action( 'init', array( $ns, 'wp_init' ) );
 			add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
 			add_action( 'admin_menu', array( $ns, 'create_admin_menus' ) );
-			add_action( 'plugins_loaded', array( $ns, 'load_i18n' ) );
 		};
 
 		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
@@ -19,8 +18,14 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 				'admincp_url' => admin_url(),
 			);
 
-			$translations = $brithoncrm->subscriptions->view->i18n->get_i18n_strings();
+			$birchpress_i18n = array(
+				'textDomain' => 'brithoncrm',
+				'locale' => get_locale()
+			);
 
+			$po_str = $brithoncrm->common->view->i18n->get_po_file();
+			$po_string = array('poString' => $po_str);
+			
 			if ( is_main_site() ) {
 				$birchpress->view->register_3rd_scripts();
 				$birchpress->view->register_core_scripts();
@@ -28,7 +33,8 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/apps/admin/subscriptions/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'bp_urls', $bp_urls );
-				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'subscriptionsTranslations', $translations);
+				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'birchpress_i18n', $birchpress_i18n);
+				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'i18n_subscriptions', $po_string);
 
 				add_action( 'wp_ajax_brithoncrm_subscriptions_i18n', array( $ns, 'i18n_string' ) );
 
@@ -42,27 +48,22 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 		};
 
 		$ns->create_admin_menus = function() use ( $ns ) {
-			add_menu_page( __('Billing and invoices', 'brithoncrm-subscriptions'), 
-				__('Settings', 'brithoncrm-subscriptions'), 'read',
+			add_menu_page( __('Billing and invoices', 'brithoncrm'), 
+				__('Settings', 'brithoncrm'), 'read',
 				'brithoncrm/subscriptions', array( $ns, 'render_setting_page' ), '', 81 );
 		};
 
 		$ns->render_setting_page = function() use ( $ns ) {
 ?>
-			<h3><?php _e('Billing and invoices', 'brithoncrm-subscriptions') ?></h3>
+			<h3><?php _e('Billing and invoices', 'brithoncrm') ?></h3>
 			<section id="birchpress-settings"></section>
 <?php
-		};
-
-		$ns->load_i18n = function() use ( $ns ) {
-			$lang_dir = 'brithon-crm/modules/subscriptions/languages';
-			load_plugin_textdomain( 'brithoncrm-subscriptions', false, $lang_dir );
 		};
 
 		$ns->i18n_string = function() use ( $ns ) {
 			if ( isset( $_POST['string'] ) ) {
 				$string = $_POST['string'];
-				$result = array( 'result' => __( $string, 'brithoncrm-subscriptions' ) );
+				$result = array( 'result' => __( $string, 'brithoncrm' ) );
 				die( json_encode( $result ) );
 			}
 		};

@@ -10,8 +10,10 @@
   "devDependencies": {
     "browserify": "^10.2.6",
     "browserify-shim": "^3.8.10",
+	"browserify-fs": "^1.0.0",
     "immutable": "^3.7.4",
     "pkgify": "^1.0.3",
+	"pofile": "^1.0.0",
     "react": "^0.13.1",
     "react-immutable-render-mixin": "^0.8.1",
     "react-tools": "^0.13.3",

@@ -412,6 +412,6 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 		};
 
 		$ns->__ = function( $str ) use ( $ns ) {
-			return __( $str, 'brithoncrm-subscriptions' );
+			return __( $str, 'brithoncrm' );
 		};
 	} );

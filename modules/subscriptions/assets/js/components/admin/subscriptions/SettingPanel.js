@@ -26,7 +26,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
       var _desc = customer.plan_desc;
       var _meta = component.__('Your next charge is $%s on %s');
-      _meta = component.composeMetaString(_meta, customer.plan_charge / 100, expireDate.toDateString());
+      _meta = _meta.toString().replace(/%s/, customer.plan_charge / 100).replace(/%s/, expireDate);
 
       return (
         <div>
@@ -106,21 +106,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   __: function(component, string) {
-    var key = string.replace(/ /g, '_');
-    var result;
-    if (subscriptionsTranslations && subscriptionsTranslations[key]) {
-      result = subscriptionsTranslations[key];
-    } else {
-      result = string;
-    }
-    return result;
-  },
-
-  composeMetaString: function(component, string, amount, dateStr) {
-    var res = string;
-    res = res.replace(/%s/, amount);
-    res = res.replace(/%s/, dateStr);
-    return res;
+    var tStore = component.props.translationStore;
+    return tStore.getText(string);
   }
 });
 
