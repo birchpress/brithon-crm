@@ -80,7 +80,10 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 					if ( $ns->check_subscription( $sub_info ) ) {
 						$result = array_merge( $result, array(
 								'plan_id' => $sub_info->plan_id,
-								'plan_desc' => $sub_info->plan_desc,
+								'plan_desc' => sprintf( $ns->__( '$%s / month - %s Service providers' ), 
+									$sub_info->plan_charge / 100, 
+									$sub_info->plan_max_providers 
+								),
 								'plan_max_providers' => $sub_info->plan_max_providers,
 								'plan_charge' => $sub_info->plan_charge,
 								'expire_date' => $sub_info->plan_period_end,
@@ -213,7 +216,11 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 					return false;
 				}
 				if ( $subscription_on_server['data']->current_period_end >= time() ) {
-					$ns->register_subscription_to_db( $subscription->plan_id, $subscription->customer_token, $subscription_on_server['data'] );
+					$ns->register_subscription_to_db( 
+						$subscription->plan_id,
+						$subscription->customer_token, 
+						$subscription_on_server['data'] 
+					);
 					return true;
 				}
 			} else {
@@ -378,7 +385,10 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				foreach ( $plans as $item ) {
 					array_push( $result, array(
 							'id' => $item->id,
-							'desc' => $item->name,
+							'desc' => sprintf( $ns->__( '$%s / month - %s Service providers' ), 
+								$item->amount / 100, 
+								$ns->get_max_providers( $item->id ) 
+							),
 							'charge' => $item->amount,
 							'trial_days' => $item->trial_period_days,
 						) );
@@ -401,7 +411,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 			return false;
 		};
 
-		$ns->__ = function( $str ) use ($ns) {
-			return __($str, 'brithoncrm-subscriptions');
+		$ns->__ = function( $str ) use ( $ns ) {
+			return __( $str, 'brithoncrm-subscriptions' );
 		};
 	} );

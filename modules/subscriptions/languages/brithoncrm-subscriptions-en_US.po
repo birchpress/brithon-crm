@@ -1,7 +1,7 @@
 # This file is distributed under the same license as the brithoncrm-registration package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-09-03 19:12+0800\n"
+"PO-Revision-Date: 2015-09-04 10:28+0800\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,4 +89,7 @@ msgid "Purchase failed - "
 msgstr ""
 
 msgid "Update"
+msgstr ""
+
+msgid "Settings"
 msgstr ""

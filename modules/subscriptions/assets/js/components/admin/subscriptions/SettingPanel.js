@@ -24,8 +24,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
       var expireDate = new Date(customer.expire_date * 1000);
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
-      var _desc = component.__('$' + customer.plan_charge / 100 + ' / month - ' + customer.plan_max_providers + ' Service provider(s)');
-      var _meta = component.__('Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + expireDate.toDateString());
+      var _desc = customer.plan_desc;
+      var _meta = component.__('Your next charge is $%s on %s');
+      _meta = component.composeMetaString(_meta, customer.plan_charge / 100, expireDate.toDateString());
+
       return (
         <div>
           <SetPlanForm
@@ -112,6 +114,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
       result = string;
     }
     return result;
+  },
+
+  composeMetaString: function(component, string, amount, dateStr) {
+    var res = string;
+    res = res.replace(/%s/, amount);
+    res = res.replace(/%s/, dateStr);
+    return res;
   }
 });
 

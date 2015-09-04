@@ -42,7 +42,8 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 		};
 
 		$ns->create_admin_menus = function() use ( $ns ) {
-			add_menu_page( __('Billing and invoices'), 'Settings', 'read',
+			add_menu_page( __('Billing and invoices', 'brithoncrm-subscriptions'), 
+				__('Settings', 'brithoncrm-subscriptions'), 'read',
 				'brithoncrm/subscriptions', array( $ns, 'render_setting_page' ), '', 81 );
 		};
 
