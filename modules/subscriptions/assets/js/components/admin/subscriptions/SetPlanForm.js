@@ -24,7 +24,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     radioId: React.PropTypes.string,
     radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
-    onSubmitClick: React.PropTypes.func,
+    onSubmitClick: React.PropTypes.func
   },
 
   handleClick: function(component) {
@@ -50,9 +50,17 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
+
     if (!component.state.shown) {
       return <span />;
     }
+
+    if (!allPlans) {
+      return (<p>
+                { component.__('Please wait while plans list is loading...') }
+              </p>);
+    }
+
     for (var key in allPlans) {
       formRows.push(
         <p>

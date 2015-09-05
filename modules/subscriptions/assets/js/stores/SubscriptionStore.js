@@ -51,7 +51,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
           alert(err.message);
           return false;
         }
-        return self.getCursor().set('customer', r);
+        self.getCursor().set('customer', r);
+
+        self.getAttr('component').setProps({
+          loadOK: true
+        });
       });
   },
 
@@ -134,8 +138,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       type: method,
       url: url,
       data: data,
-      dataType: 'json',
-      async: false
+      dataType: 'json'
     }).done(function(r) {
       if (r && r.error) {
         return callback && callback(r);
