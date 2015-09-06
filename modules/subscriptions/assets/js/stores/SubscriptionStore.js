@@ -1,4 +1,5 @@
 'use strict';
+
 var Immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
 var birchpress = require('birchpress');
@@ -65,6 +66,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   registerCustomer: function(self) {
     var stripeToken = self.getCursor().get('stripe_token');
     var email = self.getCursor().get('email');
+
     self.getAttr('component').setProps({
       inProcess: true
     });
@@ -93,6 +95,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
 
   updateCreditCard: function(self) {
     var newCardToken = self.getCursor().get('card_token');
+
     if (newCardToken) {
       self.getAttr('component').setProps({
         cardInProcess: true
@@ -121,6 +124,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
 
   updatePlan: function(self) {
     var newPlanId = self.getCursor().get('plan_id');
+
     if (newPlanId) {
       self.getAttr('component').setProps({
         planInProcess: true
@@ -150,6 +154,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   __: function(self, string) {
     var key = string.replace(/ /g, '_');
     var result;
+
     if (subscriptionsTranslations && subscriptionsTranslations[key]) {
       result = subscriptionsTranslations[key];
     } else {

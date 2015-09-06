@@ -3,7 +3,7 @@ var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
 
-var dataTableComponent;
+var dataTableComponent = null;
 
 var ns = birchpress.provide('brithoncrm.common.apps.admin.datatables', {
 

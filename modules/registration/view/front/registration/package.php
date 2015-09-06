@@ -17,13 +17,12 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'admincp_url' => admin_url(),
 			);
-			$po_str = $brithoncrm->common->view->i18n->get_po_file();
 			$locale = get_locale();
 			$birchpress_i18n = array(
 				'textDomain' => 'brithoncrm',
 				'locale' => $locale
 			);
-			$po_string = array('poString' => $po_str);
+			$po_string = array( 'poString' => $brithoncrm->common->view->i18n->get_po_file() );
 
 			if ( is_main_site() ) {
 				add_shortcode( 'birchpress_registration', array( $ns, 'render_registration_entry' ) );
@@ -38,8 +37,8 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 					$brithoncrm->plugin_url() . '/modules/registration/assets/js/apps/front/registration/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
 				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'bp_urls', $bp_urls );
-				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'birchpress_i18n', $birchpress_i18n);
-				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'i18n_registration', $po_string);
+				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'birchpress_i18n', $birchpress_i18n );
+				wp_localize_script( 'brithoncrm_registration_apps_front_registration', 'i18n_registration', $po_string );
 
 				wp_enqueue_script( 'brithoncrm_registration_apps_front_registration' );
 

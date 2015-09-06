@@ -1,4 +1,5 @@
 'use strict';
+
 var birchpress = require('birchpress');
 var Immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
@@ -18,6 +19,22 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
   },
 
   submit: function(self) {
+    if (!self.getCursor().get('email')) {
+      alert(self.__('Empty email address!'));
+    }
+    if (!self.getCursor().get('password')) {
+      alert(self.__('Empty password!'));
+    }
+    if (!self.getCursor().get('first_name')) {
+      alert(self.__('First name required!'));
+    }
+    if (!self.getCursor().get('last_name')) {
+      alert(self.__('Last name required!'));
+    }
+    if (!self.getCursor().get('org')) {
+      alert(self.__('Organization required!'));
+    }
+
     self.postApi(
       bp_urls.ajax_url,
       {
@@ -68,6 +85,10 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
       data = {};
     }
     self._ajax('POST', url, data, callback);
+  },
+
+  __: function(self, string) {
+    return self.getAttr('component').__(string);
   }
 });
 

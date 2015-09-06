@@ -1,12 +1,12 @@
 'use strict';
+
 var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
+var RegistrationStore = require('brithoncrm/registration/stores/RegistrationStore');
+var internationalizationStore = require('brithoncrm/common/stores/i18nStore');
 
-var RegStore = require('brithoncrm/registration/stores/RegistrationStore');
-var i18nStore = require('brithoncrm/common/stores/i18nStore');
-
-var regAppComponent;
+var regAppComponent = null;
 
 var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
 
@@ -15,34 +15,36 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
   },
 
   run: function() {
-    var regApp = require('brithoncrm/registration/components/front/registration/RegistrationPanel');
-    var regData = Immutable.fromJS({});
+    var registrationApp = require('brithoncrm/registration/components/front/registration/RegistrationPanel');
+    var registrationData = Immutable.fromJS({});
     var i18nData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
-    if (!regAppComponent && registerAppContainer) {
-      var store = RegStore(regData);
-      var tStore = i18nStore(i18nData);
-      tStore.loadPO(i18n_registration.poString);
+
+    if (!registrationAppComponent && registerAppContainer) {
+      var registrationStore = RegistrationStore(regData);
+      var i18nStore = internationalizationStore(i18nData);
+
+      i18nStore.loadPO(i18n_registration.poString);
       regAppComponent = React.render(
         React.createElement(regApp, {
-          store: store,
-          translationStore: tStore,
+          store: registrationStore,
+          translationStore: i18nStore,
           cursor: store.getCursor()
         }),
         registerAppContainer
       );
-      store.setAttr('component', regAppComponent);
-      birchpress.addAction('brithoncrm.registration.stores.RegistrationStore.onChangeAfter', function(_store, newCursor) {
-        _store.getAttr('component').setProps({
-          store: _store,
+      registrationStore.setAttr('component', regAppComponent);
+      birchpress.addAction('brithoncrm.registration.stores.RegistrationStore.onChangeAfter', function(store, newCursor) {
+        store.getAttr('component').setProps({
+          store: store,
           cursor: newCursor
         });
       });
 
-      tStore.setAttr('component', regAppComponent);
-      birchpress.addAction('brithoncrm.common.stores.i18nStore.onChangeAfter', function(_tStore, newCursor) {
-        tStore.getAttr('component').setProps({
-          translationStore: _tStore,
+      i18nStore.setAttr('component', regAppComponent);
+      birchpress.addAction('brithoncrm.common.stores.i18nStore.onChangeAfter', function(store, newCursor) {
+        store.getAttr('component').setProps({
+          translationStore: store,
           cursor: newCursor
         });
       });
