@@ -20,19 +20,19 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
 
   submit: function(self) {
     if (!self.getCursor().get('email')) {
-      alert(self.__('Empty email address!'));
+      return alert(self.__('Empty email address!'));
     }
     if (!self.getCursor().get('password')) {
-      alert(self.__('Empty password!'));
+      return alert(self.__('Empty password!'));
     }
     if (!self.getCursor().get('first_name')) {
-      alert(self.__('First name required!'));
+      return alert(self.__('First name required!'));
     }
     if (!self.getCursor().get('last_name')) {
-      alert(self.__('Last name required!'));
+      return alert(self.__('Last name required!'));
     }
     if (!self.getCursor().get('org')) {
-      alert(self.__('Organization required!'));
+      return alert(self.__('Organization required!'));
     }
 
     self.postApi(
