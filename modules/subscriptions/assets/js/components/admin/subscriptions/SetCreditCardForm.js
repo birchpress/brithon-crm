@@ -43,9 +43,21 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
         component.props.onUpdateCard(token.id);
       }
     });
-    if (!component.state.shown) {
+    var inProgressMessage;
+
+    if (component.props.inProcess === undefined && !component.state.shown) {
       return <span />;
     }
+
+    if (component.props.inProcess === undefined) {
+      inProgressMessage = '';
+    } else if (component.props.inProcess === false) {
+      component.props.inProcess = undefined;
+      inProgressMessage = '';
+    } else {
+      inProgressMessage = component.__('Processing...');
+    }
+
     return (
       <div>
         <h4>{ component.__('Change or update your credit card') }</h4>
@@ -60,6 +72,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
             </p>
             <p>
               <StripeControl handler={ handler } __={ component.__ } />&nbsp;
+              { inProgressMessage }&nbsp;
               <a href="javascript:;" onClick={ component.handleClick }>
                 { component.__('Hide') }
               </a>

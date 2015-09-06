@@ -50,8 +50,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
+    var inProgressMessage;
 
-    if (!component.state.shown) {
+    if (component.props.inProcess === undefined && !component.state.shown) {
       return <span />;
     }
 
@@ -59,6 +60,15 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
       return (<p>
                 { component.__('Please wait while plans list is loading...') }
               </p>);
+    }
+
+    if (component.props.inProcess === undefined) {
+      inProgressMessage = '';
+    } else if (component.props.inProcess === false) {
+      component.props.inProcess = undefined;
+      inProgressMessage = '';
+    } else {
+      inProgressMessage = component.__('Processing...');
     }
 
     for (var key in allPlans) {
@@ -83,7 +93,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
         <Button
                 type=""
                 text={ component.__('Update') }
-                onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
+                onClick={ component.props.onSubmitClick } />&nbsp;
+        { inProgressMessage }&nbsp;
         <a href="javascript:;" onClick={ component.handleClick }>
           { component.__('Hide') }
         </a>

@@ -36,7 +36,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
           alert(err.message);
           return false;
         }
-        return self.getCursor().set('plans', r);
+        self.getCursor().set('plans', r);
+
+        self.getAttr('component').setProps({
+          plansLoadOK: true
+        });
       }
     );
   },
@@ -49,7 +53,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       }, function(err, r) {
         if (err) {
           alert(err.message);
-          return false;
         }
         self.getCursor().set('customer', r);
 
@@ -62,6 +65,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   registerCustomer: function(self) {
     var stripeToken = self.getCursor().get('stripe_token');
     var email = self.getCursor().get('email');
+    self.getAttr('component').setProps({
+      inProcess: true
+    });
+
     self.postApi(
       bp_urls.ajax_url,
       {
@@ -71,9 +78,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       }, function(err, r) {
         if (err) {
           alert(self.__('Purchase failed - ') + err.message);
-          return false;
         }
         self.getCursor().set('customer_id', r.id);
+        self.getAttr('component').setProps({
+          inProcess: undefined,
+          loadOK: false
+        });
+        self.getCustomerInfo();
         // --test--
         alert(r.id);
       }
@@ -83,6 +94,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   updateCreditCard: function(self) {
     var newCardToken = self.getCursor().get('card_token');
     if (newCardToken) {
+      self.getAttr('component').setProps({
+        cardInProcess: true
+      });
+
       self.postApi(
         bp_urls.ajax_url,
         {
@@ -91,11 +106,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
         }, function(err, r) {
           if (err) {
             alert(err.error + ': ' + err.message);
-            return false;
           } else {
             // --test--
+            self.getAttr('component').setProps({
+              cardInProcess: undefined,
+              loadOK: false
+            });
+            self.getCustomerInfo();
             alert(self.__('Update Complete - Card'));
-            return true;
           }
         });
     }
@@ -104,6 +122,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   updatePlan: function(self) {
     var newPlanId = self.getCursor().get('plan_id');
     if (newPlanId) {
+      self.getAttr('component').setProps({
+        planInProcess: true
+      });
+
       self.postApi(
         bp_urls.ajax_url,
         {
@@ -112,11 +134,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
         }, function(err, r) {
           if (err) {
             alert(err.error + ': ' + err.message);
-            return false;
           } else {
+            self.getAttr('component').setProps({
+              planInProcess: undefined,
+              loadOK: false
+            });
+            self.getCustomerInfo();
             // --test--
             alert(self.__('Update Complete - Plan'));
-            return true;
           }
         });
     }

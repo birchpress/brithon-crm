@@ -28,7 +28,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
               </div>);
     }
     var customer = store.getCursor().get('customer');
-    console.log(customer);
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
       var expireDate = new Date(customer.expire_date * 1000);
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
@@ -45,11 +44,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                        name='planChecker'
                        radioOnChange={ component.handlePlanChange }
                        onSubmitClick={ component.submitPlan }
+                       plansLoadOK={ component.plansLoadOK }
+                       inProcess={ component.props.planInProcess }
                        __={ component.__ } />
           <SetCreditCardForm
                              currentCardNo={ _card }
                              onUpdateCard={ component.updateCardToken }
                              onSubmitClick={ component.submitCreditCard }
+                             inProcess={ component.props.cardInProcess }
                              __={ component.__ } />
         </div>
         );
@@ -62,6 +64,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                      radioOnChange={ component.handlePlanChange }
                      onUpdateCard={ component.updatePurchase }
                      onSubmitClick={ component.submitPurchase }
+                     plansLoadOK={ component.plansLoadOK }
                      __={ component.__ } />
         </div>
         );
