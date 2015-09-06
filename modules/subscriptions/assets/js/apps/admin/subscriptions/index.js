@@ -24,12 +24,12 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions',
       var subscriptionStore = SubscriptionStore(settingData);
       var i18nStore = internationalizationStore(i18nData);
 
-      internationalizationStore.loadPO(i18n_subscriptions.poString);
+      i18nStore.loadPO(i18n_subscriptions.poString);
       settingAppComponent = React.render(
         React.createElement(settingApp, {
           store: subscriptionStore,
-          translationStore: tStore,
-          cursor: store.getCursor()
+          translationStore: i18nStore,
+          cursor: subscriptionStore.getCursor()
         }),
         settingAppContainer
       );
