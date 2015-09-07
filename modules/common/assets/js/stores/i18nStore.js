@@ -1,4 +1,4 @@
-'use strict' ;
+'use strict';
 
 var PO = require('pofile');
 var Immutable = require('immutable');
@@ -16,8 +16,6 @@ var clazz = birchpress.provide('brithoncrm.common.stores.i18nStores', {
   },
 
   loadPO: function(self, poString) {
-    var textDomain = birchpress_i18n.textDomain;
-    var locale = birchpress_i18n.locale;
     var po = PO.parse(poString);
     var result = {};
 
