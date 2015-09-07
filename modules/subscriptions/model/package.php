@@ -76,7 +76,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 
 				$token = $sub_info->customer_token;
 				if ( $token ) {
-					// Check subscription validity
+					// Check subscription validity.
 					if ( $ns->check_subscription( $sub_info ) ) {
 						$result = array_merge( $result, array(
 								'plan_id' => $sub_info->plan_id,
@@ -174,7 +174,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 						'plan_desc' => $subscription->plan->name,
 						'plan_charge' => $subscription->plan->amount,
 						'plan_max_providers' => $ns->get_max_providers( $plan_id ),
-						'plan_period_end' => $subscription->current_period_end
+						'plan_period_end' => $subscription->current_period_end,
 					) );
 			}
 			$post_id = wp_insert_post(
@@ -308,7 +308,8 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 		$ns->get_cards = function( $customer_token ) use ( $ns ) {
 			$result = $ns->get_customer( $customer_token );
 			if ( $result['succeed'] && $result['data']->sources ) {
-				return $result['data']->sources->all( array( 'limit' => 1, 'object' => 'card' ) )['data'];
+				$card = $result['data']->sources->all( array( 'limit' => 1, 'object' => 'card' ) );
+				return $card['data'];
 			} else {
 				return false;
 			}
@@ -337,7 +338,8 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 
 			try {
 				$customer = \Stripe\Customer::retrieve( $customer_token );
-				$subs_list = $customer->subscriptions->all()['data'];
+				$subs_list = $customer->subscriptions->all();
+				$subs_list = $subs_list['data'];
 				if ( ! $subs_list ) {
 					$new_sub = $customer->subscriptions->create( array( 'plan' => $plan_id ) );
 					return $ns->return_result( true, $new_sub );
@@ -361,7 +363,8 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 					return $ns->return_result( false, 'Invalid customer token.' );
 				}
 
-				$subs_list = $customer->subscriptions->all()['data'];
+				$subs_list = $customer->subscriptions->all();
+				$subs_list = $subs_list['data'];
 				if ( ! $subs_list ) {
 					return $ns->return_result( false, 'No subscription found.' );
 				}

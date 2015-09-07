@@ -62,82 +62,82 @@ msgid "Password"
 msgstr "Password"
 
 msgid "Billing and invoices"
-msgstr ""
+msgstr "Billing and invoices"
 
 msgid "User does not exist."
-msgstr ""
+msgstr "User does not exist."
 
 msgid "No credit card."
-msgstr ""
+msgstr "No credit card."
 
 msgid "No customer info."
-msgstr ""
+msgstr "No customer info."
 
 msgid "Change or update your credit card"
-msgstr ""
+msgstr "Change or update your credit card"
 
 msgid "Changes to your credit card will be effective immediately."
-msgstr ""
+msgstr "Changes to your credit card will be effective immediately."
 
 msgid "All future charges will be charged to this card."
-msgstr ""
+msgstr "All future charges will be charged to this card."
 
 msgid "Thanks for updating your billing information."
-msgstr ""
+msgstr "Thanks for updating your billing information."
 
 msgid "Hide"
-msgstr ""
+msgstr "Hide"
 
 msgid "Change your credit card and billing information"
-msgstr ""
+msgstr "Change your credit card and billing information"
 
 msgid "See plans and upgrade or downgrade"
-msgstr ""
+msgstr "See plans and upgrade or downgrade"
 
 msgid "Choose plan"
-msgstr ""
+msgstr "Choose plan"
 
 msgid "Your next charge is $%s on %s"
-msgstr ""
+msgstr "Your next charge is $%s on %s"
 
 msgid "Purchase completed."
-msgstr ""
+msgstr "Purchase completed."
 
 msgid "You are currently on a trial subscription."
-msgstr ""
+msgstr "You are currently on a trial subscription."
 
 msgid "Buy subscription"
-msgstr ""
+msgstr "Buy subscription"
 
 msgid "Trial"
-msgstr ""
+msgstr "Trial"
 
 msgid "Purchase"
-msgstr ""
+msgstr "Purchase"
 
 msgid "Update My Card"
-msgstr ""
+msgstr "Update My Card"
 
 msgid "Your credit card on file is"
-msgstr ""
+msgstr "Your credit card on file is"
 
 msgid "$%s / month - %s Service providers"
-msgstr ""
+msgstr "$%s / month - %s Service providers"
 
 msgid "Current plan:"
-msgstr ""
+msgstr "Current plan:"
 
 msgid "Credit card"
-msgstr ""
+msgstr "Credit card"
 
 msgid "Update Complete - Plan"
-msgstr ""
+msgstr "Update Complete - Plan"
 
 msgid "Purchase failed - "
-msgstr ""
+msgstr "Purchase failed - "
 
 msgid "Update"
-msgstr ""
+msgstr "Update"
 
 msgid "Settings"
-msgstr ""
+msgstr "Settings"

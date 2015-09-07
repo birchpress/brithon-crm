@@ -5,7 +5,6 @@ birch_ns( 'brithoncrm.common.view.i18n', function( $ns ) {
         global $brithoncrm;
 
         $ns->init = function() use ( $ns ) {
-            add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
             add_action( 'plugins_loaded', array( $ns, 'load_i18n' ) );
         };
 

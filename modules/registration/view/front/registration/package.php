@@ -6,8 +6,6 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 
 		$ns->init = function() use ( $ns ) {
 			add_action( 'init', array( $ns, 'wp_init' ) );
-			add_action( 'admin_init', array( $ns, 'wp_admin_init' ) );
-			add_action( 'wp_head', array( $ns, 'wp_header' ) );
 		};
 
 		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
@@ -44,14 +42,6 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 
 				add_action( 'wp_ajax_nopriv_brithoncrm_registration_i18n', array( $ns, 'i18n_string' ) );
 			}
-		};
-
-		$ns->wp_admin_init = function() use ( $ns, $brithoncrm ) {
-
-		};
-
-		$ns->wp_header = function() use ( $ns ) {
-
 		};
 
 		$ns->render_registration_entry = function() use ( $ns ) {

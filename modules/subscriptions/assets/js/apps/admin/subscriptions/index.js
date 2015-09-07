@@ -6,7 +6,7 @@ var birchpress = require('birchpress');
 var SubscriptionStore = require('brithoncrm/subscriptions/stores/SubscriptionStore');
 var internationalizationStore = require('brithoncrm/common/stores/i18nStore');
 
-var settingAppComponent = null;
+var settingAppComponent;
 
 var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions', {
 

@@ -20,7 +20,7 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 
 			$birchpress_i18n = array(
 				'textDomain' => 'brithoncrm',
-				'locale' => get_locale()
+				'locale' => get_locale(),
 			);
 
 			$po_str = $brithoncrm->common->view->i18n->get_po_file();
