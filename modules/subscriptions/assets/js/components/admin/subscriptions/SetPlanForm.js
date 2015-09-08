@@ -50,13 +50,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var Button = require('brithoncrm/subscriptions/components/common/Button');
 
     var formRows = [];
-    var allPlans = null;
-    var inProgressMessage;
+    var allPlans = component.props.plansFetcher();
+    var inProgressMessage = null;
 
     if (component.props.inProcess === undefined && !component.state.shown) {
       return <span />;
     }
-    allPlans = component.props.plansFetcher();
 
     if (!allPlans) {
       return (<p>
