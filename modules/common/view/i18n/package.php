@@ -19,6 +19,14 @@ birch_ns( 'brithoncrm.common.view.i18n', function( $ns ) {
 			$locale = get_locale();
 			$filename = "$path/$text_domain-$locale.po";
 
-			return file_get_contents( $filename );
+			$response = wp_remote_get( $filename );
+			$content = '';
+			if ( is_array( $response ) ) {
+				$content = $response['body'];
+			} else {
+				$content = $user_id->get_error_message( $user_id->get_error_code() );
+			}
+
+			return $content;
 		};
 } );
