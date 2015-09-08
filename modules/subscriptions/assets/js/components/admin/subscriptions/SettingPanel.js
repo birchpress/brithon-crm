@@ -28,6 +28,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                 </p>
               </div>);
     }
+
     var customer = store.getCursor().get('customer');
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
       var expireDate = new Date(customer.expire_date * 1000);
@@ -42,7 +43,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                        plansFetcher={ component.retrieveAllPlans }
                        currentPlanDesc={ _desc }
                        currentPlanMeta={ _meta }
-                       name='planChecker'
+                       name="planChecker"
                        radioOnChange={ component.handlePlanChange }
                        onSubmitClick={ component.submitPlan }
                        plansLoadOK={ component.plansLoadOK }
@@ -61,11 +62,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
         <div>
           <TrialForm
                      plansFetcher={ component.retrieveAllPlans }
-                     name='planChecker'
+                     name="planChecker"
                      radioOnChange={ component.handlePlanChange }
                      onUpdateCard={ component.updatePurchase }
                      onSubmitClick={ component.submitPurchase }
                      plansLoadOK={ component.plansLoadOK }
+                     inProcess={ component.props.purchaseInProcess }
                      __={ component.__ } />
         </div>
         );
@@ -106,9 +108,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
   submitPurchase: function(component) {
     var store = component.props.store;
-    var customerRes;
     store.registerCustomer();
-    store.updatePlan();
   },
 
   __: function(component, string) {

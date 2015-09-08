@@ -105,7 +105,10 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				}
 				die( json_encode( $result ) );
 			} else {
-				$ns->return_err_msg( $ns->__( 'User does not exist.' ) );
+				die( json_encode( array(
+					'user_id' => $uid,
+					'blog_id' => $blog_id,
+				) ) );
 			}
 		};
 

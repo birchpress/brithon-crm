@@ -57,16 +57,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     });
 
     var formRows = [];
-    var allPlans = component.props.plansFetcher();
-    var inProgressMessage;
+    var allPlans = null;
+    var inProgressMessage = null;
 
     if (component.props.inProcess === undefined && !component.state.shown) {
       return <span />;
     }
+
+    allPlans = component.props.plansFetcher();
     if (!allPlans) {
-      formRows.push(<p>
-                      { component.__('Please wait while plans list is loading...') }
-                    </p>);
+      return (<p>
+                { component.__('Please wait while plans list is loading...') }
+              </p>);
     }
 
     if (component.props.inProcess === undefined) {
