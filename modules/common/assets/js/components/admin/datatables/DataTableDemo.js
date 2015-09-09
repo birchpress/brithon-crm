@@ -64,7 +64,7 @@ var clazz = birchpress.provide('brithoncrm.common.components.admin.datatables.Da
                        options={ options }
                        columns={ columns }
                        dataSrcType="server"
-                       ajaxUrl={ bp_props.ajax_url }
+                       ajaxUrl={ component.props.ajaxUrl }
                        ajaxPost={ true }
                        ajaxFormData={ postData } />);
   }
