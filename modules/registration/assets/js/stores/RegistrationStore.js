@@ -10,8 +10,9 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
 
   __mixins__: [ImmutableStore],
 
-  __construct__: function(self, data) {
+  __construct__: function(self, data, ajaxUrl) {
     ImmutableStore.__construct__(self, data);
+    self.getCursor().set('ajaxUrl', ajaxUrl);
   },
 
   insert: function(self, key, value) {
@@ -19,6 +20,10 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
   },
 
   submit: function(self) {
+    var url = self.getCursor().get('ajaxUrl');
+    if (!url) {
+      return alert(self.__('URL undefined!'));
+    }
     if (!self.getCursor().get('email')) {
       return alert(self.__('Empty email address!'));
     }
@@ -36,7 +41,7 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
     }
 
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         'action': 'register_birchpress_account',
         'username': self.getCursor().get('email'),

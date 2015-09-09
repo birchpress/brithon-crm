@@ -9,8 +9,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
 
   __mixins__: [ImmutableStore],
 
-  __construct__: function(self, data) {
+  __construct__: function(self, data, ajaxUrl) {
     ImmutableStore.__construct__(self, data);
+    self.getCursor().set('ajaxUrl', ajaxUrl);
   },
 
   insertCardToken: function(self, token) {
@@ -27,8 +28,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   },
 
   getAllPlans: function(self) {
+    var url = self.getCursor().get('ajaxUrl');
+
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         action: 'birchpress_subscriptions_getplans'
       },
@@ -47,8 +50,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   },
 
   getCustomerInfo: function(self) {
+    var url = self.getCursor().get('ajaxUrl');
+
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         'action': 'birchpress_subscriptions_getcustomer'
       }, function(err, r) {
@@ -67,13 +72,14 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
     var stripeToken = self.getCursor().get('stripe_token');
     var email = self.getCursor().get('email');
     var planId = self.getCursor().get('plan_id');
+    var url = self.getCursor().get('ajaxUrl');
 
     self.getAttr('component').setProps({
       purchaseInProcess: true
     });
 
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         action: 'birchpress_subscriptions_regcustomer',
         email: email,
@@ -87,7 +93,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
         alert(r.id);
 
         self.postApi(
-          bp_urls.ajax_url,
+          url,
           {
             'action': 'birchpress_subscriptions_updateplan',
             'plan_id': planId
@@ -107,6 +113,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
 
   updateCreditCard: function(self) {
     var newCardToken = self.getCursor().get('card_token');
+    var url = self.getCursor().get('ajaxUrl');
 
     if (newCardToken) {
       self.getAttr('component').setProps({
@@ -114,7 +121,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       });
 
       self.postApi(
-        bp_urls.ajax_url,
+        url,
         {
           'action': 'birchpress_subscriptions_updatecard',
           'stripe_token': newCardToken
@@ -136,6 +143,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
 
   updatePlan: function(self) {
     var newPlanId = self.getCursor().get('plan_id');
+    var url = self.getCursor().get('ajaxUrl');
 
     if (newPlanId) {
       self.getAttr('component').setProps({
@@ -143,7 +151,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       });
 
       self.postApi(
-        bp_urls.ajax_url,
+        url,
         {
           'action': 'birchpress_subscriptions_updateplan',
           'plan_id': newPlanId

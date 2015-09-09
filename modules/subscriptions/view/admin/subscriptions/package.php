@@ -13,18 +13,13 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
 			global $birchpress;
 
-			$bp_urls = array(
+			$params = array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'admincp_url' => admin_url(),
-			);
-
-			$birchpress_i18n = array(
-				'textDomain' => 'brithoncrm',
 				'locale' => get_locale(),
+				'textDomain' => 'brithoncrm',
+				'poString' => $brithoncrm->common->view->i18n->get_po_file(),
 			);
-
-			$po_str = $brithoncrm->common->view->i18n->get_po_file();
-			$po_string = array( 'poString' => $po_str );
 
 			if ( is_main_site() ) {
 				$birchpress->view->register_3rd_scripts();
@@ -32,9 +27,7 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 				wp_register_script( 'brithoncrm_subscriptions_apps_admin_subscriptions',
 					$brithoncrm->plugin_url() . '/modules/subscriptions/assets/js/apps/admin/subscriptions/index.bundle.js',
 					array( 'birchpress', 'react-with-addons', 'immutable' ) );
-				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'bp_urls', $bp_urls );
-				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'birchpress_i18n', $birchpress_i18n );
-				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'i18n_subscriptions', $po_string );
+				wp_localize_script( 'brithoncrm_subscriptions_apps_admin_subscriptions', 'brithoncrm_subscriptions_apps_admin_subscriptions', $params );
 
 				add_action( 'wp_ajax_brithoncrm_subscriptions_i18n', array( $ns, 'i18n_string' ) );
 

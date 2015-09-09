@@ -19,12 +19,13 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
     var registrationData = Immutable.fromJS({});
     var i18nData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
+    var globalParams = brithoncrm_registration_apps_front_registration;
 
     if (!registrationAppComponent && registerAppContainer) {
-      var registrationStore = RegistrationStore(registrationData);
+      var registrationStore = RegistrationStore(registrationData, globalParams.ajax_url);
       var i18nStore = internationalizationStore(i18nData);
 
-      i18nStore.loadPO(i18n_registration.poString);
+      i18nStore.loadPO(globalParams.poString);
       registrationAppComponent = React.render(
         React.createElement(registrationApp, {
           store: registrationStore,
