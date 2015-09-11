@@ -18,7 +18,7 @@ birch_ns( 'brithoncrm.subscriptions.view.admin.subscriptions', function( $ns ) {
 				'admincp_url' => admin_url(),
 				'locale' => get_locale(),
 				'textDomain' => 'brithoncrm',
-				'poString' => $brithoncrm->common->view->i18n->get_po_file(),
+				'translations' => $brithoncrm->common->view->i18n->get_translations(),
 			);
 
 			if ( is_main_site() ) {

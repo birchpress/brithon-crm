@@ -13,20 +13,7 @@ birch_ns( 'brithoncrm.common.view.i18n', function( $ns ) {
 			$res = load_plugin_textdomain( 'brithoncrm', false, $lang_dir );
 		};
 
-		$ns->get_po_file = function() use ( $ns, $brithoncrm ) {
-			$path = $brithoncrm->plugin_url() . '/languages';
-			$text_domain = 'brithoncrm';
-			$locale = get_locale();
-			$filename = "$path/$text_domain-$locale.po";
-
-			$response = wp_remote_get( $filename );
-			$content = '';
-			if ( is_array( $response ) ) {
-				$content = $response['body'];
-			} else {
-				$content = $user_id->get_error_message( $user_id->get_error_code() );
-			}
-
-			return $content;
+		$ns->get_translations = function() use ( $ns, $brithoncrm ) {
+			return get_translations_for_domain( 'brithoncrm' );
 		};
 } );

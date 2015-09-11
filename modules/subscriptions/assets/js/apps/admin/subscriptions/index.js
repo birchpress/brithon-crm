@@ -4,7 +4,7 @@ var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
 var SubscriptionStore = require('brithoncrm/subscriptions/stores/SubscriptionStore');
-var internationalizationStore = require('brithoncrm/common/stores/i18nStore');
+var I18nStore = birchpress.stores.I18nStore;
 
 var settingAppComponent;
 
@@ -17,15 +17,14 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions',
   run: function() {
     var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingPanel');
     var settingData = Immutable.fromJS({});
-    var i18nData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     var globalParams = brithoncrm_subscriptions_apps_admin_subscriptions;
 
     if (!settingAppComponent && settingAppContainer) {
       var subscriptionStore = SubscriptionStore(settingData, globalParams.ajax_url);
-      var i18nStore = internationalizationStore(i18nData);
+      var i18nStore = I18nStore();
 
-      i18nStore.loadPO(globalParams.poString);
+      i18nStore.loadTranslations(globalParams.translations);
       settingAppComponent = React.render(
         React.createElement(settingApp, {
           store: subscriptionStore,

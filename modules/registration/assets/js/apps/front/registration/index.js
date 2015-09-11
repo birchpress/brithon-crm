@@ -4,7 +4,7 @@ var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
 var RegistrationStore = require('brithoncrm/registration/stores/RegistrationStore');
-var internationalizationStore = require('brithoncrm/common/stores/i18nStore');
+var I18nStore = birchpress.stores.I18nStore;
 
 var registrationAppComponent = null;
 
@@ -17,15 +17,14 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
   run: function() {
     var registrationApp = require('brithoncrm/registration/components/front/registration/RegistrationPanel');
     var registrationData = Immutable.fromJS({});
-    var i18nData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     var globalParams = brithoncrm_registration_apps_front_registration;
 
     if (!registrationAppComponent && registerAppContainer) {
       var registrationStore = RegistrationStore(registrationData, globalParams.ajax_url);
-      var i18nStore = internationalizationStore(i18nData);
+      var i18nStore = I18nStore();
 
-      i18nStore.loadPO(globalParams.poString);
+      i18nStore.loadTranslations(globalParams.translations);
       registrationAppComponent = React.render(
         React.createElement(registrationApp, {
           store: registrationStore,
@@ -43,7 +42,7 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
       });
 
       i18nStore.setAttr('component', registrationAppComponent);
-      birchpress.addAction('brithoncrm.common.stores.i18nStore.onChangeAfter', function(store, newCursor) {
+      birchpress.addAction('birchpress.stores.i18nStore.onChangeAfter', function(store, newCursor) {
         store.getAttr('component').setProps({
           translationStore: store,
           cursor: newCursor
