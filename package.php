@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/lib/vendor/autoload.php';
+
 birch_ns( 'brithoncrm', function( $ns ) {
 
 		$_ns_data = new stdClass();
