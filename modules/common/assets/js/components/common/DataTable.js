@@ -1,19 +1,10 @@
 'use strict';
 var React = require('react');
-var ImmutableRenderMixin = require('react-immutable-render-mixin');
-var birchpress = require('birchpress');
 var jQuery = require('jquery');
 var $ = jQuery;
-
-var ReactMixinCompositor = birchpress.react.MixinCompositor;
+var birchpress = require('birchpress');
 
 var clazz = birchpress.provide('brithoncrm.common.components.common.DataTable', {
-
-  __mixins__: [ReactMixinCompositor],
-
-  getReactMixins: function(component) {
-    return [ImmutableRenderMixin];
-  },
 
   propTypes: {
     id: React.PropTypes.string

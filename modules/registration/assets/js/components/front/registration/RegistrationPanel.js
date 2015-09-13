@@ -1,19 +1,11 @@
 'use strict';
+
 var React = require('react/addons');
-var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
 var Modal = require('brithoncrm/registration/components/common/Modal');
 
-var ReactMixinCompositor = birchpress.react.MixinCompositor;
-
 var clazz = birchpress.provide('brithoncrm.registration.components.front.registration.RegistrationPanel', {
-
-  __mixins__: [ReactMixinCompositor],
-
-  getReactMixins: function(component) {
-    return [ImmutableRenderMixin];
-  },
 
   handleClick: function(component) {
     component.setState({
@@ -35,7 +27,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
     }
     return (
       <Modal onRequestClose={ component.handleClick }>
-        <h1>Welcome to register!</h1>
+        <h2>{ component.__('Welcome to register') }</h2>
         <form>
           <div className="row">
             <Input
@@ -43,14 +35,14 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="first_name"
                    id=""
                    className="width-1-2"
-                   placeholder="First Name"
+                   placeholder={ component.__('First Name') }
                    onChange={ component.handleChange } />
             <Input
                    type="text"
                    name="last_name"
                    id=""
                    className="width-1-2"
-                   placeholder="Last Name"
+                   placeholder={ component.__('Last Name') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -59,7 +51,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="email"
                    id=""
                    className=""
-                   placeholder="Email address"
+                   placeholder={ component.__('Email address') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -68,7 +60,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="org"
                    id=""
                    className="width-1-1"
-                   placeholder="Organization"
+                   placeholder={ component.__('Organization') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -77,7 +69,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    name="password"
                    id=""
                    className="width-1-1"
-                   placeholder="Password"
+                   placeholder={ component.__('Password') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row align-center">
@@ -85,13 +77,13 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                     type="submit"
                     id=""
                     className=""
-                    text="Submit"
+                    text={ component.__('Submit') }
                     onClick={ component.buttonClick } />
             <Button
                     type="reset"
                     id=""
                     className=""
-                    text="Reset" />
+                    text={ component.__('Reset') } />
           </div>
         </form>
       </Modal>
@@ -105,7 +97,9 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                  href="javascript:;"
                  role="button"
                  key="reglink"
-                 onClick={ component.handleClick }>Click here to register</a>
+                 onClick={ component.handleClick }>
+                { component.__('Register') }
+              </a>
               { registerForm }
             </div>);
   },
@@ -121,7 +115,13 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
 
   submit: function(component) {
     component.props.store.submit();
+  },
+
+  __: function(component, string) {
+    var i18n = component.props.i18n;
+    return i18n.getText(string);
   }
+
 });
 
 module.exports = clazz;

@@ -1,17 +1,9 @@
 'use strict';
+
 var React = require('react');
-var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
-var ReactMixinCompositor = birchpress.react.MixinCompositor;
-
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.SetPlanForm', {
-
-  __mixins__: [ReactMixinCompositor],
-
-  getReactMixins: function(component) {
-    return [ImmutableRenderMixin];
-  },
 
   propTypes: {
     plansFetcher: React.PropTypes.func,
@@ -24,7 +16,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     radioId: React.PropTypes.string,
     radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
-    onSubmitClick: React.PropTypes.func,
+    onSubmitClick: React.PropTypes.func
   },
 
   handleClick: function(component) {
@@ -50,19 +42,36 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     var formRows = [];
     var allPlans = component.props.plansFetcher();
-    if (!component.state.shown) {
+    var inProgressMessage = null;
+
+    if (component.props.inProcess === undefined && !component.state.shown) {
       return <span />;
     }
+
+    if (!allPlans) {
+      return (<p>
+                { component.__('Please wait while plans list is loading...') }
+              </p>);
+    }
+
+    if (component.props.inProcess === undefined) {
+      inProgressMessage = '';
+    } else if (component.props.inProcess === false) {
+      component.props.inProcess = undefined;
+      inProgressMessage = '';
+    } else {
+      inProgressMessage = component.__('Processing...');
+    }
+
     for (var key in allPlans) {
       formRows.push(
         <p>
           <Radio
-                 desc={ allPlans[key].desc }
+                 desc={ component.__(allPlans[key].desc) }
                  value={ allPlans[key].id }
                  name={ component.props.name }
                  id={ component.props.radioId }
                  className={ component.props.radioClassName }
-                 onClick={ component.props.onHide }
                  onChange={ component.props.radioOnChange } />
         </p>
       );
@@ -70,13 +79,16 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     return (
       <div>
-        <h4>Choose plan</h4>
+        <h4>{ component.__('Choose plan') }</h4>
         { formRows }
         <Button
                 type=""
-                text="Update"
-                onClick={ component.props.onSubmitClick } />&nbsp;&nbsp;
-        <a href="javascript:;" onClick={ component.handleClick }>Hide</a>
+                text={ component.__('Update') }
+                onClick={ component.props.onSubmitClick } />&nbsp;
+        { inProgressMessage }&nbsp;
+        <a href="javascript:;" onClick={ component.handleClick }>
+          { component.__('Hide') }
+        </a>
       </div>
       );
   },
@@ -87,14 +99,23 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
     return (
       <div id="set-plan-form">
-        <PlanLabel description={ component.props.currentPlanDesc } metainfo={ component.props.currentPlanMeta } />
+        <PlanLabel
+                   description={ component.props.currentPlanDesc }
+                   metainfo={ component.props.currentPlanMeta }
+                   __={ component.__ } />
         <a
            id="set-plan-link"
            href="javascript:;"
-           onClick={ component.handleClick }>See plans and upgrade or downgrade</a>
+           onClick={ component.handleClick }>
+          { component.__('See plans and upgrade or downgrade') }
+        </a>
         { setPlanForm }
       </div>
       );
+  },
+
+  __: function(component, string) {
+    return component.props.__(string);
   }
 });
 

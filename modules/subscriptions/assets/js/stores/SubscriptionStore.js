@@ -1,4 +1,5 @@
 'use strict';
+
 var Immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
 var birchpress = require('birchpress');
@@ -6,28 +7,40 @@ var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStore', {
 
-  __mixins__: [ImmutableStore],
+  __construct__: function(self, data, ajaxUrl) {
+    var immutableStore = ImmutableStore(Immutable.fromJS(data));
 
-  __construct__: function(self, data) {
-    ImmutableStore.__construct__(self, data);
+    immutableStore.addAction('onChangeAfter', function(newCursor) {
+      self.onChange();
+    });
+    self._ajaxUrl = ajaxUrl;
+    self._immutableStore = immutableStore;
   },
 
+  getCursor: function(self) {
+    return self._immutableStore.getCursor();
+  },
+
+  onChange: function(self) {},
+
   insertCardToken: function(self, token) {
-    self.getCursor().set('card_token', token);
+    self._cardToken = token;
   },
 
   insertSubscription: function(self, planId) {
-    self.getCursor().set('plan_id', planId);
+    self._planId = planId;
   },
 
   insertPurchase: function(self, stripeToken, email) {
-    self.getCursor().set('stripe_token', stripeToken);
-    self.getCursor().set('email', email);
+    self._stripeToken = stripeToken;
+    self._email = email;
   },
 
   getAllPlans: function(self) {
+    var url = self._ajaxUrl;
+
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         action: 'birchpress_subscriptions_getplans'
       },
@@ -36,86 +49,140 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
           alert(err.message);
           return false;
         }
-        return self.getCursor().set('plans', r);
+        self.getCursor().set('plans', r);
       }
     );
   },
 
   getCustomerInfo: function(self) {
+    var url = self._ajaxUrl;
+
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         'action': 'birchpress_subscriptions_getcustomer'
       }, function(err, r) {
         if (err) {
           alert(err.message);
-          return false;
         }
-        return self.getCursor().set('customer', r);
+        self.getCursor().set('customer', r);
       });
   },
 
   registerCustomer: function(self) {
-    var stripeToken = self.getCursor().get('stripe_token');
-    var email = self.getCursor().get('email');
+    var stripeToken = self._stripeToken;
+    var email = self._email;
+    var planId = self._planId;
+    var url = self._ajaxUrl;
+
+    self._component.setProps({
+      purchaseInProcess: true
+    });
+
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         action: 'birchpress_subscriptions_regcustomer',
         email: email,
         stripe_token: stripeToken
       }, function(err, r) {
         if (err) {
-          alert('Purchase failed - ' + err.message);
-          return false;
+          return alert(self.__('Purchase failed - ') + err.message);
         }
         self.getCursor().set('customer_id', r.id);
         // --test--
         alert(r.id);
+
+        self.postApi(
+          url,
+          {
+            'action': 'birchpress_subscriptions_updateplan',
+            'plan_id': planId
+          }, function(err, r) {
+            if (err) {
+              return alert(err.error + ': ' + err.message);
+            }
+            self._component.setProps({
+              purchaseInProcess: undefined,
+              loadOK: false,
+              refresh: true
+            });
+            self.getCustomerInfo();
+          });
       }
     );
   },
 
   updateCreditCard: function(self) {
-    var newCardToken = self.getCursor().get('card_token');
+    var newCardToken = self._cardToken;
+    var url = self._ajaxUrl;
+
     if (newCardToken) {
+      self._component.setProps({
+        cardInProcess: true
+      });
+
       self.postApi(
-        bp_urls.ajax_url,
+        url,
         {
           'action': 'birchpress_subscriptions_updatecard',
           'stripe_token': newCardToken
         }, function(err, r) {
           if (err) {
             alert(err.error + ': ' + err.message);
-            return false;
           } else {
             // --test--
-            alert('Update Complete - Card');
-            return true;
+            self._component.setProps({
+              cardInProcess: undefined,
+              loadOK: false,
+              refresh: true
+            });
+            self.getCustomerInfo();
+            alert(self.__('Update Complete - Card'));
           }
         });
     }
   },
 
   updatePlan: function(self) {
-    var newPlanId = self.getCursor().get('plan_id');
+    var newPlanId = self._planId;
+    var url = self._ajaxUrl;
+
     if (newPlanId) {
+      self._component.setProps({
+        planInProcess: true
+      });
+
       self.postApi(
-        bp_urls.ajax_url,
+        url,
         {
           'action': 'birchpress_subscriptions_updateplan',
           'plan_id': newPlanId
         }, function(err, r) {
           if (err) {
             alert(err.error + ': ' + err.message);
-            return false;
           } else {
-            // --test--
-            alert('Update Complete - Plan')
-            return true;
+            self._component.setProps({
+              planInProcess: undefined,
+              loadOK: false,
+              refresh: true
+            });
+            self.getCustomerInfo();
           }
         });
     }
+  },
+
+  __: function(self, string) {
+    var key = string.replace(/ /g, '_');
+    var result;
+
+    if (subscriptionsTranslations && subscriptionsTranslations[key]) {
+      result = subscriptionsTranslations[key];
+    } else {
+      result = string;
+    }
+    return result;
   },
 
   _ajax: function(self, method, url, data, callback) {
@@ -123,8 +190,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
       type: method,
       url: url,
       data: data,
-      dataType: 'json',
-      async: false
+      dataType: 'json'
     }).done(function(r) {
       if (r && r.error) {
         return callback && callback(r);

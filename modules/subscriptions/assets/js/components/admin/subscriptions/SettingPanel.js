@@ -1,44 +1,57 @@
 'use strict';
-var React = require('react');
-var ImmutableRenderMixin = require('react-immutable-render-mixin');
-var birchpress = require('birchpress');
 
-var ReactMixinCompositor = birchpress.react.MixinCompositor;
+var React = require('react');
+var birchpress = require('birchpress');
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.SettingPanel', {
 
-  __mixins__: [ReactMixinCompositor],
-
-  getReactMixins: function(component) {
-    return [ImmutableRenderMixin];
-  },
-
   render: function(component) {
     var store = component.props.store;
-    store.getCustomerInfo();
-    var customer = store.getCursor().get('customer');
-
     var SetPlanForm = require('brithoncrm/subscriptions/components/admin/subscriptions/SetPlanForm');
     var SetCreditCardForm = require('brithoncrm/subscriptions/components/admin/subscriptions/SetCreditCardForm');
     var TrialForm = require('brithoncrm/subscriptions/components/admin/subscriptions/TrialForm');
+    var customer = store.getCursor().get('customer');
+
+    if (component.props.refresh) {
+      customer = null;
+    }
+
+    component.props.refresh = false;
+
+    if (!customer) {
+      store.getCustomerInfo();
+      return (<div>
+                <p>
+                  { component.__('Please wait. Loading...') }
+                </p>
+              </div>);
+    }
+
     if (customer && customer.plan_id && customer.customer_token && customer.has_card) {
       var expireDate = new Date(customer.expire_date * 1000);
       var _card = 'XXXX-XXXX-XXXX-' + customer.card_last4;
-      var _desc = '$' + customer.plan_charge / 100 + ' / month - ' + customer.plan_max_providers + ' Service provider(s)';
-      var _meta = 'Your next cahrge is $' + customer.plan_charge / 100 + ' on ' + expireDate.toDateString();
+      var _desc = customer.plan_desc;
+      var _meta = component.__('Your next charge is $%s on %s');
+      _meta = _meta.replace(/%s/, customer.plan_charge / 100).replace(/%s/, expireDate.toLocaleString());
+
       return (
         <div>
           <SetPlanForm
                        plansFetcher={ component.retrieveAllPlans }
                        currentPlanDesc={ _desc }
                        currentPlanMeta={ _meta }
-                       name='planChecker'
+                       name="planChecker"
                        radioOnChange={ component.handlePlanChange }
-                       onSubmitClick={ component.submitPlan } />
+                       onSubmitClick={ component.submitPlan }
+                       plansLoadOK={ component.props.plansLoadOK }
+                       inProcess={ component.props.planInProcess }
+                       __={ component.__ } />
           <SetCreditCardForm
                              currentCardNo={ _card }
                              onUpdateCard={ component.updateCardToken }
-                             onSubmitClick={ component.submitCreditCard } />
+                             onSubmitClick={ component.submitCreditCard }
+                             inProcess={ component.props.cardInProcess }
+                             __={ component.__ } />
         </div>
         );
     } else {
@@ -46,10 +59,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
         <div>
           <TrialForm
                      plansFetcher={ component.retrieveAllPlans }
-                     name='planChecker'
+                     name="planChecker"
                      radioOnChange={ component.handlePlanChange }
                      onUpdateCard={ component.updatePurchase }
-                     onSubmitClick={ component.submitPurchase } />
+                     onSubmitClick={ component.submitPurchase }
+                     inProcess={ component.props.purchaseInProcess }
+                     __={ component.__ } />
         </div>
         );
     }
@@ -57,7 +72,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
   retrieveAllPlans: function(component) {
     var store = component.props.store;
-    if (!store.getCursor().get('plans')) {
+    if (!store.getCursor().get('plans')) {
       store.getAllPlans();
     }
     return store.getCursor().get('plans');
@@ -89,15 +104,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
 
   submitPurchase: function(component) {
     var store = component.props.store;
-    var customerRes;
     store.registerCustomer();
-    customerRes = store.getCursor().get('customer_id');
-    if (customerRes) {
-      var isUpdateSucceed = store.updatePlan();
-      if (isUpdateSucceed) {
-        alert('Purchase completed.');
-      }
-    }
+  },
+
+  __: function(component, string) {
+    var i18n = component.props.i18n;
+    return i18n.getText(string);
   }
 });
 

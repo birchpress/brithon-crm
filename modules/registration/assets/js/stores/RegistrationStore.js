@@ -1,4 +1,5 @@
 'use strict';
+
 var birchpress = require('birchpress');
 var Immutable = require('immutable');
 var Cursor = require('immutable/contrib/cursor');
@@ -7,19 +8,50 @@ var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore', {
 
-  __mixins__: [ImmutableStore],
+  __construct__: function(self, data, ajaxUrl) {
+    var immutableStore = ImmutableStore(Immutable.fromJS(data));
 
-  __construct__: function(self, data) {
-    ImmutableStore.__construct__(self, data);
+    immutableStore.addAction('onChangeAfter', function(newCursor) {
+      self.onChange();
+    });
+    self._ajaxUrl = ajaxUrl;
+    self._immutableStore = immutableStore;
   },
+
+  getCursor: function(self) {
+    return self._immutableStore.getCursor();
+  },
+
+  onChange: function(self) {},
 
   insert: function(self, key, value) {
     self.getCursor().set(key, value);
   },
 
   submit: function(self) {
+    var url = self._ajaxUrl;
+
+    if (!url) {
+      return alert(self.__('URL undefined!'));
+    }
+    if (!self.getCursor().get('email')) {
+      return alert(self.__('Empty email address!'));
+    }
+    if (!self.getCursor().get('password')) {
+      return alert(self.__('Empty password!'));
+    }
+    if (!self.getCursor().get('first_name')) {
+      return alert(self.__('First name required!'));
+    }
+    if (!self.getCursor().get('last_name')) {
+      return alert(self.__('Last name required!'));
+    }
+    if (!self.getCursor().get('org')) {
+      return alert(self.__('Organization required!'));
+    }
+
     self.postApi(
-      bp_urls.ajax_url,
+      url,
       {
         'action': 'register_birchpress_account',
         'username': self.getCursor().get('email'),
@@ -31,7 +63,7 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
       },
       function(err, r) {
         if (err) {
-          alert(err.error || err.message);
+          alert(err.message);
         } else {
           location.assign(bp_urls.admincp_url);
         }
@@ -68,6 +100,10 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
       data = {};
     }
     self._ajax('POST', url, data, callback);
+  },
+
+  __: function(self, string) {
+    return self.getAttr('component').__(string);
   }
 });
 
