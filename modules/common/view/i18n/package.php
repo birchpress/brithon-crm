@@ -10,7 +10,7 @@ birch_ns( 'brithoncrm.common.view.i18n', function( $ns ) {
 
 		$ns->load_i18n = function() use ( $ns, $brithoncrm ) {
 			$lang_dir = 'brithon-crm/languages';
-			$res = load_plugin_textdomain( 'brithoncrm', false, $lang_dir );
+			load_plugin_textdomain( 'brithoncrm', false, $lang_dir );
 		};
 
 		$ns->get_translations = function() use ( $ns, $brithoncrm ) {

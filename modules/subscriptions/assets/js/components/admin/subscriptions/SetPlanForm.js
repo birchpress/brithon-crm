@@ -1,18 +1,9 @@
 'use strict';
 
 var React = require('react');
-var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
-var ReactMixinCompositor = birchpress.react.MixinCompositor;
-
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.SetPlanForm', {
-
-  __mixins__: [ReactMixinCompositor],
-
-  getReactMixins: function(component) {
-    return [ImmutableRenderMixin];
-  },
 
   propTypes: {
     plansFetcher: React.PropTypes.func,
@@ -81,7 +72,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                  name={ component.props.name }
                  id={ component.props.radioId }
                  className={ component.props.radioClassName }
-                 onClick={ component.props.onHide }
                  onChange={ component.props.radioOnChange } />
         </p>
       );

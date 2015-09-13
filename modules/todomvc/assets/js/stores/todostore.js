@@ -1,17 +1,24 @@
 'use strict';
 
 var Immutable = require('immutable');
-// never used
-// var Cursor = require('immutable/contrib/cursor');
 var birchpress = require('birchpress');
 var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.todomvc.stores.TodoStore', {
 
-  __mixins__: [ImmutableStore],
-
   __construct__: function(self, todos) {
-    ImmutableStore.__construct__(self, todos);
+    var immutableStore = ImmutableStore(Immutable.fromJS(todos));
+
+    immutableStore.addAction('onChangeAfter', function() {
+      self.onChange();
+    });
+    self._immutableStore = immutableStore;
+  },
+
+  onChange: function(self) {},
+
+  getCursor: function(self) {
+    return self._immutableStore.getCursor();
   },
 
   /**

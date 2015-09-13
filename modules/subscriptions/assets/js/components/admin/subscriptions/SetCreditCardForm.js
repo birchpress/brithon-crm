@@ -1,18 +1,9 @@
 'use strict';
 
 var React = require('react');
-var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
-var ReactMixinCompositor = birchpress.react.MixinCompositor;
-
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.SetCreditCardForm', {
-
-  __mixins__: [ReactMixinCompositor],
-
-  getReactMixins: function(component) {
-    return [ImmutableRenderMixin];
-  },
 
   propTypes: {
     currentCardNo: React.PropTypes.string,

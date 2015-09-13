@@ -27,11 +27,11 @@ var ns = birchpress.provide('brithoncrm.todomvc.apps', {
         }),
         document.getElementById('todoapp')
       );
-      store.setAttr('component', todoAppComponent);
-      birchpress.addAction('brithoncrm.todomvc.stores.TodoStore.onChangeAfter', function(store, newCursor) {
-        store.getAttr('component').setProps({
+      store._component = todoAppComponent;
+      store.addAction('onChangeAfter', function() {
+        todoAppComponent.setProps({
           store: store,
-          cursor: newCursor
+          cursor: store.getCursor()
         });
       });
     }

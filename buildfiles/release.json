@@ -25,7 +25,7 @@
 
         "multisite": {
             "addons": [
-                "subscriptions", "registration"
+                "subscriptions", "registration", "common"
             ]
         }
     }

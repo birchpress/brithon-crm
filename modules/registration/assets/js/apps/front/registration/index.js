@@ -19,34 +19,36 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
     var registrationData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     var globalParams = brithoncrm_registration_apps_front_registration;
+    var registrationStore = RegistrationStore(registrationData, globalParams.ajax_url);
+    var i18nStore = I18nStore();
+
+    function getProps() {
+      return {
+        store: registrationStore,
+        cursor: registrationStore.getCursor(),
+        i18n: i18nStore,
+        i18nCursor: i18nStore.getCursor()
+      };
+    }
 
     if (!registrationAppComponent && registerAppContainer) {
-      var registrationStore = RegistrationStore(registrationData, globalParams.ajax_url);
-      var i18nStore = I18nStore();
-
       i18nStore.loadTranslations(globalParams.translations);
       registrationAppComponent = React.render(
         React.createElement(registrationApp, {
           store: registrationStore,
-          translationStore: i18nStore,
-          cursor: registrationStore.getCursor()
+          i18n: i18nStore,
+          cursor: registrationStore.getCursor(),
+          i18nCursor: i18nStore.getCursor()
         }),
         registerAppContainer
       );
-      registrationStore.setAttr('component', registrationAppComponent);
-      birchpress.addAction('brithoncrm.registration.stores.RegistrationStore.onChangeAfter', function(store, newCursor) {
-        store.getAttr('component').setProps({
-          store: store,
-          cursor: newCursor
-        });
+
+      registrationStore.addAction('onChangeAfter', function() {
+        registrationAppComponent.setProps(getProps());
       });
 
-      i18nStore.setAttr('component', registrationAppComponent);
-      birchpress.addAction('birchpress.stores.i18nStore.onChangeAfter', function(store, newCursor) {
-        store.getAttr('component').setProps({
-          translationStore: store,
-          cursor: newCursor
-        });
+      i18nStore.addAction('onChangeAfter', function() {
+        registrationAppComponent.setProps(getProps());
       });
     }
   }

@@ -8,19 +8,29 @@ var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore', {
 
-  __mixins__: [ImmutableStore],
-
   __construct__: function(self, data, ajaxUrl) {
-    ImmutableStore.__construct__(self, data);
-    self.getCursor().set('ajaxUrl', ajaxUrl);
+    var immutableStore = ImmutableStore(Immutable.fromJS(data));
+
+    immutableStore.addAction('onChangeAfter', function(newCursor) {
+      self.onChange();
+    });
+    self._ajaxUrl = ajaxUrl;
+    self._immutableStore = immutableStore;
   },
+
+  getCursor: function(self) {
+    return self._immutableStore.getCursor();
+  },
+
+  onChange: function(self) {},
 
   insert: function(self, key, value) {
     self.getCursor().set(key, value);
   },
 
   submit: function(self) {
-    var url = self.getCursor().get('ajaxUrl');
+    var url = self._ajaxUrl;
+
     if (!url) {
       return alert(self.__('URL undefined!'));
     }
