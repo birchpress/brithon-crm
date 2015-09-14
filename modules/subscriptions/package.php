@@ -1,7 +1,5 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
-
 birch_ns( 'brithoncrm.subscriptions', function( $ns ) {
 
 		global $brithoncrm;
