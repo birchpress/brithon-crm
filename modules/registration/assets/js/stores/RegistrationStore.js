@@ -14,7 +14,7 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
     immutableStore.addAction('onChangeAfter', function(newCursor) {
       self.onChange();
     });
-    self._ajaxUrl = ajaxUrl;
+    immutableStore.getCursor().set('ajaxUrl', ajaxUrl);
     self._immutableStore = immutableStore;
   },
 
@@ -29,7 +29,7 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
   },
 
   submit: function(self) {
-    var url = self._ajaxUrl;
+    var url = self.getCursor().get('ajaxUrl');
 
     if (!url) {
       return alert(self.__('URL undefined!'));

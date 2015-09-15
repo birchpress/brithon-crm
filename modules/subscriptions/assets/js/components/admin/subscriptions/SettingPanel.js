@@ -1,9 +1,18 @@
 'use strict';
 
 var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
+
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.SettingPanel', {
+
+  __mixins__: [ReactMixinCompositor],
+
+  getReactMixins: function(component) {
+    return [ImmutableRenderMixin];
+  },
 
   render: function(component) {
     var store = component.props.store;
@@ -11,12 +20,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var SetCreditCardForm = require('brithoncrm/subscriptions/components/admin/subscriptions/SetCreditCardForm');
     var TrialForm = require('brithoncrm/subscriptions/components/admin/subscriptions/TrialForm');
     var customer = store.getCursor().get('customer');
+    var status = {
+      refresh: store.getCursor().get('panelRefresh'),
+      planInProcess: store.getCursor().get('plansInProcess'),
+      cardInProcess: store.getCursor().get('cardInProcess'),
+      purchaseInProcess: store.getCursor().get('purchaseInProcess')
+    };
 
-    if (component.props.refresh) {
+    if (status.refresh) {
       customer = null;
     }
 
-    component.props.refresh = false;
+    store.getCursor().set('panelRefresh', false);
 
     if (!customer) {
       store.getCustomerInfo();
@@ -43,14 +58,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                        name="planChecker"
                        radioOnChange={ component.handlePlanChange }
                        onSubmitClick={ component.submitPlan }
-                       plansLoadOK={ component.props.plansLoadOK }
-                       inProcess={ component.props.planInProcess }
+                       inProcess={ status.planInProcess }
                        __={ component.__ } />
           <SetCreditCardForm
                              currentCardNo={ _card }
                              onUpdateCard={ component.updateCardToken }
                              onSubmitClick={ component.submitCreditCard }
-                             inProcess={ component.props.cardInProcess }
+                             inProcess={ status.cardInProcess }
                              __={ component.__ } />
         </div>
         );
@@ -63,7 +77,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                      radioOnChange={ component.handlePlanChange }
                      onUpdateCard={ component.updatePurchase }
                      onSubmitClick={ component.submitPurchase }
-                     inProcess={ component.props.purchaseInProcess }
+                     inProcess={ status.purchaseInProcess }
                      __={ component.__ } />
         </div>
         );
