@@ -14,4 +14,11 @@ class SampleTest extends WP_UnitTestCase {
 		$returnId = $brithoncrm->subscriptions->model->get_max_providers( 5 );
 		$this -> assertEquals( 0, $returnId );
 	}
+	function test_return_result() {
+		global $brithoncrm;
+		$succeed = 'hello';
+		$data = 'bye';
+		$result = $brithoncrm->subscriptions->model->return_result( $succeed , $data );
+		$this->assertEquals( array( 'succeed' => 'hello' , 'data' => 'bye' ), $result );
+	}
 }
