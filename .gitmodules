@@ -1,0 +1,4 @@
+[submodule "birchpress"]
+	path = birchpress
+	url = git@github.com:birchpress/birchpress.git
+	branch = issue-6
