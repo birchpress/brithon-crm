@@ -31,14 +31,14 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 						'message' => $msg,
 					) ) );
 		};
-
+		//tested
 		$ns->return_result = function( $succeed, $data ) use ( $ns ) {
 			return array(
 				'succeed' => $succeed,
 				'data' => $data,
 			);
 		};
-
+		//tested
 		$ns->get_max_providers = function( $plan_id ) use ( $ns ) {
 			if ( $plan_id == 1 ) {
 				return 1;
@@ -52,7 +52,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				return 0;
 			}
 		};
-
+		//test later
 		$ns->retrieve_all_plans = function() use ( $ns ) {
 			$res = $ns->get_all_plans();
 			if ( $res['succeed'] ) {
@@ -61,7 +61,7 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				$ns->return_err_msg( $res['data'] );
 			}
 		};
-
+		//test later
 		$ns->retrieve_customer_info = function() use ( $ns ) {
 			$uid = get_current_user_id();
 			$blog_id = get_current_blog_id();
@@ -106,12 +106,12 @@ birch_ns( 'brithoncrm.subscriptions.model', function( $ns ) {
 				die( json_encode( $result ) );
 			} else {
 				die( json_encode( array(
-					'user_id' => $uid,
-					'blog_id' => $blog_id,
-				) ) );
+							'user_id' => $uid,
+							'blog_id' => $blog_id,
+						) ) );
 			}
 		};
-
+		
 		$ns->register_customer = function() use ( $ns ) {
 			if ( isset( $_POST['stripe_token'] ) ) {
 				$stripe_token = $_POST['stripe_token'];
