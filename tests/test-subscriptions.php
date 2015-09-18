@@ -30,4 +30,9 @@ class SampleTest extends WP_UnitTestCase {
 			echo ' ';
 		}
 	}
+	function test_get_certain_plan() {
+		global $brithoncrm;
+		$result = $brithoncrm->subscriptions->model->get_certain_plan( 4 );
+		$this->assertEquals( $result['id'], 4 );
+	}
 }
