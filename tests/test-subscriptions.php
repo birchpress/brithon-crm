@@ -21,4 +21,13 @@ class SampleTest extends WP_UnitTestCase {
 		$result = $brithoncrm->subscriptions->model->return_result( $succeed , $data );
 		$this->assertEquals( array( 'succeed' => 'hello' , 'data' => 'bye' ), $result );
 	}
+	function test_get_all_plans() {
+		global $brithoncrm;
+		$return_result = $brithoncrm->subscriptions->model->get_all_plans();
+		$return_result = $return_result[ 'data' ];
+		foreach ( $return_result as $item ) {
+			echo $item[ 'id' ];
+			echo ' ';
+		}
+	}
 }
