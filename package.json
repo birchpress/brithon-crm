@@ -8,9 +8,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "birchpress-builder": "git+ssh://git@github.com:birchpress/builder.git#559a9edc",
     "babelify": "^6.2.0",
     "browserify": "^11.0.1",
     "browserify-shim": "^3.8.10",
+    "gulp": "^3.9.0",
     "immutable": "^3.7.4",
     "pkgify": "^1.0.3",
     "pofile": "^1.0.0",
