@@ -19,7 +19,17 @@
         "developer": {
             "addons": [
                 "subscriptions", "todomvc", "registration", "common"
-            ]
+            ],
+            "libs": {
+                "php": [
+                    "index.php",
+                    "composer.json",
+                    "composer.lock",
+                    "vendor/autoload.php",
+                    "vendor/composer",
+                    "vendor/stripe"
+                ]
+            }
         },
 
         "multisite": {
