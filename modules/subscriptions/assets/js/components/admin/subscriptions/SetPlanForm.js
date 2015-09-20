@@ -25,19 +25,13 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     radioId: React.PropTypes.string,
     radioOnClick: React.PropTypes.func,
     radioOnChange: React.PropTypes.func,
-    onSubmitClick: React.PropTypes.func
+    onSubmitClick: React.PropTypes.func,
+    shown: React.PropTypes.bool,
+    handleSwitch: React.PropTypes.func
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
-    });
-  },
-
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
+    return component.props.handleSwitch(component, 'SetPlanForm');
   },
 
   handleChange: function(component, event) {
@@ -53,7 +47,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var allPlans = component.props.plansFetcher();
     var inProgressMessage = null;
 
-    if (component.props.inProcess === undefined && !component.state.shown) {
+    if (component.props.inProcess === undefined && !component.props.shown) {
       return <span />;
     }
 
@@ -73,6 +67,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     }
 
     for (var key in allPlans) {
+      var selected;
+      if (key == component.props.value){
+        selected = true;
+      }
       formRows.push(
         <p>
           <Radio
@@ -80,6 +78,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                  value={ allPlans[key].id }
                  name={ component.props.name }
                  id={ component.props.radioId }
+                 checked={ selected }
                  className={ component.props.radioClassName }
                  onChange={ component.props.radioOnChange } />
         </p>

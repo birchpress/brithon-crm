@@ -59,12 +59,16 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                        radioOnChange={ component.handlePlanChange }
                        onSubmitClick={ component.submitPlan }
                        inProcess={ status.planInProcess }
+                       shown={ store.getCursor().get('SetPlanForm') }
+                       handleSwitch={ component.handleSwitch }
                        __={ component.__ } />
           <SetCreditCardForm
                              currentCardNo={ _card }
                              onUpdateCard={ component.updateCardToken }
                              onSubmitClick={ component.submitCreditCard }
+                             shown={ store.getCursor().get('SetCreditCardForm') }
                              inProcess={ status.cardInProcess }
+                             handleSwitch={ component.handleSwitch }
                              __={ component.__ } />
         </div>
         );
@@ -78,10 +82,18 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                      onUpdateCard={ component.updatePurchase }
                      onSubmitClick={ component.submitPurchase }
                      inProcess={ status.purchaseInProcess }
+                     shown={ store.getCursor().get('TrialForm') }
+                     handleSwitch={ store.handleSwitch }
                      __={ component.__ } />
         </div>
         );
     }
+  },
+
+  handleSwitch: function(component, childComponent, key) {
+    var store = component.props.store;
+    var shown = store.getCursor().get(key);
+    return store.getCursor().set(key, !shown);
   },
 
   retrieveAllPlans: function(component) {
