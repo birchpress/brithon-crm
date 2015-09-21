@@ -59,8 +59,13 @@ birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 
 			if ( ! is_wp_error( $user_id ) ) {
 				add_user_meta( $user_id, 'organization', $org );
-				$site_id = wpmu_create_blog( $ns->get_clean_basedomain(),
-					$subdir, "$first_name $last_name", $user_id );
+				if ( is_multisite() ) {
+					$site_id = wpmu_create_blog( $ns->get_clean_basedomain(),
+						$subdir, "$first_name $last_name", $user_id );
+				} else {
+					$site_id = 1;
+					$subdir = '/wp-admin';
+				}
 
 				if ( ! is_wp_error( $site_id ) ) {
 					$creds = array();
@@ -106,7 +111,7 @@ birch_ns( 'brithoncrm.registration.model', function( $ns ) {
 		};
 
 		$ns->generate_blog_dir = function( $first_name, $last_name ) use ( $ns ) {
-			return '/'.$first_name.'_'.$last_name.rand();
+			return '/'.$first_name.'_'.$last_name.(string) rand();
 		};
 
 	} );

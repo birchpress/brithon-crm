@@ -27,15 +27,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
-    });
-  },
-
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
+    return component.props.handleSwitch(component, 'TrialForm');
   },
 
   handleChange: function(component, event) {
@@ -60,7 +52,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var allPlans = component.props.plansFetcher();
     var inProgressMessage = null;
 
-    if (component.props.inProcess === undefined && !component.state.shown) {
+    if (component.props.inProcess === undefined && !component.props.shown) {
       return <span />;
     }
 
@@ -80,6 +72,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     }
 
     for (var key in allPlans) {
+      var selected;
+      if (key == component.props.value) {
+        selected = true;
+      }
       formRows.push(
         <p>
           <Radio
@@ -87,6 +83,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                  value={ allPlans[key].id }
                  name={ component.props.name }
                  id={ component.props.radioId }
+                 checked={ selected }
                  className={ component.props.radioClassName }
                  onChange={ component.props.radioOnChange } />
         </p>

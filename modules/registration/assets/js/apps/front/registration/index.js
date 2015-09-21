@@ -16,10 +16,13 @@ var ns = birchpress.provide('brithoncrm.registration.apps.front.registration', {
 
   run: function() {
     var registrationApp = require('brithoncrm/registration/components/front/registration/RegistrationPanel');
-    var registrationData = Immutable.fromJS({});
     var registerAppContainer = document.getElementById('registerapp');
     var globalParams = brithoncrm_registration_apps_front_registration;
-    var registrationStore = RegistrationStore(registrationData, globalParams.ajax_url);
+    var registrationData = Immutable.fromJS({
+      ajaxUrl: globalParams.ajax_url,
+      adminUrl: globalParams.admincp_url
+    });
+    var registrationStore = RegistrationStore(registrationData);
     var i18nStore = I18nStore();
 
     function getProps() {
