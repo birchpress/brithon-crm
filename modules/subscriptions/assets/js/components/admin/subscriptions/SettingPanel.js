@@ -21,7 +21,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var TrialForm = require('brithoncrm/subscriptions/components/admin/subscriptions/TrialForm');
     var customer = store.getCursor().get('customer');
     var status = {
-      refresh: store.getCursor().get('panelRefresh'),
       planInProcess: store.getCursor().get('planInProcess'),
       cardInProcess: store.getCursor().get('cardInProcess'),
       purchaseInProcess: store.getCursor().get('purchaseInProcess')

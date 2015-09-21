@@ -98,8 +98,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
               return alert(err.error + ': ' + err.message);
             }
             self.getCursor().set('purchaseInProcess', undefined);
-            self.getCursor().set('panelRefresh', true);
-
             self.getCustomerInfo();
           });
       }

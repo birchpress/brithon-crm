@@ -72,8 +72,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     }
 
     for (var key in allPlans) {
-      var selected;
-      if (key == component.props.value) {
+      var selected = false;
+      if (allPlans[key].id === component.props.value) {
         selected = true;
       }
       formRows.push(
@@ -85,7 +85,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                  id={ component.props.radioId }
                  checked={ selected }
                  className={ component.props.radioClassName }
-                 onChange={ component.props.radioOnChange } />
+                 onChange={ component.handleChange } />
         </p>
       );
     }
