@@ -1,9 +1,18 @@
 'use strict';
 
 var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
+
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.TrialForm', {
+
+  __mixins__: [ReactMixinCompositor],
+
+  getReactMixins: function(component) {
+    return [ImmutableRenderMixin];
+  },
 
   propTypes: {
     plansFetcher: React.PropTypes.func,
@@ -18,15 +27,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
-    });
-  },
-
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
+    return component.props.handleSwitch(component, 'TrialForm');
   },
 
   handleChange: function(component, event) {
@@ -51,7 +52,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var allPlans = component.props.plansFetcher();
     var inProgressMessage = null;
 
-    if (component.props.inProcess === undefined && !component.state.shown) {
+    if (component.props.inProcess === undefined && !component.props.shown) {
       return <span />;
     }
 
@@ -71,6 +72,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     }
 
     for (var key in allPlans) {
+      var selected = false;
+      if (allPlans[key].id === component.props.value) {
+        selected = true;
+      }
       formRows.push(
         <p>
           <Radio
@@ -78,8 +83,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                  value={ allPlans[key].id }
                  name={ component.props.name }
                  id={ component.props.radioId }
+                 checked={ selected }
                  className={ component.props.radioClassName }
-                 onChange={ component.props.radioOnChange } />
+                 onChange={ component.handleChange } />
         </p>
       );
     }
