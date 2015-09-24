@@ -16,9 +16,11 @@ var ns = birchpress.provide('brithoncrm.subscriptions.apps.admin.subscriptions',
 
   run: function() {
     var settingApp = require('brithoncrm/subscriptions/components/admin/subscriptions/SettingPanel');
-    var settingData = Immutable.fromJS({});
     var settingAppContainer = document.getElementById('birchpress-settings');
     var globalParams = brithoncrm_subscriptions_apps_admin_subscriptions;
+    var settingData = Immutable.fromJS({
+      ajaxUrl: globalParams.ajax_url
+    });
     var subscriptionStore = SubscriptionStore(settingData, globalParams.ajax_url);
     var i18nStore = I18nStore();
 

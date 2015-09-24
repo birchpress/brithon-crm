@@ -21,17 +21,10 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     var TrialForm = require('brithoncrm/subscriptions/components/admin/subscriptions/TrialForm');
     var customer = store.getCursor().get('customer');
     var status = {
-      refresh: store.getCursor().get('panelRefresh'),
-      planInProcess: store.getCursor().get('plansInProcess'),
+      planInProcess: store.getCursor().get('planInProcess'),
       cardInProcess: store.getCursor().get('cardInProcess'),
       purchaseInProcess: store.getCursor().get('purchaseInProcess')
     };
-
-    if (status.refresh) {
-      customer = null;
-    }
-
-    store.getCursor().set('panelRefresh', false);
 
     if (!customer) {
       store.getCustomerInfo();
@@ -61,6 +54,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                        inProcess={ status.planInProcess }
                        shown={ store.getCursor().get('SetPlanForm') }
                        handleSwitch={ component.handleSwitch }
+                       value={ store.getCursor().get('planId') }
                        __={ component.__ } />
           <SetCreditCardForm
                              currentCardNo={ _card }
@@ -83,7 +77,8 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
                      onSubmitClick={ component.submitPurchase }
                      inProcess={ status.purchaseInProcess }
                      shown={ store.getCursor().get('TrialForm') }
-                     handleSwitch={ store.handleSwitch }
+                     handleSwitch={ component.handleSwitch }
+                     value={ store.getCursor().get('planId') }
                      __={ component.__ } />
         </div>
         );

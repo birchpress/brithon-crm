@@ -7,13 +7,12 @@ var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStore', {
 
-  __construct__: function(self, data, ajaxUrl) {
+  __construct__: function(self, data) {
     var immutableStore = ImmutableStore(Immutable.fromJS(data));
 
     immutableStore.addAction('onChangeAfter', function(newCursor) {
       self.onChange();
     });
-    immutableStore.getCursor().set('ajaxUrl', ajaxUrl);
     self._immutableStore = immutableStore;
   },
 
@@ -99,8 +98,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
               return alert(err.error + ': ' + err.message);
             }
             self.getCursor().set('purchaseInProcess', undefined);
-            self.getCursor().set('panelRefresh', true);
-
             self.getCustomerInfo();
           });
       }
@@ -112,9 +109,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
     var url = self.getCursor().get('ajaxUrl');
 
     if (newCardToken) {
-      self._component.setProps({
-        cardInProcess: true
-      });
+      self.getCursor().set('cardInProcess', true);
 
       self.postApi(
         url,
