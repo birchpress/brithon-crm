@@ -32,12 +32,12 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			if ( is_wp_error( $user ) ) {
 				$ns->return_error_msg( $user->get_error_message() );
 			}
-			die(json_encode(
+			die(json_encode(array(
 				'id' => $user->ID,
 				'first_name' => $user->first_name,
 				'last_name' => $user->last_name,
 				'organization' => get_user_meta( $user->ID, 'organization', true ),
-			));
+			)));
 		};
 
 		$ns->user_register = function() use ( $ns, $brithoncrm ) {
@@ -46,5 +46,5 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->get_user_info = function() use ( $ns, $brithoncrm ) {
 			return $brithoncrm->subscriptions->model->retrieve_customer_info();
-		}
+		};
 	} );

@@ -11,6 +11,5 @@ birch_ns( 'brithoncrm.sso', function( $ns ) {
         $ns->wp_init = function() use ( $ns, $brithoncrm ) {
             global $birchpress;
 
-       
-
+        }
 } );
