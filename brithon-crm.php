@@ -10,28 +10,21 @@
   License: GPLv2
  */
 
-if ( defined( 'ABSPATH' ) && ! defined( 'BRITHON_CRM' ) ) {
+if ( defined( 'ABSPATH' ) && ! function_exists( 'brithoncrm_main' ) ) {
 
-	define( 'BRITHON_CRM', true );
+	function brithoncrm_main() {
 
-	if ( is_file( dirname( __DIR__ ) . '/birchpress/birchpress.php' ) ) {
-		require_once dirname( __DIR__ ) . '/birchpress/birchpress.php';
-		birchpress_load_common_framework();
-	} else {
-		require_once 'framework/includes/birchpress.inc.php';
-		global $birchpress;
-		$birchpress->set_framework_url( plugins_url() . '/' . basename( __FILE__, '.php' ) . '/framework' );
+		require_once 'lib/vendor/autoload.php';
+		require_once 'loader.php';
+
+		brithoncrm_load( array(
+				'plugin_file_path' => __FILE__,
+				'product_version' => '<%= productVersion %>',
+				'product_name' => '<%= productName %>',
+				'product_code' => '<%= productCode %>',
+				'global_name' => 'brithoncrm'
+			) );
 	}
 
-	require_once 'package.php';
-
-	global $brithoncrm;
-
-	$brithoncrm->set_plugin_file_path( __FILE__ );
-	$brithoncrm->set_product_version( '<%= productVersion %>' );
-	$brithoncrm->set_product_name( '<%= productName %>' );
-	$brithoncrm->set_product_code( '<%= productCode %>' );
-
-	$brithoncrm->run();
-
+	brithoncrm_main();
 }
