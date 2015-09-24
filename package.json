@@ -41,6 +41,7 @@
     }
   },
   "scripts": {
+    "gulp": "gulp",
     "bundle": "./buildfiles/bundle.sh"
   },
   "private": true,
