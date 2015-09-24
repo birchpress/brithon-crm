@@ -25,6 +25,7 @@ builder.taskConfig.coreMainSrcExclusion = [
 
   // the framework
   '!birchpress{,/**}',
+  '!framework{,/**}',
 
   // independent filter rules
   '!modules{,/**}',
