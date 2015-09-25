@@ -4,13 +4,6 @@ var gulp = require('gulp');
 
 var builder = require('birchpress-builder')(gulp);
 
-/*
- Files will not be included. Some files will be processed independently, such
- as `birchpress`, `assets`, `modules` and `lib`. The variable
- `coreMainSrcExclusion` is used to list those file to be excluded. We'd like you
- to list them all for each product, even some of them, such as `package.json`
- are common in different products.
- */
 builder.taskConfig.coreMainSrcExclusion = [
   // internal dev files
   '!package.json',
@@ -35,25 +28,10 @@ builder.taskConfig.coreMainSrcExclusion = [
   '!readme.txt'
 ];
 
-/*
- For wordpress plugins, `screenshots` and `readme.txt` are required to get
- published. However, they will not be included in `free` version.
- */
 builder.taskConfig.corePublishSrc = ['screenshots/**/*', 'readme.txt'];
 
-/*
- You can override the task in builder.
- */
+builder.taskConfig.shouldBrowserify = true;
 
-// gulp.task('default', function() {
-//   console.log('brithon crm');
-// });
+builder.taskConfig.coreBrowserifyDirs = [];
 
-
-/*
- You can also create new tasks.
- */
-
-// gulp.task('hello', function() {
-//   console.log('world!');
-// });
+builder.taskConfig.coreBrowserifyRecursiveDirs = ['modules/**/assets/js/apps/'];
