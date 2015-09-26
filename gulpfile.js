@@ -4,34 +4,42 @@ var gulp = require('gulp');
 
 var builder = require('birchpress-builder')(gulp);
 
-builder.taskConfig.coreMainSrcExclusion = [
-  // internal dev files
-  '!package.json',
-  '!gulpfile.js',
-  '!README.md',
-  '!phpunit.xml',
-  '!node_modules{,/**}',
-  '!test{,/**}',
-  '!__tests__{,/**}',
-  '!buildfiles{,/**}',
-  '!dist{,/**}',
+var productConfig = {
 
-  // the framework
-  '!birchpress{,/**}',
+  coreMainSrcExclusion: [
+    // internal dev files
+    '!package.json',
+    '!gulpfile.js',
+    '!README.md',
+    '!phpunit.xml',
+    '!node_modules{,/**}',
+    '!test{,/**}',
+    '!__tests__{,/**}',
+    '!buildfiles{,/**}',
+    '!dist{,/**}',
 
-  // independent filter rules
-  '!modules{,/**}',
-  '!lib{,/**}',
+    // the framework
+    '!birchpress{,/**}',
 
-  // publish to wordpress
-  '!screenshots{,/**}',
-  '!readme.txt'
-];
+    // independent filter rules
+    '!modules{,/**}',
+    '!lib{,/**}',
 
-builder.taskConfig.corePublishSrc = ['screenshots/**/*', 'readme.txt'];
+    // publish to wordpress
+    '!screenshots{,/**}',
+    '!readme.txt'
+  ],
 
-builder.taskConfig.shouldBrowserify = true;
+  corePublishSrc: [
+    'screenshots/**/*',
+    'readme.txt'
+  ],
 
-builder.taskConfig.coreBrowserifyDirs = [];
+  shouldBrowserify: true,
 
-builder.taskConfig.coreBrowserifyRecursiveDirs = ['modules/**/assets/js/apps/'];
+  coreBrowserifyDirs: [],
+
+  coreBrowserifyRecursiveDirs: ['modules/**/assets/js/apps/']
+};
+
+builder.setProductConfig(productConfig);
