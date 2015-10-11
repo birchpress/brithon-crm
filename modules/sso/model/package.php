@@ -5,7 +5,15 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		global $brithoncrm;
 
 		$ns->init = function() use ( $ns ) {
+			register_activation_hook( __FILE__, array( $ns, 'plugin_init' ) );
 			add_action( 'init', array( $ns, 'wp_init' ) );
+		};
+
+		$ns->plugin_init = function() use ( $ns ) {
+			global $birchpress;
+
+			$datatype = 'product';
+			register_post_type( $datatype );
 		};
 
 		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
@@ -47,4 +55,47 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		$ns->get_user_info = function() use ( $ns, $brithoncrm ) {
 			return $brithoncrm->subscriptions->model->retrieve_customer_info();
 		};
+
+		$ns->add_product = function( $name, $domain = 'brithon.com' ) use ( $ns, $brithoncrm ) {
+			global $birchpress;
+
+			$birchpress->model->save(
+				array(
+					'post_type' => 'product',
+					'post_title' => $name,
+					'_product_name' => $name,
+					'_product_site' => "$name.$domain"
+				)
+			);
+		};
+
+		$ns->get_products = function() use ( $ns ) {
+			global $birchpress;
+
+			$result = array();
+
+			$query = $birchpress->model->query(
+				array(
+					'post_type' => 'product'
+				)
+			);
+			while ( $query->have_posts() ) {
+				$meta = get_post_meta( the_id() );
+				array_push( $result, $meta );
+			}
+
+			return $result;
+		};
+
+		$ns->request = function($url, $method, $data) use ( $ns ) {
+			$context = array(
+				'http' => array(
+					'method' => $method,
+					'header' => '',
+					'content' => $data
+				)
+			);
+			$context = stream_context_create($context);
+			return file_get_contents($url, false, $context);
+		}
 	} );
