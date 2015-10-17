@@ -29,20 +29,19 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		};
 
 		$ns->create_token = function() use ( $ns ) {
-			global $birchpress;
-
 			$rand_str = md5(rand(1, 100000) . time() . rand(1, 10000));
 
-			$birchpress->model->save(
-				array(
-					'post_type' => 'token',
-					'post_title' => $rand_str,
-					'_time' => time()
-				),
-				array(
-					'post_title', '_time'
-				)
-			);
+			$res = wp_insert_post(array(
+				'post_type' => 'token',
+				'post_content' => $rand_str,
+				'post_title' => $rand_str
+			), true);
+
+			if( is_wp_error($res)) {
+				$ns->return_error_msg($res->get_error_message($res->get_error_code()));
+			}
+
+			add_post_meta( $res, 'time', time(), true );
 
 			return $rand_str;
 		};
@@ -51,18 +50,15 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			global $birchpress;
 			$expiration_seconds = 600;
 
-			$query = $birchpress->model->query(
-				array(
-					'post_type' => 'product'
-				),
-				array(
-					'post_title', '_time'
-				)
-			);
+			$query = new WP_Query(array(
+				'post_type' => 'product'
+			));
 
-			for( $query as $id => $item ) {
-				$answer = $item['post_title'];
-				$creation_time = intval( $item['_time'] );
+			while( $query->have_posts() ) {
+				$query->the_post();
+
+				$answer = the_title('', '', false);
+				$creation_time = intval( get_post_meta( the_id(), 'time', true ) );
 				$now = time();
 
 				if($answer === $token) {
@@ -73,7 +69,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 						return true;
 					}
 					// Destroy the token after validation
-					$birchpress->db->delete( $id );
+					wp_delete_post( the_id(), true );
 				}
 			}
 
@@ -113,17 +109,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		$ns->add_product = function( $name, $domain = 'brithon.com' ) use ( $ns, $brithoncrm ) {
 			global $birchpress;
 
-			return $birchpress->model->save(
-				array(
+			return wp_insert_post(array(
 					'post_type' => 'product',
 					'post_title' => $name,
-					'_product_name' => $name,
-					'_product_site' => "$name.$domain"
-				),
-				array(
-					'post_title', '_product_name', '_product_site'
-				)
-			);
+					'post_content' => "$name.$domain"
+			), true);
 		};
 
 		$ns->get_products = function() use ( $ns ) {
@@ -131,20 +121,16 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 			$result = array();
 
-			$query = $birchpress->model->query(
-				array(
-					'post_type' => 'product'
-				),
-				array(
-					'post_title', '_product_name', '_product_site'
-				)
-			);
+			$query = new WP_Query(array(
+				'post_type' => 'product'
+			));
 			
-			for( $query as $id => $item ) {
+			while($query->have_posts()) {
+				$query->the_post();
 				array_push( $result, array(
-					'id' => $id,
-					'name' => $item['post_title'],
-					'site' => $item['_product_site']
+					'id' => the_id(),
+					'name' => the_title('', '', false),
+					'site' => the_content()
 				) );
 			}
 
@@ -154,25 +140,16 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		$ns->edit_product = function( $id, $name, $domain = 'brithon.com' ) use ( $ns ) {
 			global $birchpress;
 
-			$query = $birchpress->model->query(
-				array(
-					'post_type' => 'product'
-				),
-				array(
-					'post_title', '_product_name', '_product_site'
-				)
-			);
-
-			$query[$id]['post_title'] = $name;
-			$query[$id]['_product_name'] = $name;
-			$query[$id]['_product_site'] = "$name.$domain'";
-
-			return $birchpress->model->save($query[$id]);
+			return wp_insert_post(array(
+				'ID' => $id,
+				'post_type' => 'product',
+				'post_title' => $name,
+				'post_content' => "$name.$domain"
+			), true);
 		};
 
 		$ns->delete_product = function( $id ) use ( $ns ) {
-			// In fact will be moved to trash
-			return wp_delete_post( $id, false );
+			return wp_delete_post( $id, true );
 		}
 
 		$ns->request = function($url, $method, $data) use ( $ns ) {
@@ -186,4 +163,10 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$context = stream_context_create($context);
 			return file_get_contents($url, false, $context);
 		};
+
+		$ns->return_error_msg = function( $msg ) use ( $ns ) {
+			die(json_encode(array(
+				'message' => $msg
+			)));
+		}
 	} );
