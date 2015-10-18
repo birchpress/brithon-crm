@@ -24,7 +24,6 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			if ( is_main_site() ) {
 				add_action( 'wp_ajax_nopriv_brithoncrm_login', array( $ns, 'user_login' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_register', array( $ns, 'user_register' ) );
-				add_action( 'wp_ajax_brithoncrm_get_user_info', array( $ns, 'get_user_info' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_validate_token', array( $ns, 'validate_token' ) );
@@ -55,7 +54,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$expiration_seconds = 600;
 
 			$query = new WP_Query( array(
-					'post_type' => 'product'
+					'post_type' => 'token'
 				) );
 
 			while ( $query->have_posts() ) {
@@ -90,6 +89,16 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		};
 
 		$ns->user_login = function() use ( $ns ) {
+			if ( !isset( $_POST['username'] ) ) {
+				$ns->return_error_msg( __( 'Empty username!', 'brithoncrm' ) );
+			}
+			if ( !isset( $_POST['password'] ) ) {
+				$ns->return_error_msg( __( 'Empty password!', 'brithoncrm' ) );
+			}
+			if ( !isset( $_POST['remember'] ) ) {
+				$_POST['remebmer'] = false;
+			}
+
 			$username = $_POST['username'];
 			$password = $_POST['password'];
 			$remember = $_POST['remebmer'];
