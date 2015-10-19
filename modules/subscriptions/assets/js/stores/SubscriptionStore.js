@@ -7,13 +7,12 @@ var ImmutableStore = birchpress.stores.ImmutableStore;
 
 var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStore', {
 
-  __construct__: function(self, data, ajaxUrl) {
+  __construct__: function(self, data) {
     var immutableStore = ImmutableStore(Immutable.fromJS(data));
 
     immutableStore.addAction('onChangeAfter', function(newCursor) {
       self.onChange();
     });
-    self._ajaxUrl = ajaxUrl;
     self._immutableStore = immutableStore;
   },
 
@@ -24,20 +23,20 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   onChange: function(self) {},
 
   insertCardToken: function(self, token) {
-    self._cardToken = token;
+    self.getCursor().set('cardToken', token);
   },
 
   insertSubscription: function(self, planId) {
-    self._planId = planId;
+    self.getCursor().set('planId', planId);
   },
 
   insertPurchase: function(self, stripeToken, email) {
-    self._stripeToken = stripeToken;
-    self._email = email;
+    self.getCursor().set('stripeToken', stripeToken);
+    self.getCursor().set('email', email);
   },
 
   getAllPlans: function(self) {
-    var url = self._ajaxUrl;
+    var url = self.getCursor().get('ajaxUrl');
 
     self.postApi(
       url,
@@ -55,7 +54,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   },
 
   getCustomerInfo: function(self) {
-    var url = self._ajaxUrl;
+    var url = self.getCursor().get('ajaxUrl');
 
     self.postApi(
       url,
@@ -70,14 +69,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   },
 
   registerCustomer: function(self) {
-    var stripeToken = self._stripeToken;
-    var email = self._email;
-    var planId = self._planId;
-    var url = self._ajaxUrl;
+    var stripeToken = self.getCursor().get('stripeToken');
+    var email = self.getCursor().get('email');
+    var planId = self.getCursor().get('planId');
+    var url = self.getCursor().get('ajaxUrl');
 
-    self._component.setProps({
-      purchaseInProcess: true
-    });
+    self.getCursor().set('purchaseInProcess', true);
 
     self.postApi(
       url,
@@ -90,8 +87,6 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
           return alert(self.__('Purchase failed - ') + err.message);
         }
         self.getCursor().set('customer_id', r.id);
-        // --test--
-        alert(r.id);
 
         self.postApi(
           url,
@@ -102,11 +97,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
             if (err) {
               return alert(err.error + ': ' + err.message);
             }
-            self._component.setProps({
-              purchaseInProcess: undefined,
-              loadOK: false,
-              refresh: true
-            });
+            self.getCursor().set('purchaseInProcess', undefined);
             self.getCustomerInfo();
           });
       }
@@ -114,13 +105,11 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
   },
 
   updateCreditCard: function(self) {
-    var newCardToken = self._cardToken;
-    var url = self._ajaxUrl;
+    var newCardToken = self.getCursor().get('cardToken');
+    var url = self.getCursor().get('ajaxUrl');
 
     if (newCardToken) {
-      self._component.setProps({
-        cardInProcess: true
-      });
+      self.getCursor().set('cardInProcess', true);
 
       self.postApi(
         url,
@@ -131,27 +120,21 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
           if (err) {
             alert(err.error + ': ' + err.message);
           } else {
-            // --test--
-            self._component.setProps({
-              cardInProcess: undefined,
-              loadOK: false,
-              refresh: true
-            });
+            self.getCursor().set('cardInProcess', undefined);
+            self.getCursor().set('panelRefresh', true);
+
             self.getCustomerInfo();
-            alert(self.__('Update Complete - Card'));
           }
         });
     }
   },
 
   updatePlan: function(self) {
-    var newPlanId = self._planId;
-    var url = self._ajaxUrl;
+    var newPlanId = self.getCursor().get('planId');
+    var url = self.getCursor().get('ajaxUrl');
 
     if (newPlanId) {
-      self._component.setProps({
-        planInProcess: true
-      });
+      self.getCursor().set('planInProcess', true);
 
       self.postApi(
         url,
@@ -162,11 +145,9 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.stores.SubscriptionStor
           if (err) {
             alert(err.error + ': ' + err.message);
           } else {
-            self._component.setProps({
-              planInProcess: undefined,
-              loadOK: false,
-              refresh: true
-            });
+            self.getCursor().set('planInProcess', undefined);
+            self.getCursor().set('panelRefresh', true);
+
             self.getCustomerInfo();
           }
         });

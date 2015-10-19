@@ -8,14 +8,15 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "babelify": "^6.2.0",
-    "browserify": "^11.0.1",
-    "browserify-shim": "^3.8.10",
-    "immutable": "^3.7.4",
-    "pkgify": "^1.0.3",
-    "pofile": "^1.0.0",
-    "react": "^0.13.3",
-    "react-immutable-render-mixin": "^0.8.1"
+    "birchpress-builder": "https://github.com/birchpress/builder.git#1.2.0",
+    "babelify": "6.3.0",
+    "browserify-shim": "3.8.10",
+    "gulp": "3.9.0",
+    "immutable": "3.7.5",
+    "pkgify": "1.0.3",
+    "pofile": "1.0.0",
+    "react": "0.13.3",
+    "react-immutable-render-mixin": "0.8.1"
   },
   "browserify": {
     "transform": [
@@ -39,6 +40,7 @@
     }
   },
   "scripts": {
+    "gulp": "gulp",
     "bundle": "./buildfiles/bundle.sh"
   },
   "private": true,

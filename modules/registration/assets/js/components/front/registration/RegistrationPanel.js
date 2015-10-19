@@ -1,11 +1,20 @@
 'use strict';
 
 var React = require('react/addons');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
+
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
 
 var Modal = require('brithoncrm/registration/components/common/Modal');
 
 var clazz = birchpress.provide('brithoncrm.registration.components.front.registration.RegistrationPanel', {
+
+  __mixins__: [ReactMixinCompositor],
+
+  getReactMixins: function(component) {
+    return [ImmutableRenderMixin];
+  },
 
   handleClick: function(component) {
     component.setState({

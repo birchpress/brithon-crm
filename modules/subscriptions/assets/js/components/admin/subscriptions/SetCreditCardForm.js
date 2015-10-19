@@ -1,9 +1,18 @@
 'use strict';
 
 var React = require('react');
+var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
+var ReactMixinCompositor = birchpress.react.MixinCompositor;
+
 var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscriptions.SetCreditCardForm', {
+
+  __mixins__: [ReactMixinCompositor],
+
+  getReactMixins: function(component) {
+    return [ImmutableRenderMixin];
+  },
 
   propTypes: {
     currentCardNo: React.PropTypes.string,
@@ -11,19 +20,12 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     name: React.PropTypes.string,
     className: React.PropTypes.string,
     id: React.PropTypes.string,
-    shown: React.PropTypes.bool
+    shown: React.PropTypes.bool,
+    handleSwitch: React.PropTypes.func
   },
 
   handleClick: function(component) {
-    component.setState({
-      shown: !component.state.shown
-    });
-  },
-
-  getInitialState: function(component) {
-    return {
-      shown: false
-    };
+    return component.props.handleSwitch(component, 'SetCreditCardForm');
   },
 
   renderLayer: function(component) {
@@ -37,7 +39,7 @@ var clazz = birchpress.provide('brithoncrm.subscriptions.components.admin.subscr
     });
     var inProgressMessage;
 
-    if (component.props.inProcess === undefined && !component.state.shown) {
+    if (component.props.inProcess === undefined && !component.props.shown) {
       return <span />;
     }
 
