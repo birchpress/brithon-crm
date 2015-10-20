@@ -37,7 +37,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$res = wp_insert_post( array(
 					'post_type' => 'token',
 					'post_content' => $rand_str,
-					'post_title' => $rand_str
+					'post_title' => $rand_str,
 				), true );
 
 			if ( is_wp_error( $res ) ) {
@@ -54,7 +54,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$expiration_seconds = 600;
 
 			$query = new WP_Query( array(
-					'post_type' => 'token'
+					'post_type' => 'token',
 				) );
 
 			while ( $query->have_posts() ) {
@@ -80,10 +80,10 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		};
 
 		$ns->validate_token = function() use ( $ns ) {
-			$token = $_POST['token']
+			$token = $_POST['token'];
 
 			$result = array(
-				'status' => $ns->check_token( $token )
+				'status' => $ns->check_token( $token ),
 			);
 			die( json_encode( $result ) );
 		};
@@ -118,17 +118,17 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->call_products_signon = function( $creds, $protocol = 'http://' ) use ( $ns ) {
 			$products = $ns->get_products();
-			for ( $products as $id => $item ) {
+			foreach ( $products as $id => $item ) {
 				$creds = array_merge( $creds, array(
 						'token' => $ns->create_token(),
-						'action' => 'brithoncrmx_login'
+						'action' => 'brithoncrmx_login',
 					) );
 				$ns->request( $protocol.$item['site'].'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
 			// Will return the Referer address to front end.
-			die( json_encode( 'referer' => $_SERVER['HTTP_REFERER'] ) );
-		}
+			die( json_encode( array( 'referer' => $_SERVER['HTTP_REFERER'] ) ) );
+		};
 
 		$ns->user_register = function() use ( $ns, $brithoncrm ) {
 			$username = $_POST['username'];
@@ -185,15 +185,15 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->call_products_register = function( $creds, $protocol = 'http://' ) use ( $ns ) {
 			$products = $ns->get_products();
-			for ( $prodcuts as $id => $item ) {
+			foreach ( $prodcuts as $id => $item ) {
 				$creds = array_merge( $creds, array(
 						'token' => $ns->create_token,
-						'action' => 'brithoncrmx_register'
+						'action' => 'brithoncrmx_register',
 					) );
 				$ns->request( $protocol.$item['site'].'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
-			die( json_encode( 'referer' => $_SERVER['HTTP_REFERER'] ) );
+			die( json_encode( array( 'referer' => $_SERVER['HTTP_REFERER'] ) ) );
 		};
 
 
@@ -203,7 +203,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			return wp_insert_post( array(
 					'post_type' => 'product',
 					'post_title' => $name,
-					'post_content' => "$name.$domain"
+					'post_content' => "$name.$domain",
 				), true );
 		};
 
@@ -213,7 +213,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$result = array();
 
 			$query = new WP_Query( array(
-					'post_type' => 'product'
+					'post_type' => 'product',
 				) );
 
 			while ( $query->have_posts() ) {
@@ -221,34 +221,34 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				array_push( $result, array(
 						'id' => the_id(),
 						'name' => the_title( '', '', false ),
-						'site' => the_content()
+						'site' => the_content(),
 					) );
 			}
 
 			return $result;
 		};
 
-		$ns->edit_product = function( $id, $name, $domain = 'brithon.com' ) use ( $ns ) {
+		$ns->edit_product = function( $id, $name, $domain = 'localhost:8080' ) use ( $ns ) {
 			global $birchpress;
 
 			return wp_insert_post( array(
 					'ID' => $id,
 					'post_type' => 'product',
 					'post_title' => $name,
-					'post_content' => "$name.$domain"
+					'post_content' => "$name.$domain",
 				), true );
 		};
 
 		$ns->delete_product = function( $id ) use ( $ns ) {
 			return wp_delete_post( $id, true );
-		}
+		};
 
 		$ns->request = function( $url, $method, $data ) use ( $ns ) {
 			$context = array(
 				'http' => array(
 					'method' => $method,
 					'header' => '',
-					'content' => $data
+					'content' => $data,
 				)
 			);
 			$context = stream_context_create( $context );
@@ -257,13 +257,13 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->return_error_msg = function( $msg ) use ( $ns ) {
 			die( json_encode( array(
-						'message' => $msg
+						'message' => $msg,
 					) ) );
-		}
+		};
 
 		$ns->remote_error_handler = function( $msg ) use ( $ns ) {
 			die( json_encode( array(
-						'message' => $_POST['message']
+						'message' => $_POST['message'],
 					) ) );
-		}
+		};
 	} );
