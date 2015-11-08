@@ -261,7 +261,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 					) ) );
 		};
 
-		$ns->remote_error_handler = function( $msg ) use ( $ns ) {
+		$ns->remote_error_handler = function() use ( $ns ) {
 			die( json_encode( array(
 						'message' => $_POST['message'],
 					) ) );
