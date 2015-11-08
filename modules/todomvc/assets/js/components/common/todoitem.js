@@ -6,7 +6,7 @@ var ReactPropTypes = React.PropTypes;
 // var Immutable = require('immutable');
 // var Cursor = require('immutable/contrib/cursor');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
-var cx = require('react/lib/cx');
+var classNames = require('classnames');
 var birchpress = require('birchpress');
 
 var ReactMixinCompositor = birchpress.react.MixinCompositor;
@@ -42,7 +42,7 @@ var clazz = birchpress.provide('brithoncrm.todomvc.components.TodoItem', {
     }
 
     return (
-      <li className={ cx({ 'completed': todo.complete, 'editing': component.state.isEditing }) } key={ todo.id }>
+      <li className={ classNames({ 'completed': todo.complete, 'editing': component.state.isEditing }) } key={ todo.id }>
         <div className="view">
           <input
                  className="toggle"
