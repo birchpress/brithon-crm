@@ -31,61 +31,67 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			}
 		};
 
-		$ns->create_token = function() use ( $ns ) {
-			$rand_str = md5( rand( 1, 100000 ) . time() . rand( 1, 10000 ) );
+		$ns->get_hkey = function() use ( $ns ) {
+			$hkey = '_sEcR37_-t0KEn';
+			return $hkey;
+		};
 
-			$res = wp_insert_post( array(
-					'post_type' => 'token',
-					'post_content' => $rand_str,
-					'post_title' => $rand_str,
-				), true );
-
-			if ( is_wp_error( $res ) ) {
-				$ns->return_error_msg( $res->get_error_message( $res->get_error_code() ) );
-			}
-
-			add_post_meta( $res, 'time', time(), true );
+		$ns->create_token = function( $product_name, $timestamp ) use ( $ns ) {
+			$hkey = $ns->get_hkey();
+			$str = $product_name . '-' . $timestamp;
+			$rand_str = hash_hmac( 'sha256', $str, $hkey );
 
 			return $rand_str;
 		};
 
-		$ns->check_token = function( $token ) use ( $ns ) {
-			global $birchpress;
-			$expiration_seconds = 600;
+		$ns->encrypt = function( $string, $key ) use ( $ns ) {
+			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb' );
+			$iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_DEV_RANDOM );
+			$key_size = mcrypt_enc_get_key_size( $td );
+			$key = substr(md5($key), 0, $key_size);
 
-			$query = new WP_Query( array(
-					'post_type' => 'token',
-				) );
+			mcrypt_generic_init($td, $key, $iv);
 
-			while ( $query->have_posts() ) {
-				$query->the_post();
+			$encrypted = mcrypt_generic($td, $string);
+			$result = base64_encode( $encrypted );
 
-				$answer = the_title( '', '', false );
-				$creation_time = intval( get_post_meta( the_id(), 'time', true ) );
-				$now = time();
+			mcrypt_generic_deinit( $td );
+			mcrypt_module_close( $td );
+			return $result;
+		};
 
-				if ( $answer === $token ) {
-					// Disallow expired token
-					if ( $now > $creation_time + $expiration_seconds ) {
-						return false;
-					} else {
-						return true;
-					}
-					// Destroy the token after validation
-					wp_delete_post( the_id(), true );
-				}
+		$ns->decrypt = function( $string, $key ) use ( $ns ) {
+			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb' );
+			$iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_DEV_RANDOM );
+			$key_size = mcrypt_enc_get_key_size( $td );
+			$key = substr(md5($key), 0, $key_size);
+
+			mcrypt_generic_init($td, $key, $iv);
+
+			$cipher = base64_decode($string);
+			$result = mdecrypt_generic( $td, $cipher );
+
+			mcrypt_generic_deinit( $td );
+			mcrypt_module_close( $td );
+
+			return $result;
+		};
+
+		$ns->check_token = function( $token, $product_name, $timestamp ) use ( $ns ) {
+			$expiration_seconds = 60;
+			$hkey = $ns->get_hkey();
+
+			$timestamp = intval( $timestamp );
+
+			if ( $timestamp + $expiration_seconds < time() ) {
+				return false;
+			}
+
+			if ( $token === hash_hmac( 'sha256', "$product_name-$timestamp", $hkey ) ) {
+				return true;
 			}
 
 			return false;
-		};
-
-		$ns->validate_token = function() use ( $ns ) {
-			$token = $_POST['token'];
-
-			$result = array(
-				'status' => $ns->check_token( $token ),
-			);
-			die( json_encode( $result ) );
 		};
 
 		$ns->user_login = function() use ( $ns ) {
@@ -116,14 +122,19 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$ns->call_products_signon( $creds );
 		};
 
-		$ns->call_products_signon = function( $creds, $protocol = 'http://' ) use ( $ns ) {
+		$ns->call_products_signon = function( $creds ) use ( $ns ) {
 			$products = $ns->get_products();
 			foreach ( $products as $id => $item ) {
-				$creds = array_merge( $creds, array(
-						'token' => $ns->create_token(),
+				$ts = time();
+				$product_name = $item['name'];
+				$token = $ns->create_token( $product_name, $ts );
+				$data = array(
+						'creds' => $ns->encrypt(json_encode($creds), $token),
+						'token' => $token,
+						'time' => $ts,
 						'action' => 'brithoncrmx_login',
-					) );
-				$ns->request( $protocol.$item['site'].'/wp-admin/admin-ajax.php', 'POST', $creds );
+					);
+				$ns->request( $ns->get_product_url($product_name).'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
 			// Will return the Referer address to front end.
@@ -183,27 +194,32 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			}
 		};
 
-		$ns->call_products_register = function( $creds, $protocol = 'http://' ) use ( $ns ) {
+		$ns->call_products_register = function( $creds ) use ( $ns ) {
 			$products = $ns->get_products();
 			foreach ( $prodcuts as $id => $item ) {
-				$creds = array_merge( $creds, array(
-						'token' => $ns->create_token,
+				$product_name = $item['name'];
+				$ts = time();
+				$token = $ns->create_token( $product_name, $ts );
+				$creds = array(
+						'creds' => $ns->encrypt( json_encode($creds), $token ),
+						'token' => $token,
+						'time' => $ts,
 						'action' => 'brithoncrmx_register',
-					) );
-				$ns->request( $protocol.$item['site'].'/wp-admin/admin-ajax.php', 'POST', $creds );
+					);
+				$ns->request( $ns->get_product_url($product_name).'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
 			die( json_encode( array( 'referer' => $_SERVER['HTTP_REFERER'] ) ) );
 		};
 
 
-		$ns->add_product = function( $name, $domain = 'brithon.com' ) use ( $ns, $brithoncrm ) {
+		$ns->add_product = function( $name, $description ) use ( $ns, $brithoncrm ) {
 			global $birchpress;
 
 			return wp_insert_post( array(
 					'post_type' => 'product',
 					'post_title' => $name,
-					'post_content' => "$name.$domain",
+					'post_content' => $description,
 				), true );
 		};
 
@@ -221,26 +237,65 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				array_push( $result, array(
 						'id' => the_id(),
 						'name' => the_title( '', '', false ),
-						'site' => the_content(),
+						'description' => the_content()
 					) );
 			}
 
 			return $result;
 		};
 
-		$ns->edit_product = function( $id, $name, $domain = 'localhost:8080' ) use ( $ns ) {
+		$ns->edit_product = function( $id, $name, $description ) use ( $ns ) {
 			global $birchpress;
 
 			return wp_insert_post( array(
 					'ID' => $id,
 					'post_type' => 'product',
 					'post_title' => $name,
-					'post_content' => "$name.$domain",
+					'post_content' => $description,
 				), true );
 		};
 
 		$ns->delete_product = function( $id ) use ( $ns ) {
 			return wp_delete_post( $id, true );
+		};
+
+		$ns->get_product_url = function( $product_name ) use ( $ns ) {
+			$host = $_SERVER['HTTP_HOST'];
+			$components = explode('.', $host, 2);
+			$subdomains = explode('-', $components[0]);
+			$domain = $components[1];
+			$env = '';
+			$result = '';
+
+			if( count( $subdomains ) < 2 ) {
+				$env = 'PROD';
+			} else {
+				if ( $subdomains[1] === 'dev' ) {
+					$env = 'DEV';
+				}
+				if ( $subdomains[1] === 'local' ) {
+					$env = 'LOCAL';
+				}
+			}
+
+			switch( $env ) {
+				case 'PROD':
+				$result = "https://$product_name.$domain";
+				break;
+
+				case 'DEV':
+				$result = "https://$product_name-dev.$domain";
+
+				case 'LOCAL':
+				$result = "http://$product_name-local.$domain";
+				break;
+
+				default:
+				$result = "https://$product_name.$domain";
+				break;
+			}
+
+			return $result;
 		};
 
 		$ns->request = function( $url, $method, $data ) use ( $ns ) {
