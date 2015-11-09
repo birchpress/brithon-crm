@@ -48,11 +48,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb' );
 			$iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_DEV_RANDOM );
 			$key_size = mcrypt_enc_get_key_size( $td );
-			$key = substr(md5($key), 0, $key_size);
+			$key = substr( md5( $key ), 0, $key_size );
 
-			mcrypt_generic_init($td, $key, $iv);
+			mcrypt_generic_init( $td, $key, $iv );
 
-			$encrypted = mcrypt_generic($td, $string);
+			$encrypted = mcrypt_generic( $td, $string );
 			$result = base64_encode( $encrypted );
 
 			mcrypt_generic_deinit( $td );
@@ -64,11 +64,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb' );
 			$iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_DEV_RANDOM );
 			$key_size = mcrypt_enc_get_key_size( $td );
-			$key = substr(md5($key), 0, $key_size);
+			$key = substr( md5( $key ), 0, $key_size );
 
-			mcrypt_generic_init($td, $key, $iv);
+			mcrypt_generic_init( $td, $key, $iv );
 
-			$cipher = base64_decode($string);
+			$cipher = base64_decode( $string );
 			$result = mdecrypt_generic( $td, $cipher );
 
 			mcrypt_generic_deinit( $td );
@@ -129,12 +129,12 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				$product_name = $item['name'];
 				$token = $ns->create_token( $product_name, $ts );
 				$data = array(
-						'creds' => $ns->encrypt(json_encode($creds), $token),
-						'token' => $token,
-						'time' => $ts,
-						'action' => 'brithoncrmx_login',
-					);
-				$ns->request( $ns->get_product_url($product_name).'/wp-admin/admin-ajax.php', 'POST', $creds );
+					'creds' => $ns->encrypt( json_encode( $creds ), $token ),
+					'token' => $token,
+					'time' => $ts,
+					'action' => 'brithoncrmx_login',
+				);
+				$ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
 			// Will return the Referer address to front end.
@@ -201,12 +201,12 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				$ts = time();
 				$token = $ns->create_token( $product_name, $ts );
 				$creds = array(
-						'creds' => $ns->encrypt( json_encode($creds), $token ),
-						'token' => $token,
-						'time' => $ts,
-						'action' => 'brithoncrmx_register',
-					);
-				$ns->request( $ns->get_product_url($product_name).'/wp-admin/admin-ajax.php', 'POST', $creds );
+					'creds' => $ns->encrypt( json_encode( $creds ), $token ),
+					'token' => $token,
+					'time' => $ts,
+					'action' => 'brithoncrmx_register',
+				);
+				$ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
 			die( json_encode( array( 'referer' => $_SERVER['HTTP_REFERER'] ) ) );
@@ -261,13 +261,13 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->get_product_url = function( $product_name ) use ( $ns ) {
 			$host = $_SERVER['HTTP_HOST'];
-			$components = explode('.', $host, 2);
-			$subdomains = explode('-', $components[0]);
+			$components = explode( '.', $host, 2 );
+			$subdomains = explode( '-', $components[0] );
 			$domain = $components[1];
 			$env = '';
 			$result = '';
 
-			if( count( $subdomains ) < 2 ) {
+			if ( count( $subdomains ) < 2 ) {
 				$env = 'PROD';
 			} else {
 				if ( $subdomains[1] === 'dev' ) {
@@ -278,19 +278,19 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				}
 			}
 
-			switch( $env ) {
-				case 'PROD':
+			switch ( $env ) {
+			case 'PROD':
 				$result = "https://$product_name.$domain";
 				break;
 
-				case 'DEV':
+			case 'DEV':
 				$result = "https://$product_name-dev.$domain";
 
-				case 'LOCAL':
+			case 'LOCAL':
 				$result = "http://$product_name-local.$domain";
 				break;
 
-				default:
+			default:
 				$result = "https://$product_name.$domain";
 				break;
 			}
