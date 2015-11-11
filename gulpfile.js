@@ -1,10 +1,10 @@
 'use strict';
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 
-var builder = require('birchpress-builder')(gulp);
+const builder = require('birchpress-builder')(gulp);
 
-var productConfig = {
+const productConfig = {
 
   coreMainSrcExclusion: [
     // internal dev files
