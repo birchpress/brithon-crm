@@ -27,7 +27,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				add_action( 'wp_ajax_nopriv_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_validate_token', array( $ns, 'validate_token' ) );
-				add_action( 'wp_ajax_brithoncrm_validate_token', array( $ns, 'validate_token' ) );
+				add_action( 'wp_ajax_brithoncrm_test_set_products', array( $ns, 'test_set_product' ) );
+				add_action( 'wp_ajax_brithoncrm_test_gen_token', array( $ns, 'test_gen_token' ) );
+				add_action( 'wp_ajax_brithoncrm_test_validate_token', array( $ns, 'test_validate_token' ) );
+				add_action( 'wp_ajax_brithoncrm_test_encrypt', array( $ns, 'test_encrypt' ) );
+				add_action( 'wp_ajax_brithoncrm_test_decrypt', array( $ns, 'test_decrypt' ) );
 			}
 		};
 
@@ -36,45 +40,17 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			return $hkey;
 		};
 
+		$ns->get_iv = function( $size ) use ( $ns ) {
+			$str = '#$Scfg#562SdgdsrTd35DsxRvcs#@fds';
+			return substr( $str, 0, $size );
+		};
+
 		$ns->create_token = function( $product_name, $timestamp ) use ( $ns ) {
 			$hkey = $ns->get_hkey();
 			$str = $product_name . '-' . $timestamp;
 			$rand_str = hash_hmac( 'sha256', $str, $hkey );
 
 			return $rand_str;
-		};
-
-		$ns->encrypt = function( $string, $key ) use ( $ns ) {
-			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb' );
-			$iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_DEV_RANDOM );
-			$key_size = mcrypt_enc_get_key_size( $td );
-			$key = substr( md5( $key ), 0, $key_size );
-
-			mcrypt_generic_init( $td, $key, $iv );
-
-			$encrypted = mcrypt_generic( $td, $string );
-			$result = base64_encode( $encrypted );
-
-			mcrypt_generic_deinit( $td );
-			mcrypt_module_close( $td );
-			return $result;
-		};
-
-		$ns->decrypt = function( $string, $key ) use ( $ns ) {
-			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb' );
-			$iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_DEV_RANDOM );
-			$key_size = mcrypt_enc_get_key_size( $td );
-			$key = substr( md5( $key ), 0, $key_size );
-
-			mcrypt_generic_init( $td, $key, $iv );
-
-			$cipher = base64_decode( $string );
-			$result = mdecrypt_generic( $td, $cipher );
-
-			mcrypt_generic_deinit( $td );
-			mcrypt_module_close( $td );
-
-			return $result;
 		};
 
 		$ns->check_token = function( $token, $product_name, $timestamp ) use ( $ns ) {
@@ -92,6 +68,39 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			}
 
 			return false;
+		};
+
+		$ns->encrypt = function( $string, $key ) use ( $ns ) {
+			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb', '' );
+			$iv = $ns->get_iv( mcrypt_enc_get_iv_size( $td ) );
+			$key_size = mcrypt_enc_get_key_size( $td );
+			$key = substr( md5( $key ), 0, $key_size );
+
+			mcrypt_generic_init( $td, $key, $iv );
+
+			$encrypted = mcrypt_generic( $td, $string );
+			$result = base64_encode( $encrypted );
+
+			mcrypt_generic_deinit( $td );
+			mcrypt_module_close( $td );
+			return $result;
+		};
+
+		$ns->decrypt = function( $string, $key ) use ( $ns ) {
+			$td = mcrypt_module_open( 'rijndael-256', '', 'cfb', '' );
+			$iv = $ns->get_iv( mcrypt_enc_get_iv_size( $td ) );
+			$key_size = mcrypt_enc_get_key_size( $td );
+			$key = substr( md5( $key ), 0, $key_size );
+
+			mcrypt_generic_init( $td, $key, $iv );
+
+			$cipher = base64_decode( $string );
+			$result = mdecrypt_generic( $td, $cipher );
+
+			mcrypt_generic_deinit( $td );
+			mcrypt_module_close( $td );
+
+			return $result;
 		};
 
 		$ns->user_login = function() use ( $ns ) {
@@ -150,22 +159,22 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$org = $_POST['org'];
 
 			if ( ! $username ) {
-				$ns->return_err_msg( __( 'Empty username!', 'brithoncrm' ) );
+				$ns->return_error_msg( __( 'Empty username!', 'brithoncrm' ) );
 			}
 			if ( ! $password ) {
-				$ns->return_err_msg( __( 'Empty password!', 'brithoncrm' ) );
+				$ns->return_error_msg( __( 'Empty password!', 'brithoncrm' ) );
 			}
 			if ( ! $email ) {
-				$ns->return_err_msg( __( 'Empty email address!', 'brithoncrm' ) );
+				$ns->return_error_msg( __( 'Empty email address!', 'brithoncrm' ) );
 			}
 			if ( ! $first_name ) {
-				$ns->return_err_msg( __( 'First name required!', 'brithoncrm' ) );
+				$ns->return_error_msg( __( 'First name required!', 'brithoncrm' ) );
 			}
 			if ( ! $last_name ) {
-				$ns->return_err_msg( __( 'Last name required!', 'brithoncrm' ) );
+				$ns->return_error_msg( __( 'Last name required!', 'brithoncrm' ) );
 			}
 			if ( ! $org ) {
-				$ns->return_err_msg( __( 'Organization required!', 'brithoncrm' ) );
+				$ns->return_error_msg( __( 'Organization required!', 'brithoncrm' ) );
 			}
 
 			$userdata = array(
@@ -176,6 +185,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				'nickname' => "$first_name $last_name",
 				'first_name' => $first_name,
 				'last_name' => $last_name,
+				'organization' => $org
 			);
 
 			$user_id = wp_insert_user( $userdata );
@@ -196,7 +206,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->call_products_register = function( $creds ) use ( $ns ) {
 			$products = $ns->get_products();
-			foreach ( $prodcuts as $id => $item ) {
+			foreach ( $products as $id => $item ) {
 				$product_name = $item['name'];
 				$ts = time();
 				$token = $ns->create_token( $product_name, $ts );
@@ -296,6 +306,51 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			}
 
 			return $result;
+		};
+
+		$ns->test_set_product = function() use ( $ns ) {
+			$product_name = 'appointments';
+			$product_desc = 'Birchpress Appointments';
+
+			$products = $ns->get_products();
+			if ( count( $products ) === 0 ) {
+				$ns->add_product( $product_name, $product_desc );
+			}
+
+			die( 'Product info installed.' );
+		};
+
+		$ns->test_gen_token = function() use ( $ns ) {
+			$ts = time();
+			die(json_encode(array(
+					'token' => $ns->create_token( 'appointments', $ts ),
+					'time' => $ts
+				)));
+		};
+
+		$ns->test_validate_token = function() use ( $ns ) {
+			$token = $_POST['token'];
+			$time = $_POST['time'];
+			$product_name = $_POST['product'];
+			die(json_encode(array(
+					'status' => $ns->check_token( $token, $product_name, $time )
+				)));
+		};
+
+		$ns->test_encrypt = function() use ( $ns ) {
+			$content = $_POST['content'];
+			$key = $_POST['key'];
+			die(json_encode(array(
+					'cipher' => $ns->encrypt( $content, $key )
+				)));
+		};
+
+		$ns->test_decrypt = function() use ( $ns ) {
+			$cipher = $_POST['cipher'];
+			$key = $_POST['key'];
+			die(json_encode(array(
+					'plaintext' => $ns->decrypt( $cipher, $key )
+				)));
 		};
 
 		$ns->request = function( $url, $method, $data ) use ( $ns ) {
