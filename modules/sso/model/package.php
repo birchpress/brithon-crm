@@ -32,6 +32,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				add_action( 'wp_ajax_brithoncrm_test_validate_token', array( $ns, 'test_validate_token' ) );
 				add_action( 'wp_ajax_brithoncrm_test_encrypt', array( $ns, 'test_encrypt' ) );
 				add_action( 'wp_ajax_brithoncrm_test_decrypt', array( $ns, 'test_decrypt' ) );
+				add_action( 'wp_ajax_brithoncrm_test_get_product_url', array( $ns, 'test_get_product_url'));
 			}
 		};
 
@@ -353,11 +354,18 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				)));
 		};
 
-		$ns->request = function( $url, $method, $data ) use ( $ns ) {
+		$ns->test_get_product_url = function() use ( $ns ) {
+			$product_name = $_POST['product'];
+			die(json_encode(array(
+					'url' => $ns->get_product_url( $product_name )
+				)));
+		};
+
+		$ns->request = function( $url, $method, $data, $accept='*/*' ) use ( $ns ) {
 			$context = array(
 				'http' => array(
 					'method' => $method,
-					'header' => '',
+					'header' => "Accept: $accept",
 					'content' => $data,
 				)
 			);
