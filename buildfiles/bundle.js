@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const globby = require('globby');
-const shell = require('shelljs');
+const browserify = require('browserify');
 
 function replaceExtension(file, ext) {
   if (typeof file !== 'string') {
@@ -23,11 +23,20 @@ function replaceExtension(file, ext) {
   return path.join(path.dirname(file), newFileName);
 }
 
-function browserify(file) {
+function browserifyFile(file) {
   const bundleFile = replaceExtension(file, '.bundle.js');
 
-  console.info(`[browserify] ${file} -> ${bundleFile}`);
-  shell.exec(`browserify ${file} -o ${bundleFile}`);
+  console.info(`${file} -> ${bundleFile}`);
+
+  // NOTE: it's safe to remove transforms if its args are the same as
+  // packages.json. `browserify-shim` is different. It only accepts
+  // `global` in the API, but not `package.json`. Interesting.
+  browserify(file)
+    .transform('babelify', {presets: ['react']})
+    .transform('browserify-shim', {global: true})
+    .transform('pkgify')
+    .bundle()
+    .pipe(fs.createWriteStream(bundleFile));
 }
 
 function bundle(item) {
@@ -41,9 +50,9 @@ function bundle(item) {
   }
 
   if (stat.isDirectory()) {
-    globby.sync(path.join(item, '**/index.js')).forEach(browserify);
+    globby.sync(path.join(item, '**/index.js')).forEach(browserifyFile);
   } else if (stat.isFile() && (path.extname(item) === '.js')) {
-    browserify(item);
+    browserifyFile(item);
   } else {
     console.error(`can not process: ${item}.`);
   }
