@@ -16,6 +16,7 @@ if ( defined( 'ABSPATH' ) && ! function_exists( 'brithoncrm_main' ) ) {
 
 		require_once 'lib/vendor/autoload.php';
 		require_once 'loader.php';
+        include 'includes/ChromePhp.php';
 
 		brithoncrm_load( array(
 				'plugin_file_path' => __FILE__,

@@ -27,12 +27,6 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				add_action( 'wp_ajax_nopriv_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_validate_token', array( $ns, 'validate_token' ) );
-				add_action( 'wp_ajax_brithoncrm_test_set_products', array( $ns, 'test_set_product' ) );
-				add_action( 'wp_ajax_brithoncrm_test_gen_token', array( $ns, 'test_gen_token' ) );
-				add_action( 'wp_ajax_brithoncrm_test_validate_token', array( $ns, 'test_validate_token' ) );
-				add_action( 'wp_ajax_brithoncrm_test_encrypt', array( $ns, 'test_encrypt' ) );
-				add_action( 'wp_ajax_brithoncrm_test_decrypt', array( $ns, 'test_decrypt' ) );
-				add_action( 'wp_ajax_brithoncrm_test_get_product_url', array( $ns, 'test_get_product_url'));
 			}
 		};
 
@@ -147,8 +141,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				$ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
-			// Will return the Referer address to front end.
-			die( json_encode( array( 'referer' => $_SERVER['HTTP_REFERER'] ) ) );
+			die( json_encode( array( 'referer' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '/' ) ) );
 		};
 
 		$ns->user_register = function() use ( $ns, $brithoncrm ) {
@@ -207,6 +200,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 		$ns->call_products_register = function( $creds ) use ( $ns ) {
 			$products = $ns->get_products();
+
 			foreach ( $products as $id => $item ) {
 				$product_name = $item['name'];
 				$ts = time();
@@ -217,10 +211,10 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 					'time' => $ts,
 					'action' => 'brithoncrmx_register',
 				);
-				$ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
+				$resp = $ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
 			}
 
-			die( json_encode( array( 'referer' => $_SERVER['HTTP_REFERER'] ) ) );
+			die( json_encode( array( 'referer' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '/' ) ) );
 		};
 
 
@@ -246,9 +240,9 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				array_push( $result, array(
-						'id' => the_id(),
+						'id' => get_the_ID(),
 						'name' => the_title( '', '', false ),
-						'description' => the_content()
+						'description' => get_the_content()
 					) );
 			}
 
@@ -275,6 +269,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$components = explode( '.', $host, 2 );
 			$subdomains = explode( '-', $components[0] );
 			$domain = $components[1];
+			$domain = explode( ':', $domain, 2 )[0];
 			$env = '';
 			$result = '';
 
@@ -309,59 +304,17 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			return $result;
 		};
 
-		$ns->test_set_product = function() use ( $ns ) {
-			$product_name = 'appointments';
-			$product_desc = 'Birchpress Appointments';
-
-			$products = $ns->get_products();
-			if ( count( $products ) === 0 ) {
-				$ns->add_product( $product_name, $product_desc );
+		$ns->request = function( $url, $method, $data, $accept='*/*' ) use ( $ns ) {
+			if( gettype( $data ) === 'array' ) {
+				$query_str = '';
+				foreach( $data as $key => $value ) {
+					$key = urlencode($key);
+					$value = urlencode($value);
+					$query_str .= "$key=$value&";
+				}
+				$data = $query_str;
 			}
 
-			die( 'Product info installed.' );
-		};
-
-		$ns->test_gen_token = function() use ( $ns ) {
-			$ts = time();
-			die(json_encode(array(
-					'token' => $ns->create_token( 'appointments', $ts ),
-					'time' => $ts
-				)));
-		};
-
-		$ns->test_validate_token = function() use ( $ns ) {
-			$token = $_POST['token'];
-			$time = $_POST['time'];
-			$product_name = $_POST['product'];
-			die(json_encode(array(
-					'status' => $ns->check_token( $token, $product_name, $time )
-				)));
-		};
-
-		$ns->test_encrypt = function() use ( $ns ) {
-			$content = $_POST['content'];
-			$key = $_POST['key'];
-			die(json_encode(array(
-					'cipher' => $ns->encrypt( $content, $key )
-				)));
-		};
-
-		$ns->test_decrypt = function() use ( $ns ) {
-			$cipher = $_POST['cipher'];
-			$key = $_POST['key'];
-			die(json_encode(array(
-					'plaintext' => $ns->decrypt( $cipher, $key )
-				)));
-		};
-
-		$ns->test_get_product_url = function() use ( $ns ) {
-			$product_name = $_POST['product'];
-			die(json_encode(array(
-					'url' => $ns->get_product_url( $product_name )
-				)));
-		};
-
-		$ns->request = function( $url, $method, $data, $accept='*/*' ) use ( $ns ) {
 			$context = array(
 				'http' => array(
 					'method' => $method,

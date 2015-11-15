@@ -45,7 +45,7 @@ birch_ns( 'brithoncrm.registration.view.front.registration', function( $ns ) {
 			if ( !is_user_logged_in() ) {
 				return $content;
 			} else {
-				return '';
+				return '<!--User already logged in-->';
 			}
 		};
 
