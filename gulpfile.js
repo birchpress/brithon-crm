@@ -12,7 +12,7 @@ const productConfig = {
    'package.php',
    'loader.php',
 
-   'languages'
+   'languages/**/*'
   ]
 
 };
