@@ -15,24 +15,36 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 			$datatype = 'product';
 			register_post_type( $datatype );
-			register_post_type( 'token' );
 		};
 
 		$ns->wp_init = function() use ( $ns, $brithoncrm ) {
 			global $birchpress;
 
+			$status = $ns->verfiy_login_state();
+			if ( !$status ) {
+				wp_logout();
+			}
+
 			if ( is_main_site() ) {
 				add_action( 'wp_ajax_nopriv_brithoncrm_login', array( $ns, 'user_login' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_register', array( $ns, 'user_register' ) );
 				add_action( 'wp_ajax_nopriv_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
+				add_action( 'wp_ajax_brithoncrm_logout', array( $ns, 'global_logout' ) );
 				add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
-				add_action( 'wp_ajax_nopriv_brithoncrm_validate_token', array( $ns, 'validate_token' ) );
+				add_action( 'wp_ajax_brithoncrm_test_set_product', array( $ns, 'test_set_product' ) );
+				add_action( 'authenticate', array( $ns, 'user_login' ), 10, 3 );
+				add_action( 'logout_url', array( $ns, 'brithoncrm_logout' ), 11, 2 );
 			}
 		};
 
 		$ns->get_hkey = function() use ( $ns ) {
-			$hkey = '_sEcR37_-t0KEn';
+			$hkey = '__bR17h0n-#sEcR37_-t0KEn';
 			return $hkey;
+		};
+
+		$ns->get_common_key = function() use ( $ns ) {
+			$common_key = '#@Br1TH0n-C00ki3_KEY#@DSAF';
+			return $common_key;
 		};
 
 		$ns->get_iv = function( $size ) use ( $ns ) {
@@ -98,50 +110,81 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			return $result;
 		};
 
-		$ns->user_login = function() use ( $ns ) {
-			if ( !isset( $_POST['username'] ) ) {
-				$ns->return_error_msg( __( 'Empty username!', 'brithoncrm' ) );
-			}
-			if ( !isset( $_POST['password'] ) ) {
-				$ns->return_error_msg( __( 'Empty password!', 'brithoncrm' ) );
-			}
-			if ( !isset( $_POST['remember'] ) ) {
-				$_POST['remebmer'] = false;
+		$ns->sign_cookie = function( $title, $data, $remebmer ) use ( $ns ) {
+			if ( gettype( $data ) == 'array' ) {
+				$data = json_encode( $data );
 			}
 
-			$username = $_POST['username'];
-			$password = $_POST['password'];
-			$remember = $_POST['remebmer'];
-
-			$creds = array(
-				'user_login' => $username,
-				'user_password' => $password,
-				'remebmer' => $remember,
-			);
-			$user = wp_signon( $creds, false );
-			if ( is_wp_error( $user ) ) {
-				$ns->return_error_msg( $user->get_error_message() );
+			$expire = 0;
+			if ( $remebmer ) {
+				$expire = time() + 86400 * 30;
 			}
 
-			$ns->call_products_signon( $creds );
+			return setcookie( $title, $data, $expire, '/', '.brithon.com', false, true );
 		};
 
-		$ns->call_products_signon = function( $creds ) use ( $ns ) {
-			$products = $ns->get_products();
-			foreach ( $products as $id => $item ) {
-				$ts = time();
-				$product_name = $item['name'];
-				$token = $ns->create_token( $product_name, $ts );
-				$data = array(
-					'creds' => $ns->encrypt( json_encode( $creds ), $token ),
-					'token' => $token,
-					'time' => $ts,
-					'action' => 'brithoncrmx_login',
-				);
-				$ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
+		$ns->verfiy_login_state = function() use ( $ns ) {
+			if ( !isset( $_COOKIE['BRITHON_USER'] ) ) {
+				return false;
 			}
 
-			die( json_encode( array( 'referer' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '/' ) ) );
+			$user_cookie = $_COOKIE['BRITHON_USER'];
+			$result = $ns->decrypt( $user_cookie, $ns->get_common_key() );
+			$data = json_decode( $result );
+
+			if ( gettype( $data ) !== 'object' ) {
+				return false;
+			}
+
+			$credential = $data->creds;
+			$key = $data->key;
+			$credential = $ns->decrypt( $credential, $key );
+			$credential = json_decode( $credential, true );
+
+			return wp_signon( $credential );
+		};
+
+		$ns->global_signon = function( $creds ) use ( $ns ) {
+			$remember = $creds['remember'];
+			$key = $ns->create_token( 'brithon.com', time() );
+			$cred_str = $ns->encrypt( json_encode( $creds ), $key );
+
+			$common_key = $ns->get_common_key();
+			$data = array(
+				'creds' => $cred_str,
+				'key' => $key
+			);
+			$cookie = $ns->encrypt( json_encode( $data ), $common_key );
+
+			return $ns->sign_cookie( 'BRITHON_USER', $cookie , $remember );
+		};
+
+		$ns->global_logout = function() use ( $ns ) {
+			setcookie( 'BRITHON_USER', '', -1, '/', '.brithon.com', false, true );
+			if ( wp_get_current_user() ) {
+				wp_logout();
+			}
+
+			die( '<script>location.assign("/");</script>' );
+		};
+
+		$ns->brithoncrm_logout = function( $url, $redirect ) use ( $ns ) {
+			return admin_url( 'admin-ajax.php' ) . '?action=brithoncrm_logout';
+		};
+
+		$ns->user_login = function( $user, $username, $password ) use ( $ns ) {
+			if ( is_wp_error( $user ) ) {
+				return $user;
+			}
+
+			$cred = array(
+				'user_login' => $username,
+				'user_password' => $password,
+				'remember' => true
+			);
+
+			$ns->global_signon( $cred );
+			return $user;
 		};
 
 		$ns->user_register = function() use ( $ns, $brithoncrm ) {
@@ -190,7 +233,8 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				$creds['user_login'] = $username;
 				$creds['user_password'] = $password;
 				$creds['remember'] = true;
-				$usr = wp_signon( $creds, false );
+				// $usr = wp_signon( $creds, false );
+				$ns->global_signon( $creds );
 
 				$ns->call_products_register( $userdata );
 			} else {
@@ -212,9 +256,12 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 					'action' => 'brithoncrmx_register',
 				);
 				$resp = $ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
+				echo $resp;
 			}
 
-			die( json_encode( array( 'referer' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '/' ) ) );
+			die( json_encode( array(
+						'referer' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '/'
+					) ) );
 		};
 
 
@@ -264,6 +311,16 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			return wp_delete_post( $id, true );
 		};
 
+		$ns->test_set_product = function() use ( $ns ) {
+			$products = $ns->get_products();
+			if ( count( $products ) == 0 ) {
+				$ns->add_product( 'appointments', 'Birchpress appointments' );
+				die( 'Birchpress appointments has been set. ' );
+			} else {
+				die( 'Product has already set. ' );
+			}
+		};
+
 		$ns->get_product_url = function( $product_name ) use ( $ns ) {
 			$host = $_SERVER['HTTP_HOST'];
 			$components = explode( '.', $host, 2 );
@@ -305,11 +362,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		};
 
 		$ns->request = function( $url, $method, $data, $accept='*/*' ) use ( $ns ) {
-			if( gettype( $data ) === 'array' ) {
+			if ( gettype( $data ) === 'array' ) {
 				$query_str = '';
-				foreach( $data as $key => $value ) {
-					$key = urlencode($key);
-					$value = urlencode($value);
+				foreach ( $data as $key => $value ) {
+					$key = urlencode( $key );
+					$value = urlencode( $value );
 					$query_str .= "$key=$value&";
 				}
 				$data = $query_str;
