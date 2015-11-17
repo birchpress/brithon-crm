@@ -10,17 +10,21 @@
   "devDependencies": {
     "babel-preset-react": "6.1.2",
     "babelify": "7.2.0",
-    "birchpress-builder": "https://github.com/birchpress/builder.git#2239444",
+    "birchpress-builder": "https://github.com/birchpress/builder.git#1e81fc1",
+    "browserify": "12.0.1",
     "browserify-shim": "3.8.11",
     "classnames": "2.2.0",
+    "event-stream": "3.3.2",
     "globby": "3.0.1",
     "gulp": "3.9.0",
+    "gulp-logger": "0.0.2",
+    "gulp-rename": "1.2.2",
     "immutable": "3.7.5",
     "pkgify": "1.0.3",
     "pofile": "1.0.2",
     "react": "0.14.2",
     "react-immutable-render-mixin": "0.8.1",
-    "shelljs": "0.5.3"
+    "vinyl-source-stream": "1.1.0"
   },
   "browserify": {
     "transform": [
@@ -51,8 +55,7 @@
     }
   },
   "scripts": {
-    "gulp": "gulp",
-    "bundle": "node ./buildfiles/bundle.js"
+    "bundle": "gulp bundle"
   },
   "private": true,
   "author": "Brithon Inc.",
