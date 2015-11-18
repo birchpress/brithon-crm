@@ -1,7 +1,6 @@
 'use strict';
 
 var Immutable = require('immutable');
-var Cursor = require('immutable/contrib/cursor');
 var birchpress = require('birchpress');
 var ImmutableStore = birchpress.stores.ImmutableStore;
 
