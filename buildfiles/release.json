@@ -24,14 +24,15 @@
                     "composer.lock",
                     "vendor/autoload.php",
                     "vendor/composer",
-                    "vendor/stripe"
+                    "vendor/stripe",
+                    "vendor/ccampbell"
                 ]
             }
         },
 
         "multisite": {
             "addons": [
-                "subscriptions", "registration", "common"
+                "subscriptions", "registration", "common", "sso"
             ]
         }
     }
