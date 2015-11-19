@@ -19,10 +19,12 @@
     "gulp": "3.9.0",
     "gulp-logger": "0.0.2",
     "gulp-rename": "1.2.2",
+    "gulp-sourcemaps": "1.6.0",
     "immutable": "3.7.5",
     "pkgify": "1.0.3",
     "pofile": "1.0.2",
     "react-immutable-render-mixin": "0.8.1",
+    "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0"
   },
   "browserify": {
