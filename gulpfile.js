@@ -49,5 +49,5 @@ gulp.task('bundle', function() {
       .pipe(gulp.dest('./'));
   });
 
-  return es.merge.apply(null, tasks);
+  return es.merge(...tasks);
 });
