@@ -7,7 +7,7 @@ const logger = require('gulp-logger');
 const source = require('vinyl-source-stream');
 const rename = require('gulp-rename');
 const buffer = require('vinyl-buffer');
-const sourcemaps = require('gulp-sourcemaps')
+const sourcemaps = require('gulp-sourcemaps');
 const gulp = require('gulp');
 
 const builder = require('birchpress-builder')(gulp);
