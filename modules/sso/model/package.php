@@ -32,6 +32,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				add_action( 'wp_ajax_brithoncrm_logout', array( $ns, 'global_logout' ) );
 				add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_brithoncrm_test_set_product', array( $ns, 'test_set_product' ) );
+				add_action( 'wp_ajax_brithoncrm_test_get_basic_info', array( $ns, 'test_get_basic_info' ) );
 				add_action( 'authenticate', array( $ns, 'user_login' ), 10, 3 );
 				add_action( 'logout_url', array( $ns, 'brithoncrm_logout' ), 11, 2 );
 			}
@@ -141,7 +142,15 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$credential = $ns->decrypt( $credential, $key );
 			$credential = json_decode( $credential, true );
 
-			return wp_signon( $credential );
+			$current_user = wp_get_current_user();
+			if ( ! $current_user ) {
+				return wp_signon( $credential );
+			} else if ( $current_user->user_login !== $credential['user_login'] ) {
+				wp_logout();
+				return wp_signon( $credential );
+			} else {
+				return $current_user;
+			}
 		};
 
 		$ns->global_signon = function( $creds ) use ( $ns ) {
