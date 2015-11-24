@@ -14,7 +14,7 @@
     "editions": {
         "developer": {
             "addons": [
-                "subscriptions", "todomvc", "registration", "common", "sso"
+                "registration", "sso"
             ],
             "libs": {
                 "php": [
@@ -30,7 +30,7 @@
 
         "multisite": {
             "addons": [
-                "subscriptions", "registration", "common"
+                "registration", "sso" 
             ]
         }
     }
