@@ -2,7 +2,6 @@
 
 var birchpress = require('birchpress');
 var Immutable = require('immutable');
-var Cursor = require('immutable/contrib/cursor');
 
 var ImmutableStore = birchpress.stores.ImmutableStore;
 
@@ -53,7 +52,7 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
     self.postApi(
       url,
       {
-        'action': 'register_birchpress_account',
+        'action': 'brithoncrm_register',
         'username': self.getCursor().get('email'),
         'password': self.getCursor().get('password'),
         'email': self.getCursor().get('email'),
@@ -65,7 +64,11 @@ var clazz = birchpress.provide('brithoncrm.registration.stores.RegistrationStore
         if (err) {
           alert(err.message);
         } else {
-          location.assign(bp_urls.admincp_url);
+          if (r.referrer) {
+            location.assign(r.referrer);
+          } else {
+            location.assign('/');
+          }
         }
       }
     );

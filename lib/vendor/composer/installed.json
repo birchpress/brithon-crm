@@ -1,59 +1,47 @@
 [
     {
-        "name": "stripe/stripe-php",
-        "version": "v3.1.0",
-        "version_normalized": "3.1.0.0",
+        "name": "ccampbell/chromephp",
+        "version": "4.1.0",
+        "version_normalized": "4.1.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "ec371b2e846db12b22646c2d8a3ec01cc358dcdb"
+            "url": "https://github.com/ccampbell/chromephp.git",
+            "reference": "c3c297615d48ae5b2a86a82311152d1ed095fcef"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/ec371b2e846db12b22646c2d8a3ec01cc358dcdb",
-            "reference": "ec371b2e846db12b22646c2d8a3ec01cc358dcdb",
+            "url": "https://api.github.com/repos/ccampbell/chromephp/zipball/c3c297615d48ae5b2a86a82311152d1ed095fcef",
+            "reference": "c3c297615d48ae5b2a86a82311152d1ed095fcef",
             "shasum": ""
         },
         "require": {
-            "ext-curl": "*",
-            "ext-json": "*",
-            "ext-mbstring": "*",
-            "php": ">=5.3.3"
+            "php": ">=5.0.0"
         },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0",
-            "satooshi/php-coveralls": "~0.6.1",
-            "squizlabs/php_codesniffer": "~2.0"
-        },
-        "time": "2015-08-03 19:14:15",
+        "time": "2013-06-26 03:44:33",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
-            "psr-4": {
-                "Stripe\\": "lib/"
+            "psr-0": {
+                "ChromePhp": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "MIT"
+            "Apache-2.0"
         ],
         "authors": [
             {
-                "name": "Stripe and contributors",
-                "homepage": "https://github.com/stripe/stripe-php/contributors"
+                "name": "Craig Campbell",
+                "email": "iamcraigcampbell@gmail.com",
+                "homepage": "http://craig.is",
+                "role": "Developer"
             }
         ],
-        "description": "Stripe PHP Library",
-        "homepage": "https://stripe.com/",
+        "description": "Log variables to the Chrome console (via Chrome Logger Google Chrome extension).",
+        "homepage": "http://github.com/ccampbell/chromephp",
         "keywords": [
-            "api",
-            "payment processing",
-            "stripe"
+            "log",
+            "logging"
         ]
     }
 ]
