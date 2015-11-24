@@ -24,7 +24,6 @@
                     "composer.lock",
                     "vendor/autoload.php",
                     "vendor/composer",
-                    "vendor/stripe",
                     "vendor/ccampbell"
                 ]
             }
