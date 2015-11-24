@@ -247,7 +247,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 
 				$ns->call_products_register( $userdata );
 			} else {
-				$ns->return_err_msg( $user_id->get_error_message( $user_id->get_error_code() ) );
+				$ns->return_error_msg( $user_id->get_error_message( $user_id->get_error_code() ) );
 			}
 		};
 
@@ -265,7 +265,6 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 					'action' => 'brithoncrmx_register',
 				);
 				$resp = $ns->request( $ns->get_product_url( $product_name ).'/wp-admin/admin-ajax.php', 'POST', $creds );
-				echo $resp;
 			}
 
 			die( json_encode( array(
