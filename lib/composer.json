@@ -1,5 +1,6 @@
 {
   "require": {
-    "stripe/stripe-php": "3.*"
+    "stripe/stripe-php": "3.*",
+    "ccampbell/chromephp": "4.1.0"
   }
 }

@@ -14,7 +14,7 @@
     "editions": {
         "developer": {
             "addons": [
-                "subscriptions", "todomvc", "registration", "common"
+                "subscriptions", "todomvc", "registration", "common", "sso"
             ],
             "libs": {
                 "php": [

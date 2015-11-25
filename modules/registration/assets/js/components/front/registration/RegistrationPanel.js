@@ -1,6 +1,6 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
 var ImmutableRenderMixin = require('react-immutable-render-mixin');
 var birchpress = require('birchpress');
 
@@ -31,6 +31,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
   renderLayer: function(component) {
     var Button = require('brithoncrm/registration/components/common/Button');
     var Input = require('brithoncrm/registration/components/common/DataInput');
+    var store = component.props.store;
     if (!component.state.shown) {
       return <span />;
     }
@@ -45,6 +46,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    id=""
                    className="width-1-2"
                    placeholder={ component.__('First Name') }
+                   value={ store.getCursor().get('first_name') }
                    onChange={ component.handleChange } />
             <Input
                    type="text"
@@ -52,6 +54,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    id=""
                    className="width-1-2"
                    placeholder={ component.__('Last Name') }
+                   value={ store.getCursor().get('last_name') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -61,6 +64,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    id=""
                    className=""
                    placeholder={ component.__('Email address') }
+                   value={ store.getCursor().get('email') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -70,6 +74,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    id=""
                    className="width-1-1"
                    placeholder={ component.__('Organization') }
+                   value={ store.getCursor().get('org') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row">
@@ -79,6 +84,7 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
                    id=""
                    className="width-1-1"
                    placeholder={ component.__('Password') }
+                   value={ store.getCursor().get('password') }
                    onChange={ component.handleChange } />
           </div>
           <div className="row align-center">
@@ -118,11 +124,23 @@ var clazz = birchpress.provide('brithoncrm.registration.components.front.registr
     component.submit();
   },
 
+  inputData: function(component, name, value) {
+    if (component.props.data === undefined) {
+      component.props.data = {};
+    }
+    component.props.data[name] = value;
+  },
+
   handleChange: function(component, childComponent, event) {
-    component.props.store.insert(childComponent.props.name, childComponent.props.value);
+    //component.props.store.insert(childComponent.props.name, childComponent.props.value);
+    component.inputData(childComponent.props.name, childComponent.props.value);
   },
 
   submit: function(component) {
+    var data = component.props.data;
+    for (var name in data) {
+      component.props.store.insert(name, data[name]);
+    }
     component.props.store.submit();
   },
 
