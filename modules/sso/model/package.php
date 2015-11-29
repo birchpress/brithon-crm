@@ -33,6 +33,8 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 				add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 				add_action( 'wp_ajax_brithoncrm_test_set_product', array( $ns, 'test_set_product' ) );
 				add_action( 'wp_ajax_brithoncrm_test_get_user_info', array( $ns, 'get_user_info' ) );
+				add_action( 'wp_ajax_brithoncrm_test_get_user_order', array( $ns, 'get_user_order' ) );
+				add_action( 'wp_ajax_brithoncrm_test_get_user_subscriptions', array( $ns, 'get_user_subscriptions' ) );
 				add_action( 'authenticate', array( $ns, 'user_login' ), 10, 3 );
 				add_action( 'logout_url', array( $ns, 'brithoncrm_logout' ), 11, 2 );
 			}
@@ -143,7 +145,7 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$credential = json_decode( $credential, true );
 
 			$current_user = wp_get_current_user();
-			if( ! $current_user ) {
+			if ( ! $current_user ) {
 				return wp_signon( $credential );
 			} else if ( $current_user->user_login !== $credential['user_login'] ) {
 				wp_logout();
@@ -274,49 +276,55 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		};
 
 		$ns->is_woocommerce_on = function() use ( $ns ) {
-			require_once admin_url('includes/plugin.php');
-			return is_plugin_active('woocommerce/woocommerce.php');
+			require_once admin_url( 'includes/plugin.php' );
+			return is_plugin_active( 'woocommerce/woocommerce.php' );
+		};
+
+		$ns->is_wc_subscriptions_on = function() use ( $ns ) {
+			require_once admin_url( 'includes/plugin.php' );
+			return is_plugin_active( 'woocommerce-subscriptions/woocommerce-subscriptions.php' );
 		};
 
 		/**
 		 * get_user_basic_info
 		 *
 		 * Get basic information of current user
+		 *
 		 * @return array(
-		 * 				'uid' 				=> Integer, 			User ID,
-		 * 				'roles' 			=> Array of strings, 	User roles,
-		 * 				'first_name' 		=> String, 				First name,
-		 * 				'last_name'			=> String,				Last name,
-		 * 				'username'			=> String,				Username,
-		 * 				'email'				=> String,				Email address,
-		 * 				'nicename'			=> String,				Nice name (URL friendly),
-		 * 				'display_name'		=> String,				Displayed name,
-		 * 				'url'				=> String,				URL of the user,
-		 * 				'organization'		=> String,				The organization of the user,
-		 * 				'customer_data'		=> Associative array,	Customer data. False when woocommerce is not activated.
-		 * 			Custoemr data:
-		 * 				'country'			=> String,
-		 * 				'state'				=> String,
-		 * 				'city'				=> String,
-		 * 				'postcode'			=> String,
-		 * 				'address'			=> String,
-		 * 				'address_2'			=> String,
-		 * 				'shipping_state'	=> String,
-		 * 				'shipping_city' 	=> String,
-		 * 				'shipping_country'	=> String,
-		 * 				'shipping_postcode'	=> String,
-		 * 				'shipping_address'	=> String,
-		 * 				'shipping_address_2'=> String,
-		 * 				'taxable_address'	=> **Array of strings**	Array of taxable addresses,
-		 * 				'is_outside_base'	=> Boolean, 			Indicates whether the customer is out of his/her base country,
-		 * 				'is_paying'			=> Boolean,				If the user is paying,
-		 * 				'is_vat_exempt'		=> Boolean
-		 * 			)
+		 *     'uid'     => Integer,    User ID,
+		 *     'roles'    => Array of strings,  User roles,
+		 *     'first_name'   => String,     First name,
+		 *     'last_name'   => String,    Last name,
+		 *     'username'   => String,    Username,
+		 *     'email'    => String,    Email address,
+		 *     'nicename'   => String,    Nice name (URL friendly),
+		 *     'display_name'  => String,    Displayed name,
+		 *     'url'    => String,    URL of the user,
+		 *     'organization'  => String,    The organization of the user,
+		 *     'customer_data'  => Associative array, Customer data. False when woocommerce is not activated.
+		 *    Custoemr data:
+		 *     'country'   => String,
+		 *     'state'    => String,
+		 *     'city'    => String,
+		 *     'postcode'   => String,
+		 *     'address'   => String,
+		 *     'address_2'   => String,
+		 *     'shipping_state' => String,
+		 *     'shipping_city'  => String,
+		 *     'shipping_country' => String,
+		 *     'shipping_postcode' => String,
+		 *     'shipping_address' => String,
+		 *     'shipping_address_2'=> String,
+		 *     'taxable_address' => **Array of strings** Array of taxable addresses,
+		 *     'is_outside_base' => Boolean,    Indicates whether the customer is out of his/her base country,
+		 *     'is_paying'   => Boolean,    If the user is paying,
+		 *     'is_vat_exempt'  => Boolean
+		 *    )
 		 * @author Excelle Su
-		 **/
+		 * */
 		$ns->get_user_basic_info = function() use ( $ns ) {
 			$current_user = wp_get_current_user();
-			if( $current_user === false ) {
+			if ( $current_user === false ) {
 				return false;
 			}
 			$info = array();
@@ -329,9 +337,9 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			$info['nicename'] = $current_user->user_nicename;
 			$info['display_name'] = $current_user->display_name;
 			$info['url'] = $current_user->user_url;
-			$info['organization'] = get_user_meta( $current_user->ID, 'organization', true);
+			$info['organization'] = get_user_meta( $current_user->ID, 'organization', true );
 
-			if( $ns->is_woocommerce_on() ) {
+			if ( $ns->is_woocommerce_on() ) {
 				$wc_customer = new WC_Customer();
 				$customer_data = array(
 					'country' => $wc_customer->get_country(),
@@ -361,35 +369,80 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		};
 
 		/**
-		 * get_user_info()
+		 * retrieve_user_info
+		 *
+		 * The AJAX action retrieve_user_info
 		 *
 		 * @return void
-		 * @author 
-		 **/
-		$ns->get_user_info = function() use ( $ns ) {
-			die(var_dump($ns->get_user_basic_info()));
+		 * @author
+		 * */
+		$ns->retrieve_user_info = function () use ( $ns ) {
+			$res = $ns->get_user_basic_info();
+			if ( !$res ) {
+				$ns->return_error_msg( 'Failed to retrieve user information. Not logged in.' );
+			}
+			die( json_encode( $res ) );
 		};
 
 		/**
 		 * get_user_subscriptions ( $product )
 		 *
 		 * Get user's subscriptions information
+		 *
 		 * @return void
-		 * @author 
-		 **/
+		 * @author
+		 * */
 		$ns->get_user_subscriptions = function( $product = '' ) use ( $ns ) {
+			if ( $ns->is_wc_subscriptions_on() ) {
+				$subs = WC_Subscriptions_Manager::get_users_subscriptions( get_current_user_id() );
+				return $subs;
+			} else {
+				return false;
+			}
+		};
 
+		$ns->retrieve_user_subscriptions = function() use ( $ns ) {
+			$product = '';
+			if ( isset( $_REQUEST['product'] ) ) {
+				$product = $_REQUEST['product'];
+			}
+
+			$res = $ns->get_user_subscriptions( $product );
+			if ( $res === false ) {
+				$ns->return_error_msg( 'Failed to retireve subscriptions. WooCommerce Subscriptions is not activated' );
+			}
+			die( json_encode( $res ) );
 		};
 
 		/**
 		 * get_user_order
-		 * 
+		 *
 		 * Get user's order records
+		 *
 		 * @return void
 		 * @author Excelle Su
-		 **/
-		$ns->get_user_order = function() use ( $ns ) {
+		 * */
+		$ns->get_user_order = function( $product = '' ) use ( $ns ) {
+			/*$customer_orders = get_posts( array(
+			    'numberposts' => -1,
+			    'meta_key'    => '_customer_user',
+			    'meta_value'  => get_current_user_id(),
+			    'post_type'   => wc_get_order_types(),
+			    'post_status' => array_keys( wc_get_order_statuses() ),
+			) );*/
 
+			$wc_order = new WC_Order();
+			$u = $wc_order->get_items();
+			die( var_dump( $u ) );
+		};
+
+		$ns->retrieve_user_order = function() use ( $ns ) {
+			$product = '';
+			if ( isset( $_REQUEST['product'] ) ) {
+				$product = $_REQUEST['product'];
+			}
+
+			die( json_encode( $ns->get_user_order( $product ) ) );
 		};
 
 		$ns->add_product = function( $name, $description ) use ( $ns, $brithoncrm ) {
