@@ -15,7 +15,7 @@
     "editions": {
         "developer": {
             "addons": [
-                "subscriptions", "registration", "common", "todomvc", "sso"
+                "registration", "sso"
             ],
             "libs": {
                 "php": [
@@ -24,7 +24,6 @@
                     "composer.lock",
                     "vendor/autoload.php",
                     "vendor/composer",
-                    "vendor/stripe",
                     "vendor/ccampbell"
                 ]
             }
@@ -32,7 +31,7 @@
 
         "multisite": {
             "addons": [
-                "subscriptions", "registration", "common", "sso"
+                "registration", "sso"
             ]
         }
     }
