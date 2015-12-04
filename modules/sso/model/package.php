@@ -31,8 +31,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 			add_action( 'wp_ajax_brithoncrm_errorhandler', array( $ns, 'remote_error_handler' ) );
 			add_action( 'wp_ajax_brithoncrm_test_set_product', array( $ns, 'test_set_product' ) );
 			add_action( 'wp_ajax_brithoncrm_get_user_info', array( $ns, 'retrieve_user_info' ) );
+			add_action( 'wp_ajax_nopriv_brithoncrm_get_user_info', array( $ns, 'retrieve_user_info' ) );
 			add_action( 'wp_ajax_brithoncrm_get_user_order', array( $ns, 'retrieve_user_order' ) );
+			add_action( 'wp_ajax_nopriv_brithoncrm_get_user_order', array( $ns, 'retrieve_user_order' ) );			
 			add_action( 'wp_ajax_brithoncrm_get_user_subscriptions', array( $ns, 'retrieve_user_subscriptions' ) );
+			add_action( 'wp_ajax_nopriv_brithoncrm_get_user_subscriptions', array( $ns, 'retrieve_user_subscriptions' ) );
 			add_action( 'authenticate', array( $ns, 'user_login' ), 10, 3 );
 			add_action( 'logout_url', array( $ns, 'brithoncrm_logout' ), 11, 2 );
 			add_action( 'password_reset', array( $ns, 'change_password' ), 1, 2 );
@@ -330,11 +333,17 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		 *    )
 		 * @author Excelle Su
 		 * */
-		$ns->get_user_basic_info = function() use ( $ns ) {
-			$current_user = wp_get_current_user();
+		$ns->get_user_basic_info = function( $username = null ) use ( $ns ) {
+			if( $username ) {
+				$current_user = get_user_by('login', $username );
+			} else {
+				$current_user = wp_get_current_user();
+			}
+
 			if ( $current_user === false ) {
 				return false;
 			}
+			wp_set_current_user( $current_user->ID );
 			$info = array();
 			$info['uid'] = $current_user->ID;
 			$info['roles'] = $current_user->roles;
@@ -385,7 +394,11 @@ birch_ns( 'brithoncrm.sso.model', function( $ns ) {
 		 * @author
 		 * */
 		$ns->retrieve_user_info = function () use ( $ns ) {
-			$res = $ns->get_user_basic_info();
+			$user = null;
+			if( isset( $_POST['user'])) {
+				$user = $_POST['user'];
+			}
+			$res = $ns->get_user_basic_info( $user );
 			if ( !$res ) {
 				$ns->return_error_msg( 'Failed to retrieve user information. Not logged in.' );
 			}
