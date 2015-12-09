@@ -3,7 +3,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 var birchpress = require('birchpress');
-var RegistrationStore = require('brithoncrm/registration/stores/RegistrationStore');
+var RegistrationStore = require('brithoncrm/registration/stores/RegistrationStore.js');
 var I18nStore = birchpress.stores.I18nStore;
 
 var registrationAppComponent = null;

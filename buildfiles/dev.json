@@ -14,7 +14,7 @@
     "editions": {
         "developer": {
             "addons": [
-                "registration", "sso"
+                "registration", "sso", "common"
             ],
             "libs": {
                 "php": [
@@ -29,7 +29,7 @@
 
         "multisite": {
             "addons": [
-                "registration", "sso" 
+                "registration", "sso", "common" 
             ]
         }
     }
